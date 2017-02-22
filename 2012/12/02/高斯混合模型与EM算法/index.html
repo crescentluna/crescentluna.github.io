@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>高斯混合模型与EM算法 | 心怀畏惧</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="这周主要学习了高斯混合模型以及EM算法的经典应用。Gaussian Mixture Model (GMM)即可以用于聚类，也可以用于估计概率密度函数。假设我们有一个训练集\(x^{(1)},\ldots,x^{(m)}\), 这训练集是无监督的，所以没有分类标签。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="高斯混合模型与EM算法">
+<meta property="og:url" content="http://crescentluna.github.io/2012/12/02/高斯混合模型与EM算法/index.html">
+<meta property="og:site_name" content="心怀畏惧">
+<meta property="og:description" content="这周主要学习了高斯混合模型以及EM算法的经典应用。Gaussian Mixture Model (GMM)即可以用于聚类，也可以用于估计概率密度函数。假设我们有一个训练集\(x^{(1)},\ldots,x^{(m)}\), 这训练集是无监督的，所以没有分类标签。">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130411144057.png">
+<meta property="og:updated_time" content="2017-02-21T18:24:27.407Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="高斯混合模型与EM算法">
+<meta name="twitter:description" content="这周主要学习了高斯混合模型以及EM算法的经典应用。Gaussian Mixture Model (GMM)即可以用于聚类，也可以用于估计概率密度函数。假设我们有一个训练集\(x^{(1)},\ldots,x^{(m)}\), 这训练集是无监督的，所以没有分类标签。">
+<meta name="twitter:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130411144057.png">
+  
+    <link rel="alternative" href="/atom.xml" title="心怀畏惧" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+  
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F1fc57dc5ccfaeae31f8e295269b6fa04' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-57404093-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+  <script src="https://cdn1.lncld.net/static/js/av-min-1.2.1.js"></script>
+  <script>AV.initialize("57nirzk8g437patyg9434lcvmpkat6e5lu5mixmrwqa8l3ao", "rsqg6iiq58eyeg8c6c6uue48crtwt5quuq5dmjaahfcjlkq8");</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">心怀畏惧</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Do not go gentle into that good night</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives">所有文章</a>
+        
+          <a class="main-nav-link" href="/about">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="http://www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
+          <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="Search">
+          <input type="submit" value="" class="search-form-submit">
+          <input name=tn type=hidden value="bds">
+          <input name=cl type=hidden value="3">
+          <input name=ct type=hidden value="2097152">
+          <input type="hidden" name="si" value="crescentluna.github.io">
+        </form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-高斯混合模型与EM算法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2012/12/02/高斯混合模型与EM算法/" class="article-date">
+  <time datetime="2012-12-02T05:47:04.000Z" itemprop="datePublished">2012-12-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/学术/">学术</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      高斯混合模型与EM算法
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这周主要学习了高斯混合模型以及EM算法的经典应用。Gaussian Mixture Model (GMM)即可以用于聚类，也可以用于估计概率密度函数。假设我们有一个训练集<span class="math inline">\(x^{(1)},\ldots,x^{(m)}\)</span>, 这训练集是无监督的，所以没有分类标签。</p>
+<p><a href="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130411144057.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130411144057.png" alt="QQ截图20130411144057"></a></p>
+<a id="more"></a>
+<p>我们假设假设数据服从 Mixture Gaussian Distribution ，即把数据看作是从许多个 Gaussian Distribution 中生成出来的。具体就是建立联合分布 <span class="math inline">\(p(x^{(i)},z^{(i)})=p(x^{(i)}|z^{(i)})p(z^{(i)})\)</span>。 这里$z^{(i)} Multinomial() <span class="math inline">\(,其中\)</span><em>{j}0,^{k}</em>{j=1}<em>{j}=1<span class="math inline">\(,\)</span></em>{j}<span class="math inline">\(即\)</span>p(z<sup>{(i)}=j)<span class="math inline">\(, 而\)</span>x</sup>{(i)}|z^{(i)}=j N(_j,_j)<span class="math inline">\(。混合高斯模型的主要分为两个步骤，是首先随机地在这\)</span>{1,,K}<span class="math inline">\(个高斯分布中之中选一个(用\)</span>z<sup>{(i)}<span class="math inline">\(表示)，再根据选取分布中生成数据\)</span>x</sup>{(i)}<span class="math inline">\(。要注意的是，因为这些数据都是未标注的，这里我们并不知道\)</span>z<sup>{(i)}<span class="math inline">\(的值，所以\)</span>z</sup>{(i)}$也被称作隐藏变量。</p>
+高斯混合模型的参数有<span class="math inline">\(\phi,\mu,\Sigma\)</span>。为了估计这些参数，我们写出它们的似然函数:
+<div>
+<span class="math display">\[\begin{split}l(\phi,\mu,\Sigma) &amp; =\sum^{m}_{i=1}{\log{p(x^{(i)};\phi,\mu,\Sigma)}} \\&amp; =\sum^{m}_{i=1}{\log{\sum^{K}_{z^{(i)}=1}p(x^{(i)}|z^{(i)};\mu,\Sigma)p(z^{(i)};\phi}}) \\ \end{split}\]</span>
+</div>
+这个似然函数在log之中又存在加和，所以通过普通的求导方法是不能得出最大似然的。之前提到<span class="math inline">\(z^{(i)}\)</span>是用来表示数据<span class="math inline">\(x^{(i)}\)</span>是来自<span class="math inline">\(k\)</span>个高斯分布中的哪一个的，假设我们已经知道了<span class="math inline">\(z^{(i)}\)</span>是多少（比如说<span class="math inline">\(z^{(i)}=k\)</span>)，那么求解决这个极大似然问题就简单多了。因为<span class="math inline">\(z^{(i)}=k\)</span>，对于任意的<span class="math inline">\(j\)</span>,只有<span class="math inline">\(\phi_{k}=p(z^{(i)}=k)=1\)</span>,其余全部都是0，因此在1到<span class="math inline">\(K\)</span>的加和中，只有一个值是存在的，其余全为0。 所以似然函数可以化简成下面这样：
+<div>
+<span class="math display">\[\begin{split} l(\phi,\mu,\Sigma) &amp; =\sum^{m}_{i=1}{ \log{p(x^{(i)}|z^{(i)};\mu,\Sigma)}+\log{p(z^{(i)},\phi)}} \\ \end{split}\]</span>
+</div>
+对此似然函数求极大值，得到参数值如下：
+<div>
+<span class="math display">\[ \begin{split} &amp; \phi_j=\frac{1}{m}\sum^{m}_{i=1}1\{z^{(i)}=j\} \\ &amp; \mu_j=\frac{\sum^m_{i=1}1\{z^{(i)}=j\}x^{(i)}}{\sum^m_{i=1}1\{z^{(i)}=j\}} \\ &amp; \Sigma_j=\frac{\sum^m_{i=1}1\{z^{(i)}=j\}(x^{(i)}-\mu_j)(x^{(i)}-\mu_j)^T}{\sum^m_{i=1}1\{z^{(i)}=j\}} \\ \end{split}\]</span>
+</div>
+<p>但是，事实上我们并不知道这些<span class="math inline">\(z^{(i)}\)</span>的值是多少。如果我们有了这些值，所有的问题都迎刃而解了。下文对于混合高斯模型的EM算法主要分为两步。在E步里，我们猜出所有的<span class="math inline">\(z^{(i)}\)</span>的值，然后在M步中根据猜出的值，更新模型中的参数，反复迭代。</p>
+<ul>
+<li><strong>E步：</strong> 具体地，对于所有的<span class="math inline">\(i,j\)</span>，我们设
+<div>
+<span class="math display">\[ \begin{split} w^{i}_j:=p(z^{(i)}=j|x^{(i)};\phi,\mu,\Sigma) \end{split}\]</span>
+</div>
+<p>这里<span class="math inline">\(w^{i}_j\)</span>是<span class="math inline">\(z^{(i)}=j\)</span>的一个后验概率。（为什么是后验概率？请见<a href="http://www.crescentmoon.info/2012/12/23/一般形式的EM算法/" target="_blank" rel="external">一般形式的EM算法</a>)</p></li>
+<li><strong>M步：</strong> 我们假设<span class="math inline">\(w^{i}_j\)</span>是已知的,求得参数(详细推导见<a href="http://www.crescentmoon.info/2013/04/02/高斯混合模型参数估计详细推导过程/" target="_blank" rel="external">高斯混合模型参数估计详细推导过程</a>)
+<div>
+<span class="math display">\[ \begin{split} &amp; \phi_j=\frac{1}{m}\sum^{m}_{i=1}w^{i}_j \\ &amp; \mu_j=\frac{\sum^m_{i=1}w^{i}_jx^{(i)}}{\sum^m_{i=1}w^{i}_j} \\ &amp; \Sigma_j=\frac{\sum^m_{i=1}w^{i}_j(x^{(i)}-\mu_j)(x^{(i)}-\mu_j)^T}{\sum^m_{i=1}w^{i}_j} \\ \end{split}\]</span>
+</div>
+相互迭代直到似然函数的值收敛。 在E步中,我们使用了后验概率，可以通过贝叶斯公式来计算：
+<div>
+<span class="math display">\[ p(z^{(i)}=j|x^{(i)};\phi,\mu,\Sigma)=\frac{p(x^{(i)}|z^{(i)}=j;\mu,\Sigma)p(z^{(i)}=j;\phi)}{\sum^k_{l=1}{p(x^{(i)}|z^{(i)}=l;\mu,\Sigma)p(z^{(i)}=l;\phi)}}\]</span>
+</div>
+<p>式子中的<span class="math inline">\(p(x^{(i)}|z^{(i)}=j;\mu,\Sigma)p(z^{(i)}=j;\phi)\)</span>是用一个拥有平均值<span class="math inline">\(\mu_j\)</span>和协方差<span class="math inline">\(\Sigma_j\)</span>的高斯分布在<span class="math inline">\(x^{(i)}\)</span>上的概率密度算出的;<span class="math inline">\(p(z^{(i)}=j;\phi)\)</span>是由<span class="math inline">\(\phi_j\)</span>算出的。计算得到的<span class="math inline">\(w^{i}_j\)</span>代表了对<span class="math inline">\(z^{(i)}\)</span>的软猜测。</p></li>
+</ul>
+<p>PS:软猜测是指猜测的结果是<span class="math inline">\([0,1]\)</span>之间的概率值，而硬猜测为单值（0或1）。</p>
+<p>PPS：<br>
+<span style="color: #ff0000;">2013年3月30日更新</span></p>
+<p><span style="color: #ff0000;">今日重看EM算法，发现以前真是胡言乱语，重新更正下：</span><span style="color: #ff0000;"> </span></p>
+<p>CS229中对EM的介绍没有任何问题，只是他先用EM的思想讲了混合高斯模型，再在之后的一章介绍一般的EM算法，并对高斯混合模型进行重述。</p>
+<ol style="list-style-type: decimal">
+<li>为什么选取后验概率<span class="math inline">\(p(w|x)\)</span>？</li>
+</ol>
+<p>答：并不是特地选取的后验概率<span class="math inline">\(p(w|x)\)</span>，而是似然函数与其下界函数相等时的Z的概率分布刚好是后验分布。</p>
+<ol start="2" style="list-style-type: decimal">
+<li>EM算法的全称是期望最大化算法，取的是什么的期望，没有详细说明。</li>
+</ol>
+<p>答：其实在后一章已经说了，我没有仔细看，取的是似然函数<span class="math inline">\(L(X,Z;\theta)\)</span>在分布<span class="math inline">\(Z\sim P(Z|X;\theta)\)</span>上的期望<span class="math inline">\(E_{Z|X,\theta_t}[L(X,Z;\theta)]\)</span></p>
+<p>这篇文章用于理解高斯混合模型挺好，但是用来理解EM算法还有一些欠缺（<del>因为根本没介绍EM么</del>）。除了CS229，PRML中还有第9章对EM算法的介绍(complete data和incomplete data)，更加接近一般的EM思路。</p>
+<p>参考： 1. 斯坦福大学公开课 ：机器学习课程 CS229 2. 《Pattern Recognition And Machine Learning》</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://crescentluna.github.io/2012/12/02/高斯混合模型与EM算法/" data-id="cizha1qzl000gg0o822rpy66n" class="article-share-link" data-share="baidu">分享到</a>
+      
+
+      
+        <a href="http://crescentluna.github.io/2012/12/02/高斯混合模型与EM算法/#ds-thread" class="article-comment-link">Comments</a>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/EM/">EM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/机器学习/">机器学习</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高斯混合模型/">高斯混合模型</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2012/12/23/一般形式的EM算法/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          一般形式的EM算法
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2012/10/14/关于二叉树非递归遍历/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">关于二叉树非递归遍历</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+  <section id="comments">
+    <div id="ds-thread" class="ds-thread" data-thread-key="2012/12/02/高斯混合模型与EM算法/" data-title="高斯混合模型与EM算法" data-url="http://crescentluna.github.io/2012/12/02/高斯混合模型与EM算法/"></div>
+  </section>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/学术/">学术</a><span class="category-list-count">18</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/学术/Gibbs-Sampling笔记/">Gibbs Sampling笔记</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/学术/变分推断笔记/">变分推断笔记</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习/">机器学习</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂项/">杂项</a><span class="category-list-count">6</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/杂项/闲话/">闲话</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a><span class="category-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/DP/" style="font-size: 13.33px;">DP</a> <a href="/tags/EM/" style="font-size: 20px;">EM</a> <a href="/tags/Gibbs-Sampling/" style="font-size: 20px;">Gibbs Sampling</a> <a href="/tags/Hexo/" style="font-size: 13.33px;">Hexo</a> <a href="/tags/LDA/" style="font-size: 10px;">LDA</a> <a href="/tags/PRML/" style="font-size: 13.33px;">PRML</a> <a href="/tags/Variational-Inference/" style="font-size: 16.67px;">Variational Inference</a> <a href="/tags/kNN/" style="font-size: 10px;">kNN</a> <a href="/tags/matlab/" style="font-size: 10px;">matlab</a> <a href="/tags/tensorflow/" style="font-size: 10px;">tensorflow</a> <a href="/tags/wordpress/" style="font-size: 10px;">wordpress</a> <a href="/tags/二叉树/" style="font-size: 10px;">二叉树</a> <a href="/tags/决策树/" style="font-size: 10px;">决策树</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/参数估计/" style="font-size: 10px;">参数估计</a> <a href="/tags/多项式分布/" style="font-size: 10px;">多项式分布</a> <a href="/tags/数据挖掘/" style="font-size: 16.67px;">数据挖掘</a> <a href="/tags/机器学习/" style="font-size: 16.67px;">机器学习</a> <a href="/tags/概率图/" style="font-size: 10px;">概率图</a> <a href="/tags/盘子/" style="font-size: 10px;">盘子</a> <a href="/tags/社区发现/" style="font-size: 10px;">社区发现</a> <a href="/tags/背包问题/" style="font-size: 13.33px;">背包问题</a> <a href="/tags/贝叶斯方法/" style="font-size: 10px;">贝叶斯方法</a> <a href="/tags/高斯混合模型/" style="font-size: 16.67px;">高斯混合模型</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">七月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/04/">四月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">二月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">一月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/">十二月 2012</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">十月 2012</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">九月 2012</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">浏览数目</h3>
+    <div class="widget">
+      <ul class="popularlist">
+      </ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">近期文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/02/23/install-tensorflow-with-gpu-support-for-ubuntu/">在Ubuntu上搭建GPU加速的TensorFlow环境</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/12/variational-inference-3/">变分推断学习笔记(3)——三硬币问题的变分推断解法</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/11/popular-widget/">使用LeanCloud平台为Hexo博客添加文章浏览量统计组件</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/11/relocation/">博客迁移小记</a>
+          </li>
+        
+          <li>
+            <a href="/2014/02/24/概率图模型简介/">概率图模型简介</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+
+  
+    
+<div class="widget-wrap">
+  <h3 class="widget-title">最近评论</h3>
+  <ul class="widget ds-recent-comments" data-num-items="5" data-show-avatars="0" data-show-title="1" data-show-time="1"></ul>
+</div>
+<!-- 需要多说的公用代码 -->
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">友情链接</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="https://github.com/xiangming/landscape-plus" target="_blank">landscape-plus主题</a>
+          </li>
+        
+          <li>
+            <a href="http://www.smallqiao.com/" target="_blank">小桥流水</a>
+          </li>
+        
+          <li>
+            <a href="http://www.ahathinking.com/" target="_blank">勇幸|Thinking</a>
+          </li>
+        
+          <li>
+            <a href="http://www.socona.me/" target="_blank">socona的博客</a>
+          </li>
+        
+          <li>
+            <a href="http://www.clarkchen.com/" target="_blank">陈曦师兄的博客</a>
+          </li>
+        
+          <li>
+            <a href="http://www.fengyafei.com/" target="_blank">小飞的博客</a>
+          </li>
+        
+          <li>
+            <a href="http://ariwaranosai.xyz/" target="_blank">今天拒绝负能量!</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Chen Hao<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      .
+      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives" class="mobile-nav-link">所有文章</a>
+  
+    <a href="/about" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+<!-- 多说公共js代码 start -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"crescent"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+<!-- 多说公共js代码 end -->
+
+
+<!-- 百度分享 start -->
+
+<div id="article-share-box" class="article-share-box">
+  <div id="bdshare" class="bdsharebuttonbox article-share-links">
+    <a class="article-share-weibo" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a class="article-share-weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a class="article-share-qq" data-cmd="sqq" title="分享到QQ"></a>
+    <a class="article-share-renren" data-cmd="renren" title="分享到人人网"></a>
+    <a class="article-share-more" data-cmd="more" title="更多"></a>
+  </div>
+</div>
+<script>window._bd_share_config={"common":{},"share":{"bdCustomStyle":"nocss.css"}};with(document)0[(getElementsByTagName("head")[0]||body).appendChild(createElement("script")).src="http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion="+~(-new Date()/36e5)];</script>
+
+<!-- 百度分享 end -->
+
+<script src="//libs.baidu.com/jquery/1.11.1/jquery.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<! -- mathjax config similar to math.stackexchange -->
+<! -- add autoNumber settting -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+                processEscapes: true
+                    
+}
+  
+        });
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+                  
+}
+    
+        });
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Queue(function() {
+            var all = MathJax.Hub.getAllJax(), i;
+            for(i=0; i < all.length; i += 1) {
+                            all[i].SourceElement().parentNode.className += ' has-jax';
+                                    
+            }
+                
+        });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+<script src="/js/script.js"></script>
+
+<!--page counter part-->
+<script>
+function addCount (Counter) {
+        url=$('.article-date').attr('href').trim();
+        title = $('.article-title').text().trim();
+       // alert(title);
+        var query=new AV.Query(Counter);
+        //use url as unique idnetfication
+        query.equalTo("url",url);
+        query.find({
+            success: function(results){
+                if(results.length>0)
+                {
+                    var counter=results[0];
+                    counter.fetchWhenSave(true); //get recent result
+                    counter.increment("time");
+                    counter.save();
+                    //alert('find '+title+' and visit time is now '+ counter.get("time"));
+                }
+                else
+                {
+                    var newcounter=new Counter();
+                    newcounter.set("title",title);
+                    newcounter.set("url",url);
+                    newcounter.set("time",1);
+                    newcounter.save(null,{
+                        success: function(newcounter){
+                        //alert('New object created');
+                        },
+                        error: function(newcounter,error){
+                        alert('Failed to create');
+                        }
+                        });
+                }
+            },
+            error: function(error){
+                //find null is not a error
+                alert('Error:'+error.code+" "+error.message);
+            }
+        });
+}
+
+$(function(){
+        var Counter=AV.Object.extend("Counter");
+        //only increse visit counting when intering a page
+        if ($('.article-title').length == 1)
+           addCount(Counter);
+        var query=new AV.Query(Counter);
+        query.descending("time");
+        query.limit(10);
+        query.find({
+            success: function(results){
+                    for(var i=0;i<results.length;i++)    
+                    {
+                        var counter=results[i];
+                        //alert(counter.get("title")+'-'+counter.get("url"));
+                        title=counter.get("title");
+                        url=counter.get("url");
+                        time=counter.get("time");
+                        // add to the popularlist widget
+                        showcontent=title+" ("+time+")";
+                        //notice the "" in href
+                        $('.popularlist').append('<li><a href="'+url+'">'+showcontent+'</a></li>');
+                    }
+                },
+            error: function(error){
+                alert("Error:"+error.code+" "+error.message);
+            }
+            }
+        )
+        });
+</script>
+
+
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>

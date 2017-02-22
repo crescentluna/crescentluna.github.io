@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>《数据挖掘导论》总结之聚类篇 | 心怀畏惧</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="聚类分析将数据划分成有意义的簇，如果目标是划分成有意义的组，则簇应当捕获数据的自然结构。 聚类的目的可以分为2类：
+
+旨在理解的聚类。比如生物学，信息检索，气候模式，心理学和医学，商业等。
+旨在实用的聚类。旨在汇总数据，压缩数据，有效地发现最近邻。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《数据挖掘导论》总结之聚类篇">
+<meta property="og:url" content="http://crescentluna.github.io/2013/02/21/《数据挖掘导论》总结之聚类篇/index.html">
+<meta property="og:site_name" content="心怀畏惧">
+<meta property="og:description" content="聚类分析将数据划分成有意义的簇，如果目标是划分成有意义的组，则簇应当捕获数据的自然结构。 聚类的目的可以分为2类：
+
+旨在理解的聚类。比如生物学，信息检索，气候模式，心理学和医学，商业等。
+旨在实用的聚类。旨在汇总数据，压缩数据，有效地发现最近邻。">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151415.png">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151444.png">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151515.png">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151556.png">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151727.png">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151740.png">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151803.png">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151814.png">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151835.png">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151858.png">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151915.png">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151929.png">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151954.png">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221152008.png">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221152019.png">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221152101.png">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221152055.png">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221152113.png">
+<meta property="og:updated_time" content="2017-02-21T18:24:27.407Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《数据挖掘导论》总结之聚类篇">
+<meta name="twitter:description" content="聚类分析将数据划分成有意义的簇，如果目标是划分成有意义的组，则簇应当捕获数据的自然结构。 聚类的目的可以分为2类：
+
+旨在理解的聚类。比如生物学，信息检索，气候模式，心理学和医学，商业等。
+旨在实用的聚类。旨在汇总数据，压缩数据，有效地发现最近邻。">
+<meta name="twitter:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151415.png">
+  
+    <link rel="alternative" href="/atom.xml" title="心怀畏惧" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+  
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F1fc57dc5ccfaeae31f8e295269b6fa04' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-57404093-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+  <script src="https://cdn1.lncld.net/static/js/av-min-1.2.1.js"></script>
+  <script>AV.initialize("57nirzk8g437patyg9434lcvmpkat6e5lu5mixmrwqa8l3ao", "rsqg6iiq58eyeg8c6c6uue48crtwt5quuq5dmjaahfcjlkq8");</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">心怀畏惧</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Do not go gentle into that good night</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives">所有文章</a>
+        
+          <a class="main-nav-link" href="/about">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="http://www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
+          <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="Search">
+          <input type="submit" value="" class="search-form-submit">
+          <input name=tn type=hidden value="bds">
+          <input name=cl type=hidden value="3">
+          <input name=ct type=hidden value="2097152">
+          <input type="hidden" name="si" value="crescentluna.github.io">
+        </form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-《数据挖掘导论》总结之聚类篇" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/02/21/《数据挖掘导论》总结之聚类篇/" class="article-date">
+  <time datetime="2013-02-20T23:55:10.000Z" itemprop="datePublished">2013-02-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/学术/">学术</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      《数据挖掘导论》总结之聚类篇
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>聚类分析将数据划分成有意义的簇，如果目标是划分成有意义的组，则簇应当捕获数据的自然结构。 聚类的目的可以分为2类：</p>
+<ol style="list-style-type: decimal">
+<li><p>旨在理解的聚类。比如生物学，信息检索，气候模式，心理学和医学，商业等。</p></li>
+<li><p>旨在实用的聚类。旨在汇总数据，压缩数据，有效地发现最近邻。</p></li>
+</ol>
+<a id="more"></a>
+<h1 id="不同的簇类型">1. 不同的簇类型</h1>
+<p>聚类旨在发现有用的簇，毫无疑问，有许多不同的簇概念，例子见图1。<a href="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151415.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151415.png" alt="QQ截图20130221151415"></a></p>
+<ol style="list-style-type: decimal">
+<li><p>明显分离的。簇是对象的集合，其中每个对象到同簇中每个对象的距离比到不同簇的任意对象都近。</p></li>
+<li><p>基于原型的。簇是对象的集合，其中每个对象到定义该簇的原型的距离比到其他簇的原型的距离都近。对于有连续属性的数据，簇的原型通常是质心。当质心无意义（分类属性）时，原型通常是中心点，这种簇被看做基于中心的簇。</p></li>
+<li><p>基于图的。如果数据用图表示，其中结点是对象，而边代表对象之间的联系，则簇可以定义为连通分支，即相互连通单不对组外对象连通的对象组。基于图的簇一个重要例子是基于邻近的簇，其中每个对象到该簇中某个对象的距离比到不同簇中的任意点距离更近。</p></li>
+<li><p>基于密度的。簇是对象的稠密区域，被低密度的区域环绕。</p></li>
+<li><p>共同性质的（概念簇）。我们把簇定义为有某种共同性质的对象的集合（包括前面全部），但是可以包含新的簇类型。</p></li>
+</ol>
+<h1 id="基于原型的聚类算法">2. 基于原型的聚类算法</h1>
+<h3 id="k均值">2.1 K均值</h3>
+<p>K均值的算法是一种简单的基于原型的聚类算法，伪代码和例子见图2。<a href="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151444.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151444.png" alt="QQ截图20130221151444"></a> K均值实用误差平方和来作为目标函数，公式如下 <span class="math display">\[ SSE=\sum^k_{i=1}\sum_{x\in C_i} dist(c_i,x)^2\]</span> 其中，<span class="math inline">\(C_i\)</span>是第<span class="math inline">\(i\)</span>个簇，<span class="math inline">\(x\)</span>是<span class="math inline">\(C_i\)</span>中的点，<span class="math inline">\(c_i\)</span>是第<span class="math inline">\(i\)</span>个簇的均值，dist是欧几里得空间中两个对象之间的标准欧几里得距离。我们对第<span class="math inline">\(k\)</span>个质心<span class="math inline">\(c_k\)</span>求解，对SSE求偏导，并求解<span class="math inline">\(c_k\)</span>，如下所示： <span class="math display">\[\begin{split} \frac{\partial}{\partial{c_k}}SSE &amp; =\frac{\partial}{\partial{c_k}}\sum^k_{i=1}\sum_{x\in C_i} (c_i-x)^2 \\&amp; =\sum^k_{i=1}\sum_{x\in C_i} \frac{\partial}{\partial{c_k}}(c_i-x)^2 \\&amp; =\sum_{x\in C_{k}}2(c_k-x_k)=0 \\ \end{split}\]</span> <span class="math display">\[ \sum_{x\in C_{k}}2(c_k-x_k)=0 \Rightarrow m_kc_k=\sum_{x\in C_{k}}x_k \Rightarrow c_k=\frac{1}{m_k}\sum_{x\in C_{k}}x_k\]</span> 这样，簇的最小化SSE的最佳质心是簇中各点的均值。</p>
+<h3 id="模糊聚类">2.2 模糊聚类</h3>
+<p>如果对象分布在明显的分离的组中，则把对象明确分类成不相交的簇比较理想。但是在大部分情况下，数据集中的对象不能划分成明显分离的簇，指派一个对象到一个特定的簇也具有一定的任意性。这时候我们可以对每个对象和每个簇赋予一个权值，指明该对象属于该簇的程度。从数学上讲，<span class="math inline">\(w_ij\)</span>是对象<span class="math inline">\(x_i\)</span>属于簇<span class="math inline">\(C_j\)</span>的权值。</p>
+<p>需要注意的是，虽然概率方法也可以提供这样的权值，但是有时候很难确定一个合适的统计模型。在这种情况下，就需要用非概率的聚类技术提供类似的能力。模糊聚类技术基于模糊集合论，并且提供一种产生聚类的自然技术，其中隶属权值 (<span class="math inline">\(w_{ij}\)</span>)具有自然（但非概率）解释。</p>
+<h4 id="模糊集合">2.2.1 模糊集合</h4>
+<p>模糊集合：允许对象以0和1之间的某个隶属度属于一个集合。</p>
+<h4 id="模糊簇">2.2.2 模糊簇</h4>
+<p>假设我们有一个数据点的集合<span class="math inline">\(\chi=\{x_1,\cdots,x_m\}\)</span>，其中每个点<span class="math inline">\(x_i\)</span>是一个<span class="math inline">\(n\)</span>维点，即<span class="math inline">\(x_i=\{x_{i1},\cdots,x_{im}\}\)</span>。模糊簇集<span class="math inline">\(\{C_1,C_2,\cdots,C_k\}\)</span>是<span class="math inline">\(\chi\)</span>的所有可能模糊子集的一个子集。（意思是点<span class="math inline">\(x_i\)</span>和每个簇<span class="math inline">\(C_j\)</span>的隶属度<span class="math inline">\(w_{ij}\)</span>已经赋值）。还需要满足以下条件: <span class="math display">\[\sum^k_{j=1}w_{ij}=1\]</span> <span class="math display">\[0&lt;\sum^m_{i=1}w_{ij}&lt;m\]</span> 每个簇<span class="math inline">\(C_j\)</span>以非零权值至少包含一个点，但不以权值1包含所有点。</p>
+<h4 id="模糊c均值">2.2.3 模糊c均值</h4>
+<p>这里我们仅以K均值的模糊版本——模糊c均值（FCM）为例,伪代码见图3。<a href="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151515.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151515.png" alt="QQ截图20130221151515"></a> 这里SSE的定义修改为 <span class="math display">\[SSE(C_1,C_2,\cdots,C_k)=\sum^k_{i=1}\sum_{x\in C_i}w^p_{ij}dist(c_i,x)^2\]</span> 是传统K均值的SSE的加权版本,这里p是权值影响的指数。 计算得到的质心变为 <span class="math display">\[c_j=\frac{\sum^m_{i=1}w_{ij}^p x_i}{\sum^m_{i=1} w_{ij}^p}\]</span> 还需要在满足限制条件的情况下更新权值<span class="math inline">\(w_{ij}\)</span>，公式为 <span class="math display">\[ w_{ij}=(1/dist(x_i,c_j)^2)^{\frac{1}{p-1}}/(\sum^k_{q=1}(1/dist(x_i,c_q)^2)^{\frac{1}{p-1}})\]</span> 模糊聚类的例子见图4。<a href="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151556.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151556.png" alt="QQ截图20130221151556"></a></p>
+<h3 id="混合模型的聚类">2.3 混合模型的聚类</h3>
+<p>基于统计模型的聚类假设数据是由一个统计过程产生的，并且通过找出最佳拟合数据的统计模型来描述数据，其中统计模型用分布和该分布的一组参数描述。而混合模型使用若干统计分布对应于一个簇，而每个分布的参数提供对应簇的描述。混合模型在之前的文章里有介绍，这里就略过。</p>
+<h3 id="自组织映射">2.4 自组织映射</h3>
+<p>自组织特征映射(SOM)基于神经网络观点的聚类和数据可视化技术,详细见书。</p>
+<h1 id="基于密度的聚类算法">3.基于密度的聚类算法</h1>
+<h3 id="dbscan">3.1 DBSCAN</h3>
+<p>DBSCAN算法属于基于密度的聚类算法，相对抗噪声，可以处理任意形状和大小的簇。算法将点分为三类：</p>
+<ol style="list-style-type: decimal">
+<li><p>核心点(core point).点在基于密度的簇内部,点的邻域由距离函数和用户指定的聚类参数Eps决定。</p></li>
+<li><p>边界点：不是核心点，但它落在某个核心点的邻域内。在图5中，点B是边界点。边界点可能落在多个核心点的邻域内。</p></li>
+<li><p>噪声点：既非核心点又非边界点.在图5中，点C是噪声点。<a href="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151727.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151727.png" alt="QQ截图20130221151727"></a></p></li>
+</ol>
+<p>伪代码见图6。<a href="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151740.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151740.png" alt="QQ截图20130221151740"></a></p>
+<h3 id="基于网格的聚类">3.2 基于网格的聚类</h3>
+<p>基于网格的聚类将数据空间划分成网格单元，然后由足够稠密的网格单元形成簇。网格是一种在低维空间中组织数据集的有效方法，算法伪代码见下图7。<a href="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151803.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151803.png" alt="QQ截图20130221151803"></a></p>
+<p>例子见图8。<a href="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151814.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151814.png" alt="QQ截图20130221151814"></a></p>
+<h3 id="子空间聚类">3.3 子空间聚类</h3>
+<p>之前的聚类算法都是使用所有的属性来发现簇，如果仅考虑特征子集（即数据的子空间），则发现的簇很可能因为子空间的不同而不同。有两个里有可以推断子空间的簇有意义：</p>
+<ol style="list-style-type: decimal">
+<li><p>数据的少量属性的集合可以聚类，而其余属性是随机分布的。</p></li>
+<li><p>在某些情况下，不同维集合中存在不同的簇。比如商品在特定的月份可能表示类似行为。</p></li>
+</ol>
+<p>图9是子空间的示例。<a href="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151835.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151835.png" alt="QQ截图20130221151835"></a></p>
+<h4 id="clique算法">3.3.1 CLIQUE算法</h4>
+<p>CLIQUE算法是系统地发现子空间簇的基于网格的聚类算法。检查每个子空间寻找簇是不现实的，因为这样子空间是维度的指数。CLIQUE依赖于以下性质：</p>
+<p>如果一个点集在k维（属性（上）形成一个基于密度的簇，则相同的点集在这些维的所有可能的子集上也是基于密度的簇的一部分。</p>
+<p>CLIQUE使用的方法与Apriori算法的先验原理十分类似，一个邻接的，形成簇的k维单元集忽略k维中的一个维之后得到的k-1维的单元集也是邻接的，并且每个低维单元包含对应高维单元的所有点，还可能包含附加的点。这样，低维单元的密度大于等于高维单元的密度。算法伪代码见图10。<a href="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151858.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151858.png" alt="QQ截图20130221151858"></a></p>
+<p>DENCLUE和核密度估计详细见书。</p>
+<h1 id="基于图的聚类算法">4. 基于图的聚类算法</h1>
+<h3 id="稀疏化">4.1 稀疏化</h3>
+<p>m个数据点的<span class="math inline">\(m\times m\)</span>邻近度矩阵可以用一个稠密图表示，图中每个结点与其他所有节点相连接，任何一对结点之间的权值反映它们之间的邻近性。对于大部分数据集，对象只与少量对象高度相似，与其他对象相似性很弱，所以我们可以稀疏化邻近度矩阵。图11中列出了稀疏化的理想过程。<a href="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151915.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151915.png" alt="QQ截图20130221151915"></a></p>
+<h3 id="最小生成树聚类">4.2 最小生成树聚类</h3>
+<p>见图12。<a href="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151929.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151929.png" alt="QQ截图20130221151929"></a> OPOSSUM和Chameleon详见书。</p>
+<h3 id="共享最近邻相似度">4.3 共享最近邻相似度</h3>
+<p>在某些情况下，依赖于相似度和密度的标准的方法的聚类技术不能产生理想的聚类结果。相似性的SNN解决以下两个问题：</p>
+<ol style="list-style-type: decimal">
+<li><p>传统的相似度在高位数据上相似度低的问题。一个对象的大多数最近邻通常属于同一个类，但是同一个中类对象之间相似性低，不能用直接相似度衡量。</p></li>
+<li><p>密度不同的问题。见图13。<a href="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151954.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221151954.png" alt="QQ截图20130221151954"></a></p></li>
+</ol>
+<p>在上述两种情况下，相似性的SNN方法基于以下思想：</p>
+<p><em>如果两个点都与一些相同的点相似，则即使直接的相似度度量不能指出，它们也相似。</em></p>
+<p>算法见图14，用相似度的共享最近邻（Shared Nearest Neighbor,SNN)定义量化。<a href="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221152008.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221152008.png" alt="QQ截图20130221152008"></a></p>
+<p>例子见图15。<a href="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221152019.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221152019.png" alt="QQ截图20130221152019"></a></p>
+<p>Jarvis——Patrick算法，SNN密度详见书。</p>
+<h1 id="其他">5. 其他</h1>
+<h3 id="凝聚层次聚类">5.1 凝聚层次聚类</h3>
+<p>层次聚类常用树状图（dendrogram）的图表示。伪代码见图16.<a href="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221152101.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221152101.png" alt="QQ截图20130221152101"></a><a href="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221152055.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221152055.png" alt="QQ截图20130221152055"></a> 簇之间的邻近度通常有三种定义。 1.单链(single link)。不同的两个簇的两个最近点之间的邻近度。 2.全链(complete link)。不同的两个簇的两个最远点之间的邻近度。 3.组平均(group average)。不同簇所有点对邻近度的平均值。 图17给出了示例。<a href="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221152113.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130221152113.png" alt="QQ截图20130221152113"></a></p>
+<p>更多具体内容请见《数据挖掘导论》。 参考文献： 《数据挖掘导论》,人民邮电出版社。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://crescentluna.github.io/2013/02/21/《数据挖掘导论》总结之聚类篇/" data-id="cizha1qzp000pg0o8p0zifmot" class="article-share-link" data-share="baidu">分享到</a>
+      
+
+      
+        <a href="http://crescentluna.github.io/2013/02/21/《数据挖掘导论》总结之聚类篇/#ds-thread" class="article-comment-link">Comments</a>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据挖掘/">数据挖掘</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2013/03/01/Monty Hall problem/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          有趣的三门问题（蒙提霍尔问题）
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2013/02/18/《数据挖掘导论》总结之关联分析/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">《数据挖掘导论》总结之关联分析</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+  <section id="comments">
+    <div id="ds-thread" class="ds-thread" data-thread-key="2013/02/21/《数据挖掘导论》总结之聚类篇/" data-title="《数据挖掘导论》总结之聚类篇" data-url="http://crescentluna.github.io/2013/02/21/《数据挖掘导论》总结之聚类篇/"></div>
+  </section>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/学术/">学术</a><span class="category-list-count">18</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/学术/Gibbs-Sampling笔记/">Gibbs Sampling笔记</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/学术/变分推断笔记/">变分推断笔记</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习/">机器学习</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂项/">杂项</a><span class="category-list-count">6</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/杂项/闲话/">闲话</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a><span class="category-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/DP/" style="font-size: 13.33px;">DP</a> <a href="/tags/EM/" style="font-size: 20px;">EM</a> <a href="/tags/Gibbs-Sampling/" style="font-size: 20px;">Gibbs Sampling</a> <a href="/tags/Hexo/" style="font-size: 13.33px;">Hexo</a> <a href="/tags/LDA/" style="font-size: 10px;">LDA</a> <a href="/tags/PRML/" style="font-size: 13.33px;">PRML</a> <a href="/tags/Variational-Inference/" style="font-size: 16.67px;">Variational Inference</a> <a href="/tags/kNN/" style="font-size: 10px;">kNN</a> <a href="/tags/matlab/" style="font-size: 10px;">matlab</a> <a href="/tags/tensorflow/" style="font-size: 10px;">tensorflow</a> <a href="/tags/wordpress/" style="font-size: 10px;">wordpress</a> <a href="/tags/二叉树/" style="font-size: 10px;">二叉树</a> <a href="/tags/决策树/" style="font-size: 10px;">决策树</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/参数估计/" style="font-size: 10px;">参数估计</a> <a href="/tags/多项式分布/" style="font-size: 10px;">多项式分布</a> <a href="/tags/数据挖掘/" style="font-size: 16.67px;">数据挖掘</a> <a href="/tags/机器学习/" style="font-size: 16.67px;">机器学习</a> <a href="/tags/概率图/" style="font-size: 10px;">概率图</a> <a href="/tags/盘子/" style="font-size: 10px;">盘子</a> <a href="/tags/社区发现/" style="font-size: 10px;">社区发现</a> <a href="/tags/背包问题/" style="font-size: 13.33px;">背包问题</a> <a href="/tags/贝叶斯方法/" style="font-size: 10px;">贝叶斯方法</a> <a href="/tags/高斯混合模型/" style="font-size: 16.67px;">高斯混合模型</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">七月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/04/">四月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">二月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">一月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/">十二月 2012</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">十月 2012</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">九月 2012</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">浏览数目</h3>
+    <div class="widget">
+      <ul class="popularlist">
+      </ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">近期文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/02/23/install-tensorflow-with-gpu-support-for-ubuntu/">在Ubuntu上搭建GPU加速的TensorFlow环境</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/12/variational-inference-3/">变分推断学习笔记(3)——三硬币问题的变分推断解法</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/11/popular-widget/">使用LeanCloud平台为Hexo博客添加文章浏览量统计组件</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/11/relocation/">博客迁移小记</a>
+          </li>
+        
+          <li>
+            <a href="/2014/02/24/概率图模型简介/">概率图模型简介</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+
+  
+    
+<div class="widget-wrap">
+  <h3 class="widget-title">最近评论</h3>
+  <ul class="widget ds-recent-comments" data-num-items="5" data-show-avatars="0" data-show-title="1" data-show-time="1"></ul>
+</div>
+<!-- 需要多说的公用代码 -->
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">友情链接</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="https://github.com/xiangming/landscape-plus" target="_blank">landscape-plus主题</a>
+          </li>
+        
+          <li>
+            <a href="http://www.smallqiao.com/" target="_blank">小桥流水</a>
+          </li>
+        
+          <li>
+            <a href="http://www.ahathinking.com/" target="_blank">勇幸|Thinking</a>
+          </li>
+        
+          <li>
+            <a href="http://www.socona.me/" target="_blank">socona的博客</a>
+          </li>
+        
+          <li>
+            <a href="http://www.clarkchen.com/" target="_blank">陈曦师兄的博客</a>
+          </li>
+        
+          <li>
+            <a href="http://www.fengyafei.com/" target="_blank">小飞的博客</a>
+          </li>
+        
+          <li>
+            <a href="http://ariwaranosai.xyz/" target="_blank">今天拒绝负能量!</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Chen Hao<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      .
+      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives" class="mobile-nav-link">所有文章</a>
+  
+    <a href="/about" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+<!-- 多说公共js代码 start -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"crescent"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+<!-- 多说公共js代码 end -->
+
+
+<!-- 百度分享 start -->
+
+<div id="article-share-box" class="article-share-box">
+  <div id="bdshare" class="bdsharebuttonbox article-share-links">
+    <a class="article-share-weibo" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a class="article-share-weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a class="article-share-qq" data-cmd="sqq" title="分享到QQ"></a>
+    <a class="article-share-renren" data-cmd="renren" title="分享到人人网"></a>
+    <a class="article-share-more" data-cmd="more" title="更多"></a>
+  </div>
+</div>
+<script>window._bd_share_config={"common":{},"share":{"bdCustomStyle":"nocss.css"}};with(document)0[(getElementsByTagName("head")[0]||body).appendChild(createElement("script")).src="http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion="+~(-new Date()/36e5)];</script>
+
+<!-- 百度分享 end -->
+
+<script src="//libs.baidu.com/jquery/1.11.1/jquery.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<! -- mathjax config similar to math.stackexchange -->
+<! -- add autoNumber settting -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+                processEscapes: true
+                    
+}
+  
+        });
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+                  
+}
+    
+        });
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Queue(function() {
+            var all = MathJax.Hub.getAllJax(), i;
+            for(i=0; i < all.length; i += 1) {
+                            all[i].SourceElement().parentNode.className += ' has-jax';
+                                    
+            }
+                
+        });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+<script src="/js/script.js"></script>
+
+<!--page counter part-->
+<script>
+function addCount (Counter) {
+        url=$('.article-date').attr('href').trim();
+        title = $('.article-title').text().trim();
+       // alert(title);
+        var query=new AV.Query(Counter);
+        //use url as unique idnetfication
+        query.equalTo("url",url);
+        query.find({
+            success: function(results){
+                if(results.length>0)
+                {
+                    var counter=results[0];
+                    counter.fetchWhenSave(true); //get recent result
+                    counter.increment("time");
+                    counter.save();
+                    //alert('find '+title+' and visit time is now '+ counter.get("time"));
+                }
+                else
+                {
+                    var newcounter=new Counter();
+                    newcounter.set("title",title);
+                    newcounter.set("url",url);
+                    newcounter.set("time",1);
+                    newcounter.save(null,{
+                        success: function(newcounter){
+                        //alert('New object created');
+                        },
+                        error: function(newcounter,error){
+                        alert('Failed to create');
+                        }
+                        });
+                }
+            },
+            error: function(error){
+                //find null is not a error
+                alert('Error:'+error.code+" "+error.message);
+            }
+        });
+}
+
+$(function(){
+        var Counter=AV.Object.extend("Counter");
+        //only increse visit counting when intering a page
+        if ($('.article-title').length == 1)
+           addCount(Counter);
+        var query=new AV.Query(Counter);
+        query.descending("time");
+        query.limit(10);
+        query.find({
+            success: function(results){
+                    for(var i=0;i<results.length;i++)    
+                    {
+                        var counter=results[i];
+                        //alert(counter.get("title")+'-'+counter.get("url"));
+                        title=counter.get("title");
+                        url=counter.get("url");
+                        time=counter.get("time");
+                        // add to the popularlist widget
+                        showcontent=title+" ("+time+")";
+                        //notice the "" in href
+                        $('.popularlist').append('<li><a href="'+url+'">'+showcontent+'</a></li>');
+                    }
+                },
+            error: function(error){
+                alert("Error:"+error.code+" "+error.message);
+            }
+            }
+        )
+        });
+</script>
+
+
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>

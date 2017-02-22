@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>三硬币问题-一个EM算法和Gibbs Sampling的例子 | 心怀畏惧</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="讲一个EM算法和Gibbs 抽样的小例子，用于加深理解（变分推断版本请见变分推断学习笔记(3)——三硬币问题的变分推断解法）。
+题目(引用自参考1）：假设有3枚硬币，分别记做A，B，C。这些硬币正面出现的概率分别是\(\pi\),\(p\)和\(q\)。进行如下掷硬币实验：先掷硬币A，根据其结果选出硬币B或C，正面选B，反面选硬币C；然后投掷选重中的硬币，出现正面记作1，反面记作0；独立地重复\(">
+<meta property="og:type" content="article">
+<meta property="og:title" content="三硬币问题-一个EM算法和Gibbs Sampling的例子">
+<meta property="og:url" content="http://crescentluna.github.io/2013/07/03/三硬币问题-一个EM算法和Gibbs Sampling的例子/index.html">
+<meta property="og:site_name" content="心怀畏惧">
+<meta property="og:description" content="讲一个EM算法和Gibbs 抽样的小例子，用于加深理解（变分推断版本请见变分推断学习笔记(3)——三硬币问题的变分推断解法）。
+题目(引用自参考1）：假设有3枚硬币，分别记做A，B，C。这些硬币正面出现的概率分别是\(\pi\),\(p\)和\(q\)。进行如下掷硬币实验：先掷硬币A，根据其结果选出硬币B或C，正面选B，反面选硬币C；然后投掷选重中的硬币，出现正面记作1，反面记作0；独立地重复\(">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/概率图.jpg">
+<meta property="og:updated_time" content="2017-02-21T18:24:27.407Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="三硬币问题-一个EM算法和Gibbs Sampling的例子">
+<meta name="twitter:description" content="讲一个EM算法和Gibbs 抽样的小例子，用于加深理解（变分推断版本请见变分推断学习笔记(3)——三硬币问题的变分推断解法）。
+题目(引用自参考1）：假设有3枚硬币，分别记做A，B，C。这些硬币正面出现的概率分别是\(\pi\),\(p\)和\(q\)。进行如下掷硬币实验：先掷硬币A，根据其结果选出硬币B或C，正面选B，反面选硬币C；然后投掷选重中的硬币，出现正面记作1，反面记作0；独立地重复\(">
+<meta name="twitter:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/概率图.jpg">
+  
+    <link rel="alternative" href="/atom.xml" title="心怀畏惧" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+  
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F1fc57dc5ccfaeae31f8e295269b6fa04' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-57404093-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+  <script src="https://cdn1.lncld.net/static/js/av-min-1.2.1.js"></script>
+  <script>AV.initialize("57nirzk8g437patyg9434lcvmpkat6e5lu5mixmrwqa8l3ao", "rsqg6iiq58eyeg8c6c6uue48crtwt5quuq5dmjaahfcjlkq8");</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">心怀畏惧</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Do not go gentle into that good night</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives">所有文章</a>
+        
+          <a class="main-nav-link" href="/about">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="http://www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
+          <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="Search">
+          <input type="submit" value="" class="search-form-submit">
+          <input name=tn type=hidden value="bds">
+          <input name=cl type=hidden value="3">
+          <input name=ct type=hidden value="2097152">
+          <input type="hidden" name="si" value="crescentluna.github.io">
+        </form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-三硬币问题-一个EM算法和Gibbs Sampling的例子" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/07/03/三硬币问题-一个EM算法和Gibbs Sampling的例子/" class="article-date">
+  <time datetime="2013-07-02T17:41:26.000Z" itemprop="datePublished">2013-07-03</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/学术/">学术</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      三硬币问题-一个EM算法和Gibbs Sampling的例子
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>讲一个EM算法和Gibbs 抽样的小例子，用于加深理解（变分推断版本请见<a href="http://crescentluna.github.io/2014/12/12/variational-inference-3/">变分推断学习笔记(3)——三硬币问题的变分推断解法</a>）。</p>
+<p>题目(引用自参考1）：假设有3枚硬币，分别记做A，B，C。这些硬币正面出现的概率分别是<span class="math inline">\(\pi\)</span>,<span class="math inline">\(p\)</span>和<span class="math inline">\(q\)</span>。进行如下掷硬币实验：先掷硬币A，根据其结果选出硬币B或C，正面选B，反面选硬币C；然后投掷选重中的硬币，出现正面记作1，反面记作0；独立地重复<span class="math inline">\(n\)</span>次（n=10)，结果为 <span class="math display">\[1111110000\]</span> 我们只能观察投掷硬币的结果，而不知其过程，估计这三个参数<span class="math inline">\(\pi\)</span>,<span class="math inline">\(p\)</span>和<span class="math inline">\(q\)</span>。</p>
+<h1 id="em算法">EM算法</h1>
+<p>可以看到投掷硬币时到底选择了B或者C是未知的。我们设隐藏变量Z 来指示来自于哪个硬币，<span class="math inline">\(Z=\{z_1,z_2,\ldots,z_n \}\)</span>，令<span class="math inline">\(\theta=\{\pi,p,q\}\)</span>，观察数据<span class="math inline">\(X=\{x_1,x_2,\ldots,x_n \}\)</span>。</p>
+<p>写出生成一个硬币时的概率： <span class="math display">\[\begin{split}P(x|\theta) &amp; =\sum_z P(x,z|\theta)=\sum_z P(z|\pi)P(x|z,\theta) \\&amp; =\pi p^x (1-p)^{1-x}+(1-\pi)q^x(1-q)^{1-x} \\\end{split}\]</span> 有了一个硬币的概率，我们就可以写出所有观察数据的log似然函数： <span class="math display">\[L(\theta|X)=\log P(X|\theta)=\sum^n_{j=1}\log[\pi p^{x_j} (1-p)^{1-{x_j}}+(1-\pi)q^{x_j}(1-q)^{1-{x_j}}]\]</span> 然后求极大似然 <span class="math display">\[\hat{\theta}=\arg \max L(\theta|X)\]</span> 其中<span class="math inline">\(L(\theta|X)=\log P(X|\theta)=\log \sum_Z P(X,Z|\theta)\)</span>。因为log里面带着加和所以这个极大似然是求不出解析解的。 <a id="more"></a> 如果我们知道隐藏变量Z的话，求以下的似然会容易很多: <span class="math display">\[L(\theta|X,Z)=\log P(X,Z|\theta)\]</span> 但是隐藏变量Z的值谁也不知道，所以我们转用EM算法求它的后验概率期望<span class="math inline">\(E_{Z|X,\theta}(L(\theta|X,Z))\)</span>的最大值。</p>
+<ul>
+<li><p>E步：假设当前模型的参数为<span class="math inline">\(\pi,p,q\)</span>时，隐含变量来自于硬币B的后验概率 <span class="math display">\[\mu=P(Z|X,\theta)=\frac{\pi p^{x_i}(1-p)^{1-x_i}}{ \pi p^{x_i}(1-p)^{1-x_i}+(1-\pi)q^{x_i}(1-q)^{1-x_i}}\]</span> 那么隐含变量来自于硬币C的后验概率自然为<span class="math inline">\(1-\mu\)</span>。</p></li>
+<li><p>M步： 先写出似然关于后验概率的期望，它是似然期望下界函数的最大值， <span class="math display">\[\begin{split}&amp;E_{Z|X,\theta}(L(\theta|X,Z))=\\&amp;\sum^n_{j=1}[ \mu \log{\frac{\pi p^{x_i}(1-p)^{1-x_i}}{\mu}}+(1-\mu) \log{\frac{(1-\pi)q^{x_i}(1-q)^{1-x_i}}{1-\mu}} ]\\\end{split}\]</span> 要注意这里把<span class="math inline">\(\mu\)</span>看做固定值。然后我们分别求偏导，获得参数<span class="math inline">\(\pi,p,q\)</span>的新估计值 <span class="math display">\[\begin{split}&amp; \pi=\frac{1}{n}\sum^n_{j=1}\mu_j \\&amp; p=\frac{\sum^n_{j=1}\mu_j x_j}{\sum^n_{j=1}\mu_j} \\&amp; q=\frac{\sum^n_{j=1}(1-\mu_j) x_j}{\sum^n_{j=1}(1-\mu_j)} \\\end{split}\]</span></p></li>
+</ul>
+<p>算法首先选取参数初始值<span class="math inline">\(\theta^{(0)}=\pi^{(0)},p^{(0)},q^{(0)}\)</span>，然后迭代到收敛为止。</p>
+<h1 id="gibbs-sampling">Gibbs Sampling</h1>
+<p>其实这道题用EM做就可以了，因为最近看了Gibbs Sampling，所以套一下看看，如果有错敬请指出~</p>
+<p>先给出Gibbs sampling的抽象的应用步骤，由于目标是对latent varibles逐一sample得到complete data再算充分统计量。所以关键是求 <span class="math inline">\(P(Z_i|Z_{-i},O,\alpha)\)</span>：</p>
+<ol style="list-style-type: decimal">
+<li>根据Markov bucket性质写出latent variable与对应observed variable的joint分布: <span class="math inline">\(P(Z,O|\alpha)=f(Z,O,\theta,\alpha)\)</span></li>
+<li>根据样本对立性和参数条件独立性对joint distribution进行分解</li>
+<li>积分参数<span class="math inline">\(\theta\)</span>，得到仅包含超参和充分统计量的joint分布表达式:<span class="math inline">\(P(Z,O|\alpha)=f(Z,O,\alpha)\)</span></li>
+<li>对单个latent variable, 计算full conditional概率，用来采样: <span class="math inline">\(P(Z_{i}|Z_{-i},O,\alpha)\)</span></li>
+</ol>
+<h2 id="建模过程">建模过程</h2>
+<p>首先我们确定建模过程，画出概率图： <a href="http://7sbo5n.com1.z0.glb.clouddn.com/概率图.jpg" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/概率图.jpg" alt="概率图"></a> 可以看到硬币B还是硬币C的类标签服从贝努利分布 <span class="math display">\[Z_j \sim Bernoulli(\pi)\]</span> 然后硬币正反面的出现也服从贝努利分布 <span class="math display">\[W_{z_{j}k} \sim Bernoulli(\theta_{Z_j})\]</span> 其中<span class="math inline">\(\theta=\{p,q\}\)</span>。需要注意这里参数都变成了随机变量，都有先验分布。为了简单和无偏倚起见，Beta分布的先验参数均设为1, <span class="math inline">\(\alpha=&lt;1,1&gt;\)</span>，<span class="math inline">\(\beta=&lt;1,1&gt;\)</span>，这样<span class="math inline">\(p(\alpha)=1,p(\beta)=1\)</span>，在实际运算中就不考虑了。</p>
+<h2 id="确定联合分布">确定联合分布</h2>
+<p>然后写出联合分布来应该是（要注意这里的联合分布应该是似然与先验<span class="math inline">\(p(\theta)\)</span>的乘积，因为先验<span class="math inline">\(p(\alpha)=1,p(\beta)=1\)</span>所以省略了后项)</p>
+<p><span class="math display">\[
+\begin{split}P(C,Z,\pi,p,q)&amp;=p(W|Z,\Theta)p(\Theta|\gamma_{\theta})p(Z|\pi)p(\pi|\gamma_{\pi})\\
+&amp;= \prod^N_{i=1} \pi^{z_{i}} (1-\pi)^{1-z_{i}} p^{W_{z_{i0}}} (1-p)^{W_{z_{i1}}} q^{W_{(1-z_{i})0}} (1-q)^{W_{(1-z_{i})1}} \\
+&amp; =\pi^{C_0} (1-\pi)^{C_1} p^{N_{C_0}(0)} (1-p)^{N_{C_0}(1)} q^{N_{C_1}(0)} (1-q)^{N_{C_1}(1)} \\ 
+\end{split}
+\]</span></p>
+<p>其中<span class="math inline">\(z_i=0\)</span>时选中硬币B，<span class="math inline">\(z_i=1\)</span>时选中硬币C，<span class="math inline">\(W_{xj}\)</span>是观察到的硬币B或硬币C的正反结果，正面为<span class="math inline">\(W_{x0}=1,W_{x1}=0\)</span>，反面为<span class="math inline">\(W_{x1}=1,W_{x0}=0\)</span> ，<span class="math inline">\(C_0\)</span>是所有结果中选中硬币B的次数，<span class="math inline">\(C_1\)</span>是选中硬币C的次数，<span class="math inline">\(N_{C_0}(0)\)</span>是选B 的硬币中正面的硬币个数，<span class="math inline">\(N_{C_0}(1)\)</span> 是选B的硬币中反面的硬币个数，<span class="math inline">\(N_{C_1}(0)\)</span>是选C的硬币中正面的硬币个数，<span class="math inline">\(N_{C_1}(1)\)</span>是选C的硬币中反面的硬币个数。</p>
+<h2 id="standard-gibbs-sampling">Standard Gibbs Sampling</h2>
+<h3 id="对类标签z采样">对类标签Z采样</h3>
+<p>然后根据Gibbs Sampling对隐藏变量Z采样，首先，我们设<span class="math inline">\({Z}^{-j}\)</span>是除了<span class="math inline">\(Z_j\)</span>外所有的硬币标签，然后<span class="math inline">\(C^{(-j)}\)</span>是除了<span class="math inline">\(W_j\)</span>外所有的硬币结果集合。硬币A的投掷有2个结果，<span class="math inline">\(Z_j=0\)</span>（硬币B）或<span class="math inline">\(Z_j=1\)</span>（硬币C）。如果<span class="math inline">\(Z_j=0\)</span>，那么<span class="math inline">\(C_0^{-j}=C_0-1,C_1^{-j}=C_1\)</span>。反之如果文档<span class="math inline">\(Z_j=1\)</span>，那么<span class="math inline">\(C_1^{-j}=C_1-1,C_0^{-j}=C_0\)</span>。</p>
+<p>我们构建Gibbs Sampler，采样公式为： <span class="math display">\[\begin{split}P(Z_j=0|Z^{-j},C^{-j},\pi,p,q) &amp;=\frac{P(Z,C,\pi,p,q)}{P(Z^{-j},C^{-j},\pi,p,q)} \\&amp;=\pi p^{W_{j0}} (1-p)^{W_{j1}}\\P(Z_j=1|Z^{-j},C^{-j},\pi,p,q) &amp;=\frac{P(Z,C,\pi,p,q)}{P(Z^{-j},C^{-j},\pi,p,q)} \\&amp;=(1-\pi) q^{W_{j0}} (1-q)^{W_{j1}}\end{split}\]</span></p>
+<p>然后根据这两个概率对<span class="math inline">\(Z_j^{(t+1)}\)</span>做贝努利实验，得到新采样的结果。</p>
+<h3 id="对剩下参数的采样">对剩下参数的采样</h3>
+<p>在对<span class="math inline">\(Z\)</span>采样获得了所有硬币的正反面之后，我们接下来要估计<span class="math inline">\(\pi,p,q\)</span>。</p>
+<p>Gibbs Sampler的公式分别为: <span class="math display">\[\begin{split}&amp;P(\pi|Z,C,p,q)=\pi^{C_0} (1-\pi)^{C_1}\\&amp;P(p|Z,C,\pi,q)=p^{N_{C_0}(0)} (1-p)^{N_{C_0}(1)}\\&amp;P(q|Z,C,\pi,p)=q^{N_{C_1}(0)} (1-q)^{N_{C_1}(1)}\\ \end{split}\]</span> 这里<span class="math inline">\(\pi,p,q\)</span>均服从贝努利分布，根据Beta-Bernoulli共轭(之前先验分布为Beta(1,1))，我们可以把他们看成后验的Beta分布 <span class="math display">\[\begin{split}&amp;\pi \sim Beta(1+C_0,1+C_1)\\&amp;p \sim Beta(1+N_{C_0}(0),1+N_{C_0}(1))\\&amp;q \sim Beta(1+N_{C_1}(0),1+N_{C_1}(1))\\\end{split}\]</span> 然后从各自的Beta分布中采样出<span class="math inline">\(\pi,p,q\)</span>的值，详见<a href="http://www.crescentmoon.info/?p=525" target="_blank" rel="external">这里</a>的求<span class="math inline">\(\theta\)</span>部分。</p>
+<h2 id="collapsed-gibbs-sampling">Collapsed Gibbs Sampling</h2>
+<h3 id="对变量积分">对变量积分</h3>
+<p>根据《Gibbs Sampling for the UniniTiated》上所说,<span class="math inline">\(\pi\)</span>可以被积分掉来简化联合分布，这种方法被称作“Collapsed Gibbs Sampling”,指通过积分避开了实际待估计的参数，转而对每个硬币的正反面<span class="math inline">\(z\)</span>进行采样，一旦每个硬币的z确定下来，被积分的值可以在统计频次后计算出来。正巧这里<span class="math inline">\(\theta=\{p,q\}\)</span>也只生成一个样本，可以被积分，就统统给积分好了。 <span class="math display">\[\begin{split}&amp;P(C,Z)= \int\int\int P(C,Z,\pi,p,q) d \pi d p d q \\&amp;=\int\int\int \pi^{C_0} (1-\pi)^{C_1} p^{N_{C_0}(0)} (1-p)^{N_{C_0}(1)} q^{N_{C_1}(0)} (1-q)^{N_{C_1}(1)} d \pi d p d q \\&amp;=\int \pi^{C_0} (1-\pi)^{C_1}d \pi \int p^{N_{C_0}(0)} (1-p)^{N_{C_0}(1)} dp \int q^{N_{C_1}(0)} (1-q)^{N_{C_1}(1)} \\&amp;=\frac{\Gamma(C_0+1)\Gamma(C_1+1)}{\Gamma(C_0+C_1+2)}\frac{\Gamma(N_{C_0}(0)+1)\Gamma(N_{C_0}(1)+1)}{\Gamma(C_0+2)}\frac{\Gamma(N_{C_1}(0)+1)\Gamma(N_{C_1}(1)+1)}{\Gamma(C_1+2)}\end{split}\]</span> 最后一步是根据Beta分布的积分公式得出的。要注意这个式子里还是存在未知数的<span class="math inline">\(Z\)</span>的，只不过被加和掩盖了而已。</p>
+<h3 id="对类标签z采样-1">对类标签Z采样</h3>
+<p>在这里采样公式就变成了 <span class="math display">\[\begin{split}&amp;P(Z_j=0|Z^{-j},C^{-j})=\frac{C_0}{C_0+C_1+1}(\frac{N_{C_0}(0)}{C_0+1})^{W_{j0}}(\frac{N_{C_1}(0)}{C_1+1})^{W_{j1}}\\&amp;P(Z_j=1|Z^{-j},C^{-j})=\frac{C_1}{C_0+C_1+1}(\frac{N_{C_0}(1)}{C_0+1})^{W_{j0}}(\frac{N_{C_1}(1)}{C_1+1})^{W_{j1}}\\ \end{split}\]</span> 根据这两个概率对<span class="math inline">\(Z_j^{(t+1)}\)</span>做贝努利实验，得到新采样的结果。</p>
+<p>在<span class="math inline">\(Z\)</span>的一轮迭代结束后我们还要估计被积分了的变量的值，已知后验概率为 <span class="math display">\[\begin{split}&amp;p(\pi|Z)=\prod^n_{i=1}p(z|\pi)p(\pi|r_\pi)=Beta(\pi|1+C_0,1+C_1)\\&amp;p(p|Z)=\prod^n_{i=1}p(z|p)p(p|r_\theta)=Beta(\pi|1+N_{C_0}(0),1+N_{C_0}(1))\\&amp;p(q|Z)=\prod^n_{i=1}p(z|q)p(q|r_\theta)=Beta(\pi|1+N_{C_1}(0),1+N_{C_1}(1))\\ \end{split}\]</span> 根据贝叶斯推断的话，我们应该求整个参数分布上的期望，所以有 <span class="math display">\[E(\pi)=\int \pi \cdot \pi^{C_0+1-1}(1-\pi)^{C_1+1-1} d \pi=\frac{C_0+1}{C_0+C_1+2}\]</span> 这里还是利用Beta分布的积分公式，同理剩下的俩为 <span class="math display">\[\begin{split}&amp;E(p)=\frac{N_{C_0}(0)+1}{C_0+2}\\&amp;E(q)=\frac{N_{C_1}(0)+1}{C_1+2}\\ \end{split}\]</span> 这里可以看到先验知识（分子式上面的1和分母的2）和观察到的数据很好的结合了起来。</p>
+<h1 id="em算法和sampling算法见prml的11.1.6和参考3">EM算法和Sampling算法（见PRML的11.1.6和参考3)</h1>
+<h2 id="两者的联系">两者的联系</h2>
+<p>两者都常用来估计latent variable分布的参数。主要思想一致：先估计生成一些latent variable，然后看成complete data，算参数。 区别：</p>
+<ul>
+<li><p>EM直接估计所有latent varibles的联合概率;</p></li>
+<li><p>Gibbs估计单个单个latent variable的条件概率;</p></li>
+</ul>
+<p>所以，EM类似梯度下降，而Gibbs类似于coordinate gradient decent(不是conjugate)。</p>
+<h2 id="monte-carlo-em算法">Monte Carlo EM算法</h2>
+<p>EM算法中的E步估计所有latent varible的联合概率分布，可能很复杂。所以可以用抽样的方法来估计，以下是似然函数的期望表达式： <span class="math display">\[Q(\theta,\theta^{old})=\int p(Z|X,\theta^{old})\ln p(Z,X|\theta)d Z\]</span> 我们可以在后验概率<span class="math inline">\(p(Z|X,\theta^{old})\)</span>的分布上进行有限次数的抽样来接近这个期望： <span class="math display">\[Q(\theta,\theta^{old}) \simeq \frac{1}{L}\sum^L_{l=1}\ln p(Z^{(l)},X|\theta)\]</span> 然后像往常一样在M步优化Q函数，这个方法叫做Monte Carlo EM算法。</p>
+<p>而每次在E步只生成一个样本的方法叫做stochastic EM，是Monte Carlo EM 算法的一个特例。在E步，我们从后验概率<span class="math inline">\(p(Z|X,\theta^{old})\)</span>中抽取一个样本，用来近似计算似然的期望，然后在M步更新模型参数的值。</p>
+<p>刚才介绍的Collapsed Gibbs Sampling的方法就是stochastic EM的一个例子，只不过，M步骤的参数估计结果在E步骤中没有用到，所以不需要重复多余的M步骤，只需在最后进行一次M步骤，得到所需要的参数即可。</p>
+<h2 id="参考文献">参考文献：</h2>
+<ol style="list-style-type: decimal">
+<li>《统计学习方法》</li>
+<li>《Pattern Recognition and Machine Learning》</li>
+<li>http://xhyan.wordpress.com/2012/04/30/%E3%80%90todo%E3%80%91quick-derivation-in-gibbs-sampling/</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://crescentluna.github.io/2013/07/03/三硬币问题-一个EM算法和Gibbs Sampling的例子/" data-id="cizha1r03001ng0o8dm3ighkf" class="article-share-link" data-share="baidu">分享到</a>
+      
+
+      
+        <a href="http://crescentluna.github.io/2013/07/03/三硬币问题-一个EM算法和Gibbs Sampling的例子/#ds-thread" class="article-comment-link">Comments</a>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/EM/">EM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Gibbs-Sampling/">Gibbs Sampling</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2013/07/14/我是否吃遍了食堂的盘子？/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          我是否吃遍了食堂的盘子？
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2013/06/29/Gibbs Sampling for the UniniTiated-3/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">《Gibbs Sampling for the UniniTiated》阅读笔记(下)---连续型参数求积分的思考</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+  <section id="comments">
+    <div id="ds-thread" class="ds-thread" data-thread-key="2013/07/03/三硬币问题-一个EM算法和Gibbs Sampling的例子/" data-title="三硬币问题-一个EM算法和Gibbs Sampling的例子" data-url="http://crescentluna.github.io/2013/07/03/三硬币问题-一个EM算法和Gibbs Sampling的例子/"></div>
+  </section>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/学术/">学术</a><span class="category-list-count">18</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/学术/Gibbs-Sampling笔记/">Gibbs Sampling笔记</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/学术/变分推断笔记/">变分推断笔记</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习/">机器学习</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂项/">杂项</a><span class="category-list-count">6</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/杂项/闲话/">闲话</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a><span class="category-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/DP/" style="font-size: 13.33px;">DP</a> <a href="/tags/EM/" style="font-size: 20px;">EM</a> <a href="/tags/Gibbs-Sampling/" style="font-size: 20px;">Gibbs Sampling</a> <a href="/tags/Hexo/" style="font-size: 13.33px;">Hexo</a> <a href="/tags/LDA/" style="font-size: 10px;">LDA</a> <a href="/tags/PRML/" style="font-size: 13.33px;">PRML</a> <a href="/tags/Variational-Inference/" style="font-size: 16.67px;">Variational Inference</a> <a href="/tags/kNN/" style="font-size: 10px;">kNN</a> <a href="/tags/matlab/" style="font-size: 10px;">matlab</a> <a href="/tags/tensorflow/" style="font-size: 10px;">tensorflow</a> <a href="/tags/wordpress/" style="font-size: 10px;">wordpress</a> <a href="/tags/二叉树/" style="font-size: 10px;">二叉树</a> <a href="/tags/决策树/" style="font-size: 10px;">决策树</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/参数估计/" style="font-size: 10px;">参数估计</a> <a href="/tags/多项式分布/" style="font-size: 10px;">多项式分布</a> <a href="/tags/数据挖掘/" style="font-size: 16.67px;">数据挖掘</a> <a href="/tags/机器学习/" style="font-size: 16.67px;">机器学习</a> <a href="/tags/概率图/" style="font-size: 10px;">概率图</a> <a href="/tags/盘子/" style="font-size: 10px;">盘子</a> <a href="/tags/社区发现/" style="font-size: 10px;">社区发现</a> <a href="/tags/背包问题/" style="font-size: 13.33px;">背包问题</a> <a href="/tags/贝叶斯方法/" style="font-size: 10px;">贝叶斯方法</a> <a href="/tags/高斯混合模型/" style="font-size: 16.67px;">高斯混合模型</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">七月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/04/">四月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">二月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">一月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/">十二月 2012</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">十月 2012</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">九月 2012</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">浏览数目</h3>
+    <div class="widget">
+      <ul class="popularlist">
+      </ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">近期文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/02/23/install-tensorflow-with-gpu-support-for-ubuntu/">在Ubuntu上搭建GPU加速的TensorFlow环境</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/12/variational-inference-3/">变分推断学习笔记(3)——三硬币问题的变分推断解法</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/11/popular-widget/">使用LeanCloud平台为Hexo博客添加文章浏览量统计组件</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/11/relocation/">博客迁移小记</a>
+          </li>
+        
+          <li>
+            <a href="/2014/02/24/概率图模型简介/">概率图模型简介</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+
+  
+    
+<div class="widget-wrap">
+  <h3 class="widget-title">最近评论</h3>
+  <ul class="widget ds-recent-comments" data-num-items="5" data-show-avatars="0" data-show-title="1" data-show-time="1"></ul>
+</div>
+<!-- 需要多说的公用代码 -->
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">友情链接</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="https://github.com/xiangming/landscape-plus" target="_blank">landscape-plus主题</a>
+          </li>
+        
+          <li>
+            <a href="http://www.smallqiao.com/" target="_blank">小桥流水</a>
+          </li>
+        
+          <li>
+            <a href="http://www.ahathinking.com/" target="_blank">勇幸|Thinking</a>
+          </li>
+        
+          <li>
+            <a href="http://www.socona.me/" target="_blank">socona的博客</a>
+          </li>
+        
+          <li>
+            <a href="http://www.clarkchen.com/" target="_blank">陈曦师兄的博客</a>
+          </li>
+        
+          <li>
+            <a href="http://www.fengyafei.com/" target="_blank">小飞的博客</a>
+          </li>
+        
+          <li>
+            <a href="http://ariwaranosai.xyz/" target="_blank">今天拒绝负能量!</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Chen Hao<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      .
+      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives" class="mobile-nav-link">所有文章</a>
+  
+    <a href="/about" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+<!-- 多说公共js代码 start -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"crescent"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+<!-- 多说公共js代码 end -->
+
+
+<!-- 百度分享 start -->
+
+<div id="article-share-box" class="article-share-box">
+  <div id="bdshare" class="bdsharebuttonbox article-share-links">
+    <a class="article-share-weibo" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a class="article-share-weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a class="article-share-qq" data-cmd="sqq" title="分享到QQ"></a>
+    <a class="article-share-renren" data-cmd="renren" title="分享到人人网"></a>
+    <a class="article-share-more" data-cmd="more" title="更多"></a>
+  </div>
+</div>
+<script>window._bd_share_config={"common":{},"share":{"bdCustomStyle":"nocss.css"}};with(document)0[(getElementsByTagName("head")[0]||body).appendChild(createElement("script")).src="http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion="+~(-new Date()/36e5)];</script>
+
+<!-- 百度分享 end -->
+
+<script src="//libs.baidu.com/jquery/1.11.1/jquery.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<! -- mathjax config similar to math.stackexchange -->
+<! -- add autoNumber settting -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+                processEscapes: true
+                    
+}
+  
+        });
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+                  
+}
+    
+        });
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Queue(function() {
+            var all = MathJax.Hub.getAllJax(), i;
+            for(i=0; i < all.length; i += 1) {
+                            all[i].SourceElement().parentNode.className += ' has-jax';
+                                    
+            }
+                
+        });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+<script src="/js/script.js"></script>
+
+<!--page counter part-->
+<script>
+function addCount (Counter) {
+        url=$('.article-date').attr('href').trim();
+        title = $('.article-title').text().trim();
+       // alert(title);
+        var query=new AV.Query(Counter);
+        //use url as unique idnetfication
+        query.equalTo("url",url);
+        query.find({
+            success: function(results){
+                if(results.length>0)
+                {
+                    var counter=results[0];
+                    counter.fetchWhenSave(true); //get recent result
+                    counter.increment("time");
+                    counter.save();
+                    //alert('find '+title+' and visit time is now '+ counter.get("time"));
+                }
+                else
+                {
+                    var newcounter=new Counter();
+                    newcounter.set("title",title);
+                    newcounter.set("url",url);
+                    newcounter.set("time",1);
+                    newcounter.save(null,{
+                        success: function(newcounter){
+                        //alert('New object created');
+                        },
+                        error: function(newcounter,error){
+                        alert('Failed to create');
+                        }
+                        });
+                }
+            },
+            error: function(error){
+                //find null is not a error
+                alert('Error:'+error.code+" "+error.message);
+            }
+        });
+}
+
+$(function(){
+        var Counter=AV.Object.extend("Counter");
+        //only increse visit counting when intering a page
+        if ($('.article-title').length == 1)
+           addCount(Counter);
+        var query=new AV.Query(Counter);
+        query.descending("time");
+        query.limit(10);
+        query.find({
+            success: function(results){
+                    for(var i=0;i<results.length;i++)    
+                    {
+                        var counter=results[i];
+                        //alert(counter.get("title")+'-'+counter.get("url"));
+                        title=counter.get("title");
+                        url=counter.get("url");
+                        time=counter.get("time");
+                        // add to the popularlist widget
+                        showcontent=title+" ("+time+")";
+                        //notice the "" in href
+                        $('.popularlist').append('<li><a href="'+url+'">'+showcontent+'</a></li>');
+                    }
+                },
+            error: function(error){
+                alert("Error:"+error.code+" "+error.message);
+            }
+            }
+        )
+        });
+</script>
+
+
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>

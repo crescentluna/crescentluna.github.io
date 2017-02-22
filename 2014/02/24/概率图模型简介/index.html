@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>概率图模型简介 | 心怀畏惧</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="介绍
+定义
+概率图模型(Graphical Model)是概率论和图论之间的桥梁，概率图模型的基本想法来自模块的概念，即一个复杂系统是由简单的部分所联合而成的。概率论部分告诉我们哪些部分是耦合在一起的，然后提供推断模型的方法，而图论部分给我们一个非常直观的认识，把拥有相互关系的变量看做数据结构，从而导出一般化的方法来解决这个问题。很多经典的多元概率系统，比如混合模型，因子分析，隐含马尔科夫模型,K">
+<meta property="og:type" content="article">
+<meta property="og:title" content="概率图模型简介">
+<meta property="og:url" content="http://crescentluna.github.io/2014/02/24/概率图模型简介/index.html">
+<meta property="og:site_name" content="心怀畏惧">
+<meta property="og:description" content="介绍
+定义
+概率图模型(Graphical Model)是概率论和图论之间的桥梁，概率图模型的基本想法来自模块的概念，即一个复杂系统是由简单的部分所联合而成的。概率论部分告诉我们哪些部分是耦合在一起的，然后提供推断模型的方法，而图论部分给我们一个非常直观的认识，把拥有相互关系的变量看做数据结构，从而导出一般化的方法来解决这个问题。很多经典的多元概率系统，比如混合模型，因子分析，隐含马尔科夫模型,K">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20140224133640.png">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20140224133826.png">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20140224134911.png">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20140224134256.png">
+<meta property="og:updated_time" content="2017-02-21T18:24:27.407Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="概率图模型简介">
+<meta name="twitter:description" content="介绍
+定义
+概率图模型(Graphical Model)是概率论和图论之间的桥梁，概率图模型的基本想法来自模块的概念，即一个复杂系统是由简单的部分所联合而成的。概率论部分告诉我们哪些部分是耦合在一起的，然后提供推断模型的方法，而图论部分给我们一个非常直观的认识，把拥有相互关系的变量看做数据结构，从而导出一般化的方法来解决这个问题。很多经典的多元概率系统，比如混合模型，因子分析，隐含马尔科夫模型,K">
+<meta name="twitter:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20140224133640.png">
+  
+    <link rel="alternative" href="/atom.xml" title="心怀畏惧" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+  
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F1fc57dc5ccfaeae31f8e295269b6fa04' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-57404093-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+  <script src="https://cdn1.lncld.net/static/js/av-min-1.2.1.js"></script>
+  <script>AV.initialize("57nirzk8g437patyg9434lcvmpkat6e5lu5mixmrwqa8l3ao", "rsqg6iiq58eyeg8c6c6uue48crtwt5quuq5dmjaahfcjlkq8");</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">心怀畏惧</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Do not go gentle into that good night</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives">所有文章</a>
+        
+          <a class="main-nav-link" href="/about">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="http://www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
+          <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="Search">
+          <input type="submit" value="" class="search-form-submit">
+          <input name=tn type=hidden value="bds">
+          <input name=cl type=hidden value="3">
+          <input name=ct type=hidden value="2097152">
+          <input type="hidden" name="si" value="crescentluna.github.io">
+        </form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-概率图模型简介" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/02/24/概率图模型简介/" class="article-date">
+  <time datetime="2014-02-23T21:56:02.000Z" itemprop="datePublished">2014-02-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/学术/">学术</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      概率图模型简介
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="介绍">介绍</h1>
+<h2 id="定义">定义</h2>
+<p>概率图模型(Graphical Model)是概率论和图论之间的桥梁，概率图模型的基本想法来自模块的概念，即一个复杂系统是由简单的部分所联合而成的。概率论部分告诉我们哪些部分是耦合在一起的，然后提供推断模型的方法，而图论部分给我们一个非常直观的认识，把拥有相互关系的变量看做数据结构，从而导出一般化的方法来解决这个问题。很多经典的多元概率系统，比如混合模型，因子分析，隐含马尔科夫模型,Kalman filter 和Ising model等，从概率图模型的角度来看，都可以看做普遍隐含形成过程的一种实例表现。这意味着，一旦在某个系统上有什么特别的方法发现，就很容易推广到一系列的模型中去。除此之外，概率图模型还非常自然地提供了设计新系统的方法。</p>
+<p>在概率图模型中，点代表随机变量，点与点之间边的存在与否代表了点与点之间是存在条件依赖。点与边的组合描绘了联合概率分布的特征结构。假设有<span class="math inline">\(N\)</span>个二元随机变量，在没有任何信息帮助的情况下，联合分布<span class="math inline">\(P(X_1,\ldots,X_N)\)</span>，需要<span class="math inline">\(O(2^N)\)</span>个参数。而通过概率图描绘点与点之间的条件关系之后，表示联合分布，所需要的参数会减少很多，这对后面的模型的推断和学习是有帮助的。</p>
+<p>概率图模型主要分为两种，无向图(也叫Markov random fields)和有向图(也叫Bayesian networks)，前者多用于物理和图像领域，后者多用于AI和机器学习，具体的基本就不多介绍了。下面给出一个简单贝叶斯网络的例子。</p>
+<p><a href="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20140224133640.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20140224133640.png" alt="QQ截图20140224133640"></a></p>
+<p>这里Cloudy指是否多云，Sprinkler指洒水器是否打开，Rain指是否有雨， WetGrass指草地是否湿了。</p>
+<a id="more"></a>
+<h1 id="推断inference">推断(Inference)</h1>
+<p>推断的主要目的是在知道观察变量的值的情况下估计隐藏变量的值。如果我们观察到生成模型的“叶子”，然后可以尝试推断隐藏的原因(diagnosis)，反之如果观察到生成模型的“根”，就可以尝试预测它的节点(predicition)。</p>
+<p>使用的方法就是贝叶斯公式</p>
+<p><span class="math display">\[P(X|y)=\frac{P(y|X)P(X)}{P(y)}\]</span></p>
+<p>其中<span class="math inline">\(X\)</span>是隐藏变量，<span class="math inline">\(y\)</span>是观察到的值。公式可以这么解释:</p>
+<p><span class="math display">\[\text{posterior}=\frac{\text{conditional likelihood} \times \text{prior}}{\text{likelihood}}\]</span></p>
+<p>以前面的图为例，当我们观察到草地是湿的(<span class="math inline">\(W=1\)</span>)时，有可能有2个原因:下雨(<span class="math inline">\(R=1\)</span>)或者开着洒水器(<span class="math inline">\(S=1\)</span>)。我们根据贝叶斯公式求得它们各自的概率</p>
+<p><span class="math display">\[P(S=1|W=1)=\frac{P(S=1,W=1)}{P(W=1)}=\frac{\sum_{c,r}P(C=c,S=1,W=1,R=r)}{P(W=1)}=0.430\]</span></p>
+<p><span class="math display">\[P(R=1|W=1)=\frac{P(R=1,W=1)}{P(W=1)}=\frac{\sum_{c,s}P(C=c,S=1,W=1,R=r)}{P(W=1)}=0.708\]</span></p>
+<p>分母作为归一化常数，同时也是似然</p>
+<p><span class="math display">\[P(W=1)=\sum_{c,s,r}P(C=c,S=r,R=r,W=1)=0.6471\]</span></p>
+<p>可以看到草地湿因为下雨的概率要比因为洒水器的概率高。一般来说在实际情况中，利用后验概率算积分的时候不会像例子这么容易。比如分母<span class="math inline">\(Z\)</span>，有可能是指数级别的加和（可以参见<a href="http://freemind.pluskid.org/machine-learning/probabilistic-graphical-model/" target="_blank" rel="external">pluskid大神的文章</a>），而且，在连续型隐藏变量里，很有可能是求一个无解析解的积分。</p>
+<p>因为推断的问题一般都比较复杂，我们自然希望能用一些方法来加速推断的过程。</p>
+<h2 id="参数消去">参数消去</h2>
+<p>根据概率图的结构，我们可以将条件独立的节点的生成概率区分开来写，比如:</p>
+<p><span class="math display">\[
+\begin{split}
+&amp;P(W=w) =\sum_c\sum_s\sum_r P(C=c,S=s,R=r,W=w) \\
+&amp;= \sum_c \sum_s \sum_r P(C=c)\times P(S=s|C=c)\times P(R=r|C=c)\times P(W=w|S=s,R=r) \\
+\end{split}
+\]</span></p>
+<p>参数消去算法的主要目的就是尽量可能的合并子项来减少计算量，我们将上面的式子化为：</p>
+<p><span class="math display">\[ P(W=w)=\sum_c P(C=c)\times \sum_s P(S=s|C=c)\times \sum_r P(R=r|C=c)\times P(W=w|S=s,R=r) \]</span></p>
+<p>可以看到第三项与前两个求和项无关。这样我们可以得到合并之后的图： <a href="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20140224133826.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20140224133826.png" alt="QQ截图20140224133826"></a></p>
+<p>如果概率图比较复杂，存在重复统计的情况，我们可以使用动态规划算法来避免重复的计算。如果概率图是无环的(比如一棵树)，可以用局部信息传播算法(Belief Propagation，HMM的Sum-Product算法的泛化版本)来做推断。如果概率图有环就比较麻烦，因为局部信息传播可能会被重复计算，从而导致算法不收敛。这个时候可以用Junction Tree方法把概率图转化成一棵树（可能会很复杂，见<a href="http://freemind.pluskid.org/machine-learning/probabilistic-graphical-model/" target="_blank" rel="external">pluskid 的例子</a>）。</p>
+<h2 id="近似推断">近似推断</h2>
+<p>推断算法的时间复杂度是指数级别的（取决于概率图中的最大簇的大小），优化它是个NP-hard 问题，所以就导致了推断的近似方法产生。除了图复杂以外还有另外一个原因，即使图的复杂度很低，如果一些节点是连续随机变量，在很多情况下它们对应的积分是没有解析解的。</p>
+<p>流行的近似推断方法主要有三种：</p>
+<ul>
+<li><p>Sampling(Monte Carlo) methods。采样做法就是通过抽取大量的样本来逼近真实的分布。最简单的是importance sampling，根据出现的结果的比例采样。在高维空间中更有效的方法叫Markov Chain Monte Carlo，是利用马科夫链的性质来生成某个分布的样本，包括Metropolis-Hastings算法和Gibbs Samppling算法等。</p></li>
+<li><p>Variational Infernece。变分推断采取的是另一种做法，通过限制近似分布的类型，得到一种局部最优，但具有确定解的近似后验分布。最简单的方法叫做mean-field approximation，就是把概率图里的点全部解耦，看做相互独立的，然后对每个点引进一个变分参数，通过循环地迭代参数来最小化近似分布和真实分布的KL距离。</p></li>
+<li><p>Loopy Belief Propagation。之前我们讲到Belief Propagation 算法，是应用在无环的图上的，然后LBP就是不管图有没有环，都直接使用这个算法去求解。</p></li>
+</ul>
+<h1 id="学习learning">学习(Learning)</h1>
+<p>Learning可以分很多情况，比如估计参数，或者估计模型的结构，或者两者都有。根据变量是否被观察到和结构是否已知可以对learning方法分类（见下图)：</p>
+<p><a href="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20140224134911.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20140224134911.png" alt="QQ截图20140224134911"></a></p>
+<p>还有一个区别在于，我们的目标在于寻找一个最有可能的模型（点估计），还是在所有可能的模型上做贝叶斯估计。在结构已知的时候，贝叶斯参数估计和推断是等价的，这时候隐藏的节点就代表了这些参数。如果结构未知，还要有对概率图结构的学习过程。</p>
+<h2 id="known-structurefull-observability">Known structure,full observability</h2>
+<p>这种最简单，因为结构已知，变量全部都观察到了，所以直接求极大似然值(MLE)就好了。令数据为<span class="math inline">\(D=\{D_1,\ldots,D_M\}\)</span>，那么似然为</p>
+<p><span class="math display">\[
+L=\frac{1}{M}\log \prod^M_{m=1}P(D_m|G)=\frac{1}{M}\sum^n_{i=1}\sum^M_{m=1}\log P(X_i|Pa(X_i),D_m)
+\]</span></p>
+<p>这里<span class="math inline">\(Pa(X_i)\)</span>是<span class="math inline">\(X_i\)</span>的父亲节点。我们依据概率图的结构分解整个似然式子，然后独立地最大化每个参数。以之前的图为例，我们有</p>
+<p><span class="math display">\[ P_{ML}(W=w|S=s,R=r)=\frac{(W=w,S=s,R=r)}{(S=s,R=r)} \]</span></p>
+<p>这里<span class="math inline">\((S=s,R=r)\)</span>和<span class="math inline">\((W=w,S=s,R=r)\)</span>分别为下雨而且洒水器开着的次数和满足前两个条件的同时，草地湿了的次数。可以看到极大似然是根据观察到的数据得出最有可能的结果。如果我们有一些训练数据的话，也可以加上先验条件，做最大后验估计(MAP).</p>
+<h2 id="known-structurepartial-observability">Known structure,partial observability</h2>
+<p>如果结构已知，但是有些节点是隐藏的话，我们可以通过EM算法来寻找一个局部最优的MLE。EM的算法的思想就是求那些隐藏节点的期望值，然后把期望值看做观察到的值。以<span class="math inline">\(W\)</span>节点为例，我们用期望代替观察到的次数，得到</p>
+<p><span class="math display">\[P(W=w|S=s,R=r)=\frac{E(W=w,S=s,R=r)}{E(S=s,R=r)}\]</span></p>
+<p>这里<span class="math inline">\(E(e)\)</span>就是在当前参数下，事件<span class="math inline">\(e\)</span>发生次数的期望值。这个期望可以由单次发生事件<span class="math inline">\(e\)</span>的期望多次加和得到。</p>
+<p><span class="math display">\[E  (e)=E \sum_m I(e|D_m)=\sum_m P(e|D_m)\]</span></p>
+<p>这里<span class="math inline">\(I(e|D_m)\)</span>是个指示函数，当事件<span class="math inline">\(e\)</span>在第<span class="math inline">\(m\)</span>个数据时发生为1，其余都为0。得到期望值后，我们可以重新最大化参数，然后重新计算期望，反复迭代达到一个局部的最优解。</p>
+<h2 id="unknown-structurefull-observability">Unknown structure,full observability</h2>
+<p>这种情况虽然我们可以观察到概率图中每个节点的数据，但是节点与节点之间的边关系未知。完全图能够给出最大的似然值，那是因为这种情况最复杂，含有最多的参数，很明显过拟合了。 为了解决过拟合的问题，我们可以加上对模型选择的先验条件，使用贝叶斯公式最大化后验</p>
+<p><span class="math display">\[P(G|D)=\frac{P(D|G)P(G)}{P(D)}\]</span></p>
+<p>求log我们得到</p>
+<p><span class="math display">\[L=\log P(G|D)=\log P(D|G) + \log P(G)+ c\]</span></p>
+<p>这里<span class="math inline">\(c=-\log P(D)\)</span>是个与模型<span class="math inline">\(G\)</span>独立的常数。如果先验偏向于简单的模型，那么<span class="math inline">\(P(G)\)</span>就能对复杂模型起到惩罚作用。事实上就算先验不这么做，使用贝叶斯原理计算的边缘似然(marginal likelihood)</p>
+<p><span class="math display">\[P(D|G)=\int P(D|G,\theta)P(\theta|G)d \theta\]</span></p>
+<p>(<span class="math inline">\(\theta\)</span>为模型的参数)能够自动地倾向解释数据的最简单模型，如果模型参数太多的话，它只能在一个很宽的数据范围内预测，而没办法给小范围数据一个很大的发生概率（也就是说复杂模型更可能“对”，但是不够“准”），而简单模型刚好反之。这个现象被叫做奥卡姆剃刀(Ockham’razor)。</p>
+<p><a href="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20140224134256.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20140224134256.png" alt="QQ截图20140224134256"></a></p>
+<p>尽管我们可以通过上面那个<span class="math inline">\(L\)</span>来衡量模型的好坏（被称作Bayesian Score），我们依然还是需要一个方法来寻找得分最高的概率图。穷举的复杂度是超指数级别的，所以我们一般用一些局部的搜索算法（比如多重启的爬山法）或者划分区域来搜索图空间。另外地，由于我们求的是模型生成数据的后验概率<span class="math inline">\(P(G|D)\)</span>，我们可以直接从这个后验概率分布中抽样一些图出来，这叫MCMC search。</p>
+<h2 id="unknown-structurepartial-observability">Unknown structure,partial observability</h2>
+<p>最后也是最难的情况，就是图结构未知，而且存在隐藏变量。这导致了边缘似然非常难求，需要对隐藏变量<span class="math inline">\(Z\)</span>积分才能得到。</p>
+<p><span class="math display">\[P(D|G)=\int_Z P(D,Z|G,\theta)P(\theta|G)d \theta\]</span></p>
+<p>一种办法是做拉普拉斯近似(Laplace Approximation)，计算得到</p>
+<p><span class="math display">\[\log P(D|G) \approx \log P(D|G,\hat{\theta_G})-\frac{d}{2}\log M\]</span></p>
+<p>这里<span class="math inline">\(M\)</span>是样本个数，<span class="math inline">\(\hat{\theta_G}\)</span>是参数的最大似然估计(由EM算法得到),<span class="math inline">\(d\)</span>是模型的维度（在全观察到的情况下，模型维度等于自由参数的个数，在存在隐藏变量的情况下,模型维度会少于参数个数）。这个式子被叫做Bayesian Information Criterion，和Minimum Description Length (MDL) 是等价的。</p>
+<p>式子的第一项就是似然，而第二项减去一个代表模型复杂度的量，所以BIC score是对复杂模型有惩罚的。尽管BIC是可以分解的(decomposable)，局部的搜索算法还是非常昂贵，因为我们每一步都要跑一次EM 算法来得到<span class="math inline">\(\theta\)</span>。一种可选的办法是在EM的M 步直接做一个局部搜索，得到一个局部最优的BIC score，这个方法被称作Structural EM。</p>
+<p>当然，结构学习不仅仅包括寻找已经存在节点的连通性，还包括在必要情况下增加隐藏节点等等更为复杂的东西。</p>
+<p>参考文献：</p>
+<ol style="list-style-type: decimal">
+<li>《An introduction to graphical models》 Kevin P. Murphy</li>
+<li>http://freemind.pluskid.org/machine-learning/probabilistic-graphical-model/</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://crescentluna.github.io/2014/02/24/概率图模型简介/" data-id="cizha1r0h002gg0o8zx0ffpiv" class="article-share-link" data-share="baidu">分享到</a>
+      
+
+      
+        <a href="http://crescentluna.github.io/2014/02/24/概率图模型简介/#ds-thread" class="article-comment-link">Comments</a>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/概率图/">概率图</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/12/11/relocation/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          博客迁移小记
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2013/10/11/variational-inference-2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">变分推断学习笔记(2)——一维高斯模型的例子</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+  <section id="comments">
+    <div id="ds-thread" class="ds-thread" data-thread-key="2014/02/24/概率图模型简介/" data-title="概率图模型简介" data-url="http://crescentluna.github.io/2014/02/24/概率图模型简介/"></div>
+  </section>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/学术/">学术</a><span class="category-list-count">18</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/学术/Gibbs-Sampling笔记/">Gibbs Sampling笔记</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/学术/变分推断笔记/">变分推断笔记</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习/">机器学习</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂项/">杂项</a><span class="category-list-count">6</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/杂项/闲话/">闲话</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a><span class="category-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/DP/" style="font-size: 13.33px;">DP</a> <a href="/tags/EM/" style="font-size: 20px;">EM</a> <a href="/tags/Gibbs-Sampling/" style="font-size: 20px;">Gibbs Sampling</a> <a href="/tags/Hexo/" style="font-size: 13.33px;">Hexo</a> <a href="/tags/LDA/" style="font-size: 10px;">LDA</a> <a href="/tags/PRML/" style="font-size: 13.33px;">PRML</a> <a href="/tags/Variational-Inference/" style="font-size: 16.67px;">Variational Inference</a> <a href="/tags/kNN/" style="font-size: 10px;">kNN</a> <a href="/tags/matlab/" style="font-size: 10px;">matlab</a> <a href="/tags/tensorflow/" style="font-size: 10px;">tensorflow</a> <a href="/tags/wordpress/" style="font-size: 10px;">wordpress</a> <a href="/tags/二叉树/" style="font-size: 10px;">二叉树</a> <a href="/tags/决策树/" style="font-size: 10px;">决策树</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/参数估计/" style="font-size: 10px;">参数估计</a> <a href="/tags/多项式分布/" style="font-size: 10px;">多项式分布</a> <a href="/tags/数据挖掘/" style="font-size: 16.67px;">数据挖掘</a> <a href="/tags/机器学习/" style="font-size: 16.67px;">机器学习</a> <a href="/tags/概率图/" style="font-size: 10px;">概率图</a> <a href="/tags/盘子/" style="font-size: 10px;">盘子</a> <a href="/tags/社区发现/" style="font-size: 10px;">社区发现</a> <a href="/tags/背包问题/" style="font-size: 13.33px;">背包问题</a> <a href="/tags/贝叶斯方法/" style="font-size: 10px;">贝叶斯方法</a> <a href="/tags/高斯混合模型/" style="font-size: 16.67px;">高斯混合模型</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">七月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/04/">四月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">二月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">一月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/">十二月 2012</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">十月 2012</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">九月 2012</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">浏览数目</h3>
+    <div class="widget">
+      <ul class="popularlist">
+      </ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">近期文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/02/23/install-tensorflow-with-gpu-support-for-ubuntu/">在Ubuntu上搭建GPU加速的TensorFlow环境</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/12/variational-inference-3/">变分推断学习笔记(3)——三硬币问题的变分推断解法</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/11/popular-widget/">使用LeanCloud平台为Hexo博客添加文章浏览量统计组件</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/11/relocation/">博客迁移小记</a>
+          </li>
+        
+          <li>
+            <a href="/2014/02/24/概率图模型简介/">概率图模型简介</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+
+  
+    
+<div class="widget-wrap">
+  <h3 class="widget-title">最近评论</h3>
+  <ul class="widget ds-recent-comments" data-num-items="5" data-show-avatars="0" data-show-title="1" data-show-time="1"></ul>
+</div>
+<!-- 需要多说的公用代码 -->
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">友情链接</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="https://github.com/xiangming/landscape-plus" target="_blank">landscape-plus主题</a>
+          </li>
+        
+          <li>
+            <a href="http://www.smallqiao.com/" target="_blank">小桥流水</a>
+          </li>
+        
+          <li>
+            <a href="http://www.ahathinking.com/" target="_blank">勇幸|Thinking</a>
+          </li>
+        
+          <li>
+            <a href="http://www.socona.me/" target="_blank">socona的博客</a>
+          </li>
+        
+          <li>
+            <a href="http://www.clarkchen.com/" target="_blank">陈曦师兄的博客</a>
+          </li>
+        
+          <li>
+            <a href="http://www.fengyafei.com/" target="_blank">小飞的博客</a>
+          </li>
+        
+          <li>
+            <a href="http://ariwaranosai.xyz/" target="_blank">今天拒绝负能量!</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Chen Hao<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      .
+      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives" class="mobile-nav-link">所有文章</a>
+  
+    <a href="/about" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+<!-- 多说公共js代码 start -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"crescent"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+<!-- 多说公共js代码 end -->
+
+
+<!-- 百度分享 start -->
+
+<div id="article-share-box" class="article-share-box">
+  <div id="bdshare" class="bdsharebuttonbox article-share-links">
+    <a class="article-share-weibo" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a class="article-share-weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a class="article-share-qq" data-cmd="sqq" title="分享到QQ"></a>
+    <a class="article-share-renren" data-cmd="renren" title="分享到人人网"></a>
+    <a class="article-share-more" data-cmd="more" title="更多"></a>
+  </div>
+</div>
+<script>window._bd_share_config={"common":{},"share":{"bdCustomStyle":"nocss.css"}};with(document)0[(getElementsByTagName("head")[0]||body).appendChild(createElement("script")).src="http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion="+~(-new Date()/36e5)];</script>
+
+<!-- 百度分享 end -->
+
+<script src="//libs.baidu.com/jquery/1.11.1/jquery.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<! -- mathjax config similar to math.stackexchange -->
+<! -- add autoNumber settting -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+                processEscapes: true
+                    
+}
+  
+        });
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+                  
+}
+    
+        });
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Queue(function() {
+            var all = MathJax.Hub.getAllJax(), i;
+            for(i=0; i < all.length; i += 1) {
+                            all[i].SourceElement().parentNode.className += ' has-jax';
+                                    
+            }
+                
+        });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+<script src="/js/script.js"></script>
+
+<!--page counter part-->
+<script>
+function addCount (Counter) {
+        url=$('.article-date').attr('href').trim();
+        title = $('.article-title').text().trim();
+       // alert(title);
+        var query=new AV.Query(Counter);
+        //use url as unique idnetfication
+        query.equalTo("url",url);
+        query.find({
+            success: function(results){
+                if(results.length>0)
+                {
+                    var counter=results[0];
+                    counter.fetchWhenSave(true); //get recent result
+                    counter.increment("time");
+                    counter.save();
+                    //alert('find '+title+' and visit time is now '+ counter.get("time"));
+                }
+                else
+                {
+                    var newcounter=new Counter();
+                    newcounter.set("title",title);
+                    newcounter.set("url",url);
+                    newcounter.set("time",1);
+                    newcounter.save(null,{
+                        success: function(newcounter){
+                        //alert('New object created');
+                        },
+                        error: function(newcounter,error){
+                        alert('Failed to create');
+                        }
+                        });
+                }
+            },
+            error: function(error){
+                //find null is not a error
+                alert('Error:'+error.code+" "+error.message);
+            }
+        });
+}
+
+$(function(){
+        var Counter=AV.Object.extend("Counter");
+        //only increse visit counting when intering a page
+        if ($('.article-title').length == 1)
+           addCount(Counter);
+        var query=new AV.Query(Counter);
+        query.descending("time");
+        query.limit(10);
+        query.find({
+            success: function(results){
+                    for(var i=0;i<results.length;i++)    
+                    {
+                        var counter=results[i];
+                        //alert(counter.get("title")+'-'+counter.get("url"));
+                        title=counter.get("title");
+                        url=counter.get("url");
+                        time=counter.get("time");
+                        // add to the popularlist widget
+                        showcontent=title+" ("+time+")";
+                        //notice the "" in href
+                        $('.popularlist').append('<li><a href="'+url+'">'+showcontent+'</a></li>');
+                    }
+                },
+            error: function(error){
+                alert("Error:"+error.code+" "+error.message);
+            }
+            }
+        )
+        });
+</script>
+
+
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>

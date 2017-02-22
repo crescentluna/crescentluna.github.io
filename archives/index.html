@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Archives | 心怀畏惧</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="chen hao&apos;s blog | machine learning | data mining">
+<meta property="og:type" content="website">
+<meta property="og:title" content="心怀畏惧">
+<meta property="og:url" content="http://crescentluna.github.io/archives/index.html">
+<meta property="og:site_name" content="心怀畏惧">
+<meta property="og:description" content="chen hao&apos;s blog | machine learning | data mining">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="心怀畏惧">
+<meta name="twitter:description" content="chen hao&apos;s blog | machine learning | data mining">
+  
+    <link rel="alternative" href="/atom.xml" title="心怀畏惧" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+  
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F1fc57dc5ccfaeae31f8e295269b6fa04' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-57404093-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+  <script src="https://cdn1.lncld.net/static/js/av-min-1.2.1.js"></script>
+  <script>AV.initialize("57nirzk8g437patyg9434lcvmpkat6e5lu5mixmrwqa8l3ao", "rsqg6iiq58eyeg8c6c6uue48crtwt5quuq5dmjaahfcjlkq8");</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">心怀畏惧</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Do not go gentle into that good night</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives">所有文章</a>
+        
+          <a class="main-nav-link" href="/about">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="http://www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
+          <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="Search">
+          <input type="submit" value="" class="search-form-submit">
+          <input name=tn type=hidden value="bds">
+          <input name=cl type=hidden value="3">
+          <input name=ct type=hidden value="2097152">
+          <input type="hidden" name="si" value="crescentluna.github.io">
+        </form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-install-tensorflow-with-gpu-support-for-ubuntu" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/02/23/install-tensorflow-with-gpu-support-for-ubuntu/" class="article-date">
+  <time datetime="2017-02-22T16:24:13.000Z" itemprop="datePublished">2017-02-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/机器学习/">机器学习</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/02/23/install-tensorflow-with-gpu-support-for-ubuntu/">在Ubuntu上搭建GPU加速的TensorFlow环境</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="硬件软件环境">硬件软件环境</h2>
+<ul>
+<li><p>Ubuntu 16.10</p></li>
+<li><p>GTX 750ti（需要一张NVIDIA的显卡，越新越好，新卡的Compute Capability版本高）</p></li>
+<li><p>NVIDA CUDA 8.0</p></li>
+<li><p>NVIDIA 驱动 375.26</p></li>
+<li><p>gcc version 4.9</p></li>
+</ul>
+<p>​</p>
+<h2 id="基础环境配置">1. 基础环境配置</h2>
+<p>因为Ubuntu是机子新装的，所以我安装了Linux自己用的一些基本环境和python科学计算的库，请各取所需。</p>
+<h3 id="基本开发">基本开发</h3>
+<ul>
+<li>安装vim <code>sudo apt-get install vim</code></li>
+<li>安装zsh</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install zsh</div><div class="line">chsh -s /usr/bin/zsh</div></pre></td></tr></table></figure>
+<ul>
+<li>安装git <code>sudo apt-get install git</code></li>
+<li>安装 <a href="http://ohmyz.sh/" target="_blank" rel="external">oh-my-zsh</a> <code>sh -c &quot;$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&quot;</code></li>
+<li>安装 autojump <code>sudo apt-get install autojump</code></li>
+</ul>
+<h3 id="python科学计算库安装">Python科学计算库安装</h3>
+<ul>
+<li>安装<a href="https://www.continuum.io/downloads" target="_blank" rel="external">Anaconda</a></li>
+</ul>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># 下载Anaconda</div><div class="line">bash Anaconda2-4.3.0-Linux-x86_64.sh </div><div class="line"># 切换成清华镜像，用于conda加速</div><div class="line">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/</div><div class="line">conda config --set show_channel_urls yes</div></pre></td></tr></table></figure></p>
+<ul>
+<li><p>安装open-jdk <code>sudo apt-get install openjdk-8-jdk</code></p></li>
+<li><p>安装<a href="http://www.jetbrains.com/pycharm/" target="_blank" rel="external">pycharm</a></p></li>
+</ul>
+<h2 id="nvida环境安装">2. NVIDA环境安装</h2>
+<p>首先贴一段<a href="https://www.tensorflow.org/install/install_linux" target="_blank" rel="external">Tensorflow</a>官网上GPU支持对NVIDIA的环境需求：If you are installing TensorFlow with GPU support using one of the mechanisms described in this guide, then the following NVIDIA software must be installed on your system:</p>
+<ul>
+<li><p>CUDA® Toolkit 8.0. For details, see <a href="http://docs.nvidia.com/cuda/cuda-installation-guide-linux/#axzz4VZnqTJ2A" target="_blank" rel="external">NVIDIA’s documentation</a>. Ensure that you append the relevant Cuda pathnames to the <code>LD_LIBRARY_PATH</code> environment variable as described in the NVIDIA documentation.</p></li>
+<li><p>The NVIDIA drivers associated with CUDA Toolkit 8.0.</p></li>
+<li><p>cuDNN v5.1. For details, see <a href="https://developer.nvidia.com/cudnn" target="_blank" rel="external">NVIDIA’s documentation</a>. Ensure that you create the <code>CUDA_HOME</code> environment variable as described in the NVIDIA documentation.</p></li>
+<li><p>GPU card with CUDA Compute Capability 3.0 or higher. See <a href="https://developer.nvidia.com/cuda-gpus" target="_blank" rel="external">NVIDIA documentation</a> for a list of supported GPU cards.</p></li>
+<li><p>The libcupti-dev library, which is the NVIDIA CUDA Profile Tools Interface. This library provides advanced profiling support. To install this library, issue the following command:</p></li>
+</ul>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get install libcupti-dev</div></pre></td></tr></table></figure></p>
+<p>除了最后的libcupti-dev库可以直接apt-get，我们需要装的大头就是CUDA® Toolkit和cuDNN两个东西，各种坑从这里开始了囧。</p>
+<h3 id="cuda安装">CUDA安装</h3>
+<p>按照 <a href="http://docs.nvidia.com/cuda/cuda-installation-guide-linux/#axzz4VZnqTJ2A" target="_blank" rel="external">NVIDIA’s documentation</a> 给出的步骤：</p>
+<ul>
+<li>在安装之前首先逐一验证系统是否符合条件（Pre-installation Actions)</li>
+<li>下载<a href="https://developer.nvidia.com/cuda-toolkit" target="_blank" rel="external">CUDA Toolkit</a>，UBuntu推荐下载deb(local)版，安装过程比较方便</li>
+<li>把deb包加入到包管理中，然后apt-get安装</li>
+<li>安装后的验证过程</li>
+</ul>
+<p>在安装后的验证过程中需要注意的几个点如下：</p>
+<h4 id="cuda环境变量配置">CUDA环境变量配置</h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">export PATH=/usr/local/cuda-8.0/bin$&#123;PATH:+:$&#123;PATH&#125;&#125;</div><div class="line">export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64/$&#123;LD_LIBRARY_PATH:+:$&#123;LD_LIBRARY_PATH&#125;&#125;</div><div class="line"># 注意这里要路径要和Nvida驱动版本一致</div><div class="line">export LPATH=/usr/lib/nvidia-375:$LPATH</div><div class="line">export LIBRARY_PATH=/usr/lib/nvidia-375:$LIBRARY_PATH</div><div class="line"># Tensorflow 要求的环境变量</div><div class="line">export CUDA_HOME=/usr/local/cuda-8.0</div></pre></td></tr></table></figure>
+<p>这里最坑爹的一点是LIBRARY_PATH这个环境变量配置，官方的文档上一点没提，如果不写的话，在编译cuda的samples时，会在3_Imaging这个samples下报这个错误</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">/usr/bin/ld: cannot find -lnvcuvid</div><div class="line">collect2: error: ld returned 1 exit status</div><div class="line">Makefile:346: recipe for target &apos;cudaDecodeGL&apos; failed</div></pre></td></tr></table></figure>
+<h4 id="切换成低版本的gcc编译器">切换成低版本的gcc编译器</h4>
+<p>因为Ubuntu 16.10自带的gcc编译器版本是6.2，对于CUDA来说太新了，所以会报错</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">error -- unsupported GNU version! gcc versions later than 5 are not supported!</div></pre></td></tr></table></figure>
+<p>可以看到CUDA 8.0 能够支持的gcc最新版本不能超过5。网上给出的比较好的解决办法是利用Ubutnu的<a href="https://www.udacity.com/wiki/cs344/troubleshoot_gcc47" target="_blank" rel="external">update-alternatives</a> 命令来切换版本，具体命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install gcc-4.9 g++-4.9</div><div class="line">sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 40 --slave /usr/bin/g++ g++ /usr/bin/g++-4.9</div><div class="line">sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 30 --slave /usr/bin/g++ g++ /usr/bin/g++-6 </div><div class="line">sudo update-alternatives --config gcc</div></pre></td></tr></table></figure>
+<p>敲完<code>sudo update-alternatives --config gcc</code>之后，你就可以看到不同版本的gcc优先级了。</p>
+<h4 id="samples编译测试">Samples编译测试</h4>
+<p>根据Recommended Actions](http://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#recommended-post)步骤编译Cuda的那些samples，如果出现<code>Finished building CUDA samples</code>，说明所有samples的编译通过了。可以敲<code>NVIDIA_CUDA-8.0_Samples ./bin/x86_64/linux/release/nbody</code>，可以看到以下效果</p>
+<div class="figure">
+<img src="http://crescent.qiniudn.com/static/images/tensorflow_gpu_2017-02-22_01.png" alt="tensorflow_gpu_2017-02-22_01">
+<p class="caption">tensorflow_gpu_2017-02-22_01</p>
+</div>
+<h3 id="cudnn配置">cuDNN配置</h3>
+<p>下载 <a href="https://developer.nvidia.com/cudnn" target="_blank" rel="external">cuDNN</a>之前需要注册一下，成为NVIDIA的开发者，然后把下载的包解压拷贝到CUDA的链接库和头文件目录就行了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">tar -xzvf cudnn-8.0-linux-x64-v5.1.tgz </div><div class="line"># 解压得到cuda文件</div><div class="line">sudo cp cuda/lib64/* /usr/local/cuda/lib64 </div><div class="line">sudo cp cuda/include/cudnn.h /usr/local/cuda/include/</div></pre></td></tr></table></figure>
+<h2 id="tensorflow安装">3. Tensorflow安装</h2>
+<p>安装<a href="https://www.tensorflow.org/install/install_linux" target="_blank" rel="external">Tensorflow</a>有多种方式，这里我直接用的pip安装，python版本是2.7。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">TF_BINARY_URL=https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-1.0.0-cp27-none-linux_x86_64.whl</div><div class="line">sudo pip install --upgrade TF_BINARY_URL</div></pre></td></tr></table></figure>
+<p>都搞定之后，启动ipython，输入</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf </div><div class="line">hello = tf.constant(<span class="string">'Hello, TensorFlow!'</span>)</div><div class="line">sess = tf.Session()</div><div class="line">print(sess.run(hello))</div></pre></td></tr></table></figure>
+<p>能看到输出的结果，说明GPU加速安装成功了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">I tensorflow/core/common_runtime/gpu/gpu_device.cc:885] Found device 0 with properties: </div><div class="line">name: GeForce GTX 750 Ti</div><div class="line">major: 5 minor: 0 memoryClockRate (GHz) 1.0845</div><div class="line">pciBusID 0000:01:00.0</div><div class="line">Total memory: 1.95GiB</div><div class="line">Free memory: 1.53GiB</div><div class="line">I tensorflow/core/common_runtime/gpu/gpu_device.cc:906] DMA: 0 </div><div class="line">I tensorflow/core/common_runtime/gpu/gpu_device.cc:916] 0:   Y </div><div class="line">I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -&gt; (device: 0, name: GeForce GTX 750 Ti, pci bus id: 0000:01:00.0)</div><div class="line">Hello, TensorFlow!</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://crescentluna.github.io/2017/02/23/install-tensorflow-with-gpu-support-for-ubuntu/" data-id="cizha1r0i002jg0o8ghz9e95p" class="article-share-link" data-share="baidu">分享到</a>
+      
+
+      
+        <a href="http://crescentluna.github.io/2017/02/23/install-tensorflow-with-gpu-support-for-ubuntu/#ds-thread" class="article-comment-link">Comments</a>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tensorflow/">tensorflow</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-variational-inference-3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/12/12/variational-inference-3/" class="article-date">
+  <time datetime="2014-12-12T14:54:14.000Z" itemprop="datePublished">2014-12-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/学术/">学术</a>►<a class="article-category-link" href="/categories/学术/变分推断笔记/">变分推断笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/12/12/variational-inference-3/">变分推断学习笔记(3)——三硬币问题的变分推断解法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>变分推断学习笔记系列：</p>
+<ol style="list-style-type: decimal">
+<li><a href="http://crescentluna.github.io/2013/10/03/%E5%8F%98%E5%88%86%E6%8E%A8%E6%96%AD%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94%E6%A6%82%E5%BF%B5%E4%BB%8B%E7%BB%8D/">变分推断学习笔记(1)——概念介绍</a></li>
+<li><a href="http://crescentluna.github.io/2013/10/11/variational-inference-2/">变分推断学习笔记(2)——一维高斯模型的例子</a></li>
+<li><a href="http://crescentluna.github.io/2014/12/12/variational-inference-3/">变分推断学习笔记(3)——三硬币问题的变分推断解法</a>
+<hr>
+</hr></li>
+</ol>
+<p><del>其实三硬币的例子不写，前面的介绍也够了，写这个纯粹是吃撑了</del>。这次我们采取更加普遍的假设，将原先假设的3枚硬币拓展开来。现在假设有<span class="math inline">\(K+1\)</span>个骰子，第一个骰子有<span class="math inline">\(K\)</span>个面，其余的骰子有<span class="math inline">\(T\)</span>个面。进行如下实验：先掷第一个骰子，根据投出的结果<span class="math inline">\(Z_k\)</span>，选择第<span class="math inline">\(Z_k\)</span>个骰子再投，观测到投出的<span class="math inline">\(N\)</span>个结果，每个结果<span class="math inline">\(w_n\)</span>可能是 <span class="math display">\[
+1，3，7，8，3，2，6，9，...
+\]</span></p>
+<p>可以看到现在第1个骰子投出的标签服从多项分布： <span class="math display">\[Z_k \sim Multinomial(\pi)\]</span> 然后剩余骰子投出的面也服从多项分布 <span class="math display">\[W_{Z_{kt}} \sim Multinomial(\theta_{Z_k})\]</span> 我们假设，随机变量<span class="math inline">\(\pi\)</span>和<span class="math inline">\(\theta\)</span>的先验分布为狄利克雷分布，超参分别为<span class="math inline">\(\alpha\)</span>和<span class="math inline">\(\beta\)</span>。
+        
+          <p class="article-more-link">
+            <a href="/2014/12/12/variational-inference-3/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://crescentluna.github.io/2014/12/12/variational-inference-3/" data-id="cizha1r0d0028g0o8qtrmqbjl" class="article-share-link" data-share="baidu">分享到</a>
+      
+
+      
+        <a href="http://crescentluna.github.io/2014/12/12/variational-inference-3/#ds-thread" class="article-comment-link">Comments</a>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Variational-Inference/">Variational Inference</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-popular-widget" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/12/11/popular-widget/" class="article-date">
+  <time datetime="2014-12-11T11:25:03.000Z" itemprop="datePublished">2014-12-11</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/杂项/">杂项</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/12/11/popular-widget/">使用LeanCloud平台为Hexo博客添加文章浏览量统计组件</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在原来的wordpress博客中有一个WP-PostViews Plus插件，可以统计每篇文章的浏览量，可以为游客提供热门文章的信息，<del>(顺便满足一下作者的虚荣心)</del>。现在切换到静态博客Hexo了，就需要第三方服务来实现这样的动态数据处理。这里要感谢师弟<a href="http://ariwaranosai.xyz/">ariwaranosai</a>给我推荐的<a href="https://cn.avoscloud.com/">LeanCloud</a>平台，以及<a href="http://ibruce.info/2013/12/22/count-views-of-hexo/">为hexo博客添加访问次数统计功能</a>（基于BAE）提供的思路。使用LeanCloud的优点是它自己实现了一个AV.view 类，不需要考虑JavaScript的跨站访问问题。</p>
+<h2 id="创建lean-cloud应用">创建Lean Cloud应用</h2>
+<p>首先一句话介绍Lean Cloud:</p>
+<blockquote>
+<p><a href="https://leancloud.cn/">LeanCloud</a>（aka. AVOS Cloud）提供一站式后端云服务，从数据存储、实时聊天、消息推送到移动统计，涵盖应用开发的多方面后端需求。</p>
+</blockquote>
+<p>我们只用到它的数据存储部分,具体步骤如下：</p>
+<ol style="list-style-type: decimal">
+<li>首先到『控制台』创建一个应用，名字随便取。</li>
+<li>点击新建应用的『数据』选项，选择『创建Class』，取名为”Counter“。</li>
+<li>点击新建应用右上角的齿轮，在『应用Key』选项里得到APP ID 和 APP Key，在后面会用到。</li>
+</ol>
+<h2 id="修改hexo页面">修改Hexo页面</h2>
+<h3 id="新建popular_posts.ejs">新建popular_posts.ejs</h3>
+<p>首先在<code>theme/你的主题/layout/_widget</code>目录下新建<code>popular_posts.ejs</code>文件,其内容为</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">%</span> <span class="attr">if</span> (<span class="attr">site.posts.length</span>)&#123; %&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"widget-wrap"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">h3</span> <span class="attr">class</span>=<span class="string">"widget-title"</span>&gt;</span>浏览数目<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"widget"</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">ul</span> <span class="attr">class</span>=<span class="string">"popularlist"</span>&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">%</span> &#125; %&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="修改head.ejs">修改head.ejs</h3>
+<p>修改<code>theme/你的主题/layout/_partial/head.ejs</code>文件,在head标签的最后插入：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;script src=<span class="string">"https://cdn1.lncld.net/static/js/av-min-1.2.1.js"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></div><div class="line">  &lt;script&gt;AV.initialize(<span class="string">"你的APP ID"</span>, <span class="string">"你的APP Key"</span>);<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></div></pre></td></tr></table></figure>
+<p>注意Lean Cloud引用的js文件位置可能会变化，如果代码里位置打不开的话，记得去官方的<a href="https://leancloud.cn/docs/sdk_setup-js.html#npm_安装">JavaScript SDK文档</a>找一下最新的位置。</p>
+<h3 id="修改after-footer.ejs">修改after-footer.ejs</h3>
+<p>修改<code>theme/你的主题/layout/_partial/after-footer.ejs</code>文件,在最后插入：
+        
+          <p class="article-more-link">
+            <a href="/2014/12/11/popular-widget/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://crescentluna.github.io/2014/12/11/popular-widget/" data-id="cizha1r0f002bg0o8jqamsg7x" class="article-share-link" data-share="baidu">分享到</a>
+      
+
+      
+        <a href="http://crescentluna.github.io/2014/12/11/popular-widget/#ds-thread" class="article-comment-link">Comments</a>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/">Hexo</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-relocation" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/12/11/relocation/" class="article-date">
+  <time datetime="2014-12-11T02:17:06.000Z" itemprop="datePublished">2014-12-11</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/杂项/">杂项</a>►<a class="article-category-link" href="/categories/杂项/闲话/">闲话</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/12/11/relocation/">博客迁移小记</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一点闲话">一点闲话</h2>
+<p>扯一点闲话，这半年发生了不少事,导致博客断更了半年多。一言难尽，就上一句心灵鸡汤来概括吧，顺便弘扬一下正能量：</p>
+<blockquote>
+<p><strong>所有的事情最后都会有好结局，如果你觉得结局不好，那是因为还没有到最后。</strong></p>
+</blockquote>
+<h2 id="迁移原因">迁移原因</h2>
+<p>进入正题，这两天闲下来之后，也是起了心思，想把博客从wordpress迁移到静态博客上，原因如下：</p>
+<ol style="list-style-type: decimal">
+<li>最近用惯了markdown，想更方便地写东西，更加专注于内容。而wordpress没有好用的markdown插件，以前都是写tex里然后往博客上粘贴，太麻烦了。</li>
+<li>作为一个不称职的程序员，用了这么久的wordpress，现在终于想要有一点control every thing的感觉，自己动手折腾个静态博客，顺便学习一下javascript，jquery，css基础。</li>
+<li>还有就是静态博客的普遍优点了，比如不用服务器，省了买空间的钱（免费的<a href="https://pages.github.com/" target="_blank" rel="external">Github Pages</a>），访问速度快，容易被搜索引擎抓取等。</li>
+</ol>
+<p>静态博客先使用了Github推荐的<a href="http://jekyllrb.com/" target="_blank" rel="external">Jekyll</a>，发现需要自己搞的东西太多，于是转用了基于node.js的<a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>。Hexo有以下优点：</p>
+<ol style="list-style-type: decimal">
+<li>生成文章速度非常快。</li>
+<li>命令简单，只需要会<code>hexo n</code>，<code>hexo g</code>，<code>hexo s</code>，<code>hexo d</code>就能 搞定一切。</li>
+<li>中文用户多，文档和插件比较全。</li>
+<li>能通过插件解决markdwon和mathjax冲突问题。</li>
+</ol>
+<h2 id="搭建参考">搭建参考</h2>
+<p>在搭建过程，主要参考了以下文章:</p>
+<ul>
+<li>官方文档：<a href="http://hexo.io/docs/" class="uri" target="_blank" rel="external">http://hexo.io/docs/</a></li>
+<li>hexo作者tommy351的博客：<a href="http://zespia.tw/blog/2012/10/11/hexo-debut/" target="_blank" rel="external">Hexo 颯爽登場！</a></li>
+<li>不如的博客：<a href="http://ibruce.info/2013/11/22/hexo-your-blog/" target="_blank" rel="external">hexo你的博客</a></li>
+<li><a href="http://zipperary.com/categories/hexo/" target="_blank" rel="external">Zippera的hexo系列教程</a></li>
+<li>官方主题：<a href="https://github.com/hexojs/hexo/wiki/Themes" class="uri" target="_blank" rel="external">https://github.com/hexojs/hexo/wiki/Themes</a></li>
+<li>官方插件：<a href="https://github.com/tommy351/hexo/wiki/Plugins" class="uri" target="_blank" rel="external">https://github.com/tommy351/hexo/wiki/Plugins</a></li>
+<li>(20160828更新)<a href="http://bblove.me/2016/03/06/migrate-pages-from-gitcafe-to-coding/" target="_blank" rel="external">解决 Github Pages 禁止百度爬虫的方法</a>，基本思路是把博客同时发布到github pages和coding pages.然后使用dnspod设置域名解析,国内线路解析到coding.net,国外线路解析到github</li>
+</ul>
+<p>以上的文章已经足够基本了解hexo博客的整个搭建过程了，只需要照做即可。我的博客主题是基于<a href="https://github.com/xiangming/landscape-plus" target="_blank" rel="external">landscape-plus</a>改的，另外参考了howiefh的 <a href="https://github.com/howiefh/hexo-theme-landscape-f" target="_blank" rel="external">landscape-f</a>主题，添加了多说最近评论小部件以及我自己写的浏览计数小部件。图片都托管在<a href="http://www.qiniu.com/" target="_blank" rel="external">七牛云存储</a>上。</p>
+<h2 id="迁移问题">迁移问题</h2>
+<p>在博客从wordpress迁移到hexo的过程中，主要碰到的问题及解决办法如下:</p>
+<ol style="list-style-type: decimal">
+<li>原wordpress博客链接的死链问题。原先我wordpress文章链接用的是坑爹的默认生成方式，是通过?传p的参数来获取文章的URL。问题是p是个随机数字，我又没办法在静态页面上动态地获取p的值做重定向。现在折衷的解决办法是暂时不改域名，先用着github提供的二级域名，然后在原域名上用wordpress的Redirect插件对文章链接做301重定向，看看搜索引擎能不能把原文章的URL给改了。 <del>（我会尽快把这个域名的DNS解析转到github的博客上来）。目前你可以通过<a href="www.crescentmoon.info" class="uri">www.crescentmoon.info</a>访问原wordpress博客，但是点击任何文章都会跳转到新博客来:-D。</del>这个没有成功，请从搜索引擎点文章名过来的读者在博客页面寻找一下那篇文章吧囧。</li>
+<li>mathjax和markdown渲染冲突问题。因为markdown的解析要优先于mathjax，所以经常会导致mathjax渲染失败，需要玩一些tricks，比如latex语法中的下标’_‘要改成转义的’\_’, equation环境需要套一个div标签或者rawblock环境等，带来了无穷无尽的麻烦。还好hexo上有大神写的<a href="https://github.com/wzpan/hexo-renderer-pandoc" target="_blank" rel="external">hexo-renderer-pandoc插件</a>，用pandoc去代替默认的markdown渲染器，完美地解决了这个问题。</li>
+<li>文章的浏览数小部件问题。原先我的wordpress有个显示文章浏览数的小插件，现在换成静态网页了，就必须用第三方的服务实现这个功能，具体请见下一篇博客啦。</li>
+<li>多说评论没有跟过来的问题，这个正在解决中。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://crescentluna.github.io/2014/12/11/relocation/" data-id="cizha1r0c0024g0o8k06cwlrv" class="article-share-link" data-share="baidu">分享到</a>
+      
+
+      
+        <a href="http://crescentluna.github.io/2014/12/11/relocation/#ds-thread" class="article-comment-link">Comments</a>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/">Hexo</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-概率图模型简介" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/02/24/概率图模型简介/" class="article-date">
+  <time datetime="2014-02-23T21:56:02.000Z" itemprop="datePublished">2014-02-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/学术/">学术</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/02/24/概率图模型简介/">概率图模型简介</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="介绍">介绍</h1>
+<h2 id="定义">定义</h2>
+<p>概率图模型(Graphical Model)是概率论和图论之间的桥梁，概率图模型的基本想法来自模块的概念，即一个复杂系统是由简单的部分所联合而成的。概率论部分告诉我们哪些部分是耦合在一起的，然后提供推断模型的方法，而图论部分给我们一个非常直观的认识，把拥有相互关系的变量看做数据结构，从而导出一般化的方法来解决这个问题。很多经典的多元概率系统，比如混合模型，因子分析，隐含马尔科夫模型,Kalman filter 和Ising model等，从概率图模型的角度来看，都可以看做普遍隐含形成过程的一种实例表现。这意味着，一旦在某个系统上有什么特别的方法发现，就很容易推广到一系列的模型中去。除此之外，概率图模型还非常自然地提供了设计新系统的方法。</p>
+<p>在概率图模型中，点代表随机变量，点与点之间边的存在与否代表了点与点之间是存在条件依赖。点与边的组合描绘了联合概率分布的特征结构。假设有<span class="math inline">\(N\)</span>个二元随机变量，在没有任何信息帮助的情况下，联合分布<span class="math inline">\(P(X_1,\ldots,X_N)\)</span>，需要<span class="math inline">\(O(2^N)\)</span>个参数。而通过概率图描绘点与点之间的条件关系之后，表示联合分布，所需要的参数会减少很多，这对后面的模型的推断和学习是有帮助的。</p>
+<p>概率图模型主要分为两种，无向图(也叫Markov random fields)和有向图(也叫Bayesian networks)，前者多用于物理和图像领域，后者多用于AI和机器学习，具体的基本就不多介绍了。下面给出一个简单贝叶斯网络的例子。</p>
+<p><a href="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20140224133640.png"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20140224133640.png" alt="QQ截图20140224133640" /></a></p>
+<p>这里Cloudy指是否多云，Sprinkler指洒水器是否打开，Rain指是否有雨， WetGrass指草地是否湿了。</p>
+        
+          <p class="article-more-link">
+            <a href="/2014/02/24/概率图模型简介/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://crescentluna.github.io/2014/02/24/概率图模型简介/" data-id="cizha1r0h002gg0o8zx0ffpiv" class="article-share-link" data-share="baidu">分享到</a>
+      
+
+      
+        <a href="http://crescentluna.github.io/2014/02/24/概率图模型简介/#ds-thread" class="article-comment-link">Comments</a>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/概率图/">概率图</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-variational-inference-2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/10/11/variational-inference-2/" class="article-date">
+  <time datetime="2013-10-11T00:10:18.000Z" itemprop="datePublished">2013-10-11</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/学术/">学术</a>►<a class="article-category-link" href="/categories/学术/变分推断笔记/">变分推断笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2013/10/11/variational-inference-2/">变分推断学习笔记(2)——一维高斯模型的例子</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>变分推断学习笔记系列：</p>
+<ol style="list-style-type: decimal">
+<li><a href="http://crescentluna.github.io/2013/10/03/%E5%8F%98%E5%88%86%E6%8E%A8%E6%96%AD%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94%E6%A6%82%E5%BF%B5%E4%BB%8B%E7%BB%8D/">变分推断学习笔记(1)——概念介绍</a></li>
+<li><a href="http://crescentluna.github.io/2013/10/11/variational-inference-2/">变分推断学习笔记(2)——一维高斯模型的例子</a></li>
+<li><a href="http://crescentluna.github.io/2014/12/12/variational-inference-3/">变分推断学习笔记(3)——三硬币问题的变分推断解法</a></li>
+</ol>
+<hr>
+</hr>
+<p>举一个一元高斯模型的例子。假设我们有数据<span class="math inline">\(\mathbf{X}=\{x_1,\ldots,x_M\}\)</span>，要推断平均值<span class="math inline">\(\mu\)</span>和精度<span class="math inline">\(\tau(1/\sigma)\)</span>的后验概率分布。 写出似然 <span class="math display">\[\begin{equation}
+p(\mathbf{X}|\mu,\tau)=(\frac{\tau}{2\pi})^{N/2}\exp\{-\frac{\tau}{2}\sum^N_{n=1}(x_n-\mu)^2\}
+\end{equation}\]</span> 其中<span class="math inline">\(\mu,\tau\)</span>各自服从先验分布 <span class="math display">\[\begin{equation}p(\mu|\tau)=N(\mu|\mu,(\lambda_0\tau)^{-1})\end{equation}\]</span> <span class="math display">\[\begin{equation}p(\tau)=Gam(\tau|a_0,b_0)\end{equation}\]</span> 其中Gam为Gamma分布（见备注1）。</p>
+<h2 id="通用的估计方法">通用的估计方法</h2>
+<p>好，我们现在假设<span class="math inline">\(q\)</span>之间的分布都独立。 <span class="math display">\[\begin{equation}q(\mu,\tau)=q_u(\mu)q_r(\tau)\end{equation}\]</span>
+        
+          <p class="article-more-link">
+            <a href="/2013/10/11/variational-inference-2/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://crescentluna.github.io/2013/10/11/variational-inference-2/" data-id="cizha1r0a0022g0o8f6cnp84q" class="article-share-link" data-share="baidu">分享到</a>
+      
+
+      
+        <a href="http://crescentluna.github.io/2013/10/11/variational-inference-2/#ds-thread" class="article-comment-link">Comments</a>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Variational-Inference/">Variational Inference</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-变分推断学习笔记1——概念介绍" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/10/03/变分推断学习笔记1——概念介绍/" class="article-date">
+  <time datetime="2013-10-03T04:25:24.000Z" itemprop="datePublished">2013-10-03</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/学术/">学术</a>►<a class="article-category-link" href="/categories/学术/变分推断笔记/">变分推断笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2013/10/03/变分推断学习笔记1——概念介绍/">变分推断学习笔记(1)——概念介绍</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>变分推断学习笔记系列：</p>
+<ol style="list-style-type: decimal">
+<li><a href="http://crescentluna.github.io/2013/10/03/%E5%8F%98%E5%88%86%E6%8E%A8%E6%96%AD%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94%E6%A6%82%E5%BF%B5%E4%BB%8B%E7%BB%8D/">变分推断学习笔记(1)——概念介绍</a></li>
+<li><a href="http://crescentluna.github.io/2013/10/11/variational-inference-2/">变分推断学习笔记(2)——一维高斯模型的例子</a></li>
+<li><a href="http://crescentluna.github.io/2014/12/12/variational-inference-3/">变分推断学习笔记(3)——三硬币问题的变分推断解法</a></li>
+</ol>
+<hr>
+</hr>
+<h2 id="问题描述">问题描述</h2>
+<p>变分推断是一类用于贝叶斯估计和机器学习领域中近似计算复杂（intractable）积分的技术，它广泛应用于各种复杂模型的推断。本文是学习PRML第10章的一篇笔记，错误或不足的地方敬请指出。</p>
+<p>先给出问题描述。记得在上一篇EM的文章中，我们有一个观察变量<span class="math inline">\(\mathbf{X}=\{x^{\{1\}},\ldots,x^{\{m\}}\}\)</span>和隐藏变量<span class="math inline">\(\mathbf{Z}=\{z^{\{1\}},\ldots,z^{\{m\}}\}\)</span>, 整个模型<span class="math inline">\(p(\mathbf{X},\mathbf{Z})\)</span>是个关于变量<span class="math inline">\(\mathbf{X},\mathbf{Z}\)</span>的联合分布，我们的目标是得到后验分布<span class="math inline">\(P(\mathbf{Z}|\mathbf{X})\)</span>的一个近似分布。</p>
+<p>在之前介绍过Gibbs Sampling这一类Monte Carlo算法，它们的做法就是通过抽取大量的样本估计真实的后验分布。而变分推断不同，与此不同的是，变分推断限制近似分布的类型，从而得到一种局部最优，但具有确定解的近似后验分布。</p>
+之前<a href="http://www.crescentmoon.info/?p=171">在EM算法的介绍中</a>我们有似然的式子如下： <span class="math display">\[\begin{equation}\ln p(\mathbf{X})=L(q)+KL(q||p)\end{equation}\]</span> 其中
+<div>
+<span class="math display">\[\begin{equation}L(q)=\int q(\mathbf{Z})\ln{\frac{p(\mathbf{X},\mathbf{Z})}{q(\mathbf{Z})}}d\mathbf{Z}\end{equation}\]</span>
+</div>
+<div>
+<span class="math display">\[\begin{equation}KL(q||p)=-\int q(\mathbf{Z}) \ln{\frac{p(\mathbf{Z}|\mathbf{X})}{q(\mathbf{Z})}}d\mathbf{Z}\end{equation}\]</span>
+</div>
+<p>这里公式中不再出现参数<span class="math inline">\(\theta\)</span>，因为参数不再是固定的值，而变成了随机变量，所以也是隐藏变量，包括在<span class="math inline">\(\mathbf{Z}\)</span>之内了。</p>
+        
+          <p class="article-more-link">
+            <a href="/2013/10/03/变分推断学习笔记1——概念介绍/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://crescentluna.github.io/2013/10/03/变分推断学习笔记1——概念介绍/" data-id="cizha1r09001zg0o8ja8ogjao" class="article-share-link" data-share="baidu">分享到</a>
+      
+
+      
+        <a href="http://crescentluna.github.io/2013/10/03/变分推断学习笔记1——概念介绍/#ds-thread" class="article-comment-link">Comments</a>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PRML/">PRML</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Variational-Inference/">Variational Inference</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-bag-problem-2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/08/08/bag-problem-2/" class="article-date">
+  <time datetime="2013-08-08T06:03:10.000Z" itemprop="datePublished">2013-08-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/算法/">算法</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2013/08/08/bag-problem-2/">背包问题学习笔记(2)-问法的变化</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>所有问法均以01背包问题为例，问题如下： 有<span class="math inline">\(N\)</span>种物品和一个容量为<span class="math inline">\(V\)</span>的背包，每种物品都有无限件可用。放入第i种物品的费用是<span class="math inline">\(C_i\)</span>，价值是<span class="math inline">\(W_i\)</span>，求背包所装物体的价值最大。 基本代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> N=<span class="number">4</span>,V=<span class="number">10</span>;</div><div class="line"><span class="keyword">int</span> F[N+<span class="number">1</span>][V+<span class="number">1</span>];</div><div class="line"><span class="keyword">int</span> C[N+<span class="number">1</span>]=&#123;<span class="number">0</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">4</span>,<span class="number">5</span>&#125;;</div><div class="line"><span class="keyword">int</span> W[N+<span class="number">1</span>]=&#123;<span class="number">0</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">6</span>,<span class="number">7</span>&#125;;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">BasicZeroOnePack</span><span class="params">()</span>  <span class="comment">//O(NV)</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="built_in">memset</span>(F,<span class="number">0</span>,<span class="keyword">sizeof</span>(F));</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=N;i++)</div><div class="line">	&#123;</div><div class="line"></div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> v=<span class="number">0</span>;v&lt;=V;v++) 		</div><div class="line">		&#123;</div><div class="line">			F[i][v]=F[i<span class="number">-1</span>][v];  <span class="comment">//默认不加入物品 			</span></div><div class="line">			<span class="keyword">if</span>(v&gt;=C[i])  <span class="comment">//可以加入的时候考虑一下</span></div><div class="line">				F[i][v]=max(F[i<span class="number">-1</span>][v],F[i<span class="number">-1</span>][v-C[i]]+W[i]);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>改动都是基于这个代码。</p>
+<h3 id="恰好装满的要求">恰好装满的要求</h3>
+<p>如果要求恰好装满的话,初始化时除了<span class="math inline">\(F[0]=0\)</span>以外，其余的F[1,…V]均设为负无穷。因为如果要求恰好装满，初始化的时候只有容量为0的背包装容量为0的物体才是合法状态，其余的状态全都不合法，用负无穷表示。
+        
+          <p class="article-more-link">
+            <a href="/2013/08/08/bag-problem-2/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://crescentluna.github.io/2013/08/08/bag-problem-2/" data-id="cizha1r04001qg0o8fyhe7rad" class="article-share-link" data-share="baidu">分享到</a>
+      
+
+      
+        <a href="http://crescentluna.github.io/2013/08/08/bag-problem-2/#ds-thread" class="article-comment-link">Comments</a>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DP/">DP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/背包问题/">背包问题</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-bag-problem-1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/08/05/bag-problem-1/" class="article-date">
+  <time datetime="2013-08-05T03:30:28.000Z" itemprop="datePublished">2013-08-05</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/算法/">算法</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2013/08/05/bag-problem-1/">背包问题学习笔记(1)-基本的背包问题介绍</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>背包问题是动态规划中非常经典的问题。这里仅仅是一份学习笔记和简单的代码实现，更详细的介绍请见参考1和2。</p>
+<h2 id="背包问题">01背包问题</h2>
+<h3 id="题目">题目</h3>
+<p>有<span class="math inline">\(N\)</span>种物品和一个容量为<span class="math inline">\(V\)</span>的背包，每种物品都有无限件可用。放入第i种物品的费用是<span class="math inline">\(C_i\)</span>，价值是<span class="math inline">\(W_i\)</span>。求解：将哪些物品装入背包，可使这些物品的耗费的费用总和不超过背包容量，且价值总和最大。</p>
+<h3 id="基本思路">基本思路</h3>
+<p><span class="math inline">\(F[i,v]\)</span>代表前<span class="math inline">\(i\)</span>件物品放入容量为<span class="math inline">\(v\)</span>的背包可以获得的最大价值。 01背包的状态转移方程为: <span class="math display">\[F[i,v]=\max\{F[i-1][v],F[i-1][v-C_i]+W_i\}\]</span> 将“前<span class="math inline">\(i\)</span>件物品放入容量为<span class="math inline">\(v\)</span>的背包”中这个子问题，只考虑地<span class="math inline">\(i\)</span>件物品的策略(放或不放）。如果放入<span class="math inline">\(i\)</span>物品，问题转为“前i-1件物品放入容量为<span class="math inline">\(v-C_i\)</span> 的背包中“这个子问题的最大价值<span class="math inline">\(F[i-1,v-C_i]\)</span>加上<span class="math inline">\(W_i\)</span>。如果不放，问题转化为”前i-1件物品放入容量为<span class="math inline">\(v-C_i\)</span> 的背包中“,价值为<span class="math inline">\(F[i-1,v]\)</span>。</p>
+<p>代码是
+        
+          <p class="article-more-link">
+            <a href="/2013/08/05/bag-problem-1/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://crescentluna.github.io/2013/08/05/bag-problem-1/" data-id="cizha1r06001ug0o83ajg5044" class="article-share-link" data-share="baidu">分享到</a>
+      
+
+      
+        <a href="http://crescentluna.github.io/2013/08/05/bag-problem-1/#ds-thread" class="article-comment-link">Comments</a>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DP/">DP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/动态规划/">动态规划</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/背包问题/">背包问题</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-我是否吃遍了食堂的盘子？" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/07/14/我是否吃遍了食堂的盘子？/" class="article-date">
+  <time datetime="2013-07-14T05:53:34.000Z" itemprop="datePublished">2013-07-14</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/杂项/">杂项</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2013/07/14/我是否吃遍了食堂的盘子？/">我是否吃遍了食堂的盘子？</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>前一阵子突发奇想，想看看吃饭吃了这么久，是不是把食堂里的盘子都吃过一遍了。提出问题如下： 现存在1，2，3号个盘子，每次吃饭拿一个盘子，用完之后放回去，请问吃了5次饭之后三个盘子都被用过的概率是多少？如果是m个盘子，吃了n次饭所有的盘子都被用过的概率呢？</p>
+<h2 id="求概率">求概率</h2>
+<p>虽然我猜出了公式，但是还是不怎么懂。。。讲一下猜的过程：</p>
+<ol style="list-style-type: decimal">
+<li>3个盘子吃了5次饭的情况。 既然我要算所有盘子都被吃过的情况，那么只要排除掉盘子没吃过的情况就好了。首先考虑只用了2个盘子的情况，总够有<span class="math inline">\(C^2_3 \cdot 2^5\)</span>种。但是要注意到这里对2个盘子的穷举已经包括了只用了1个盘子的情形而且还冗余了，所以要减掉冗余的3种情况。 所以三个盘子都被用过的概率为：
+<div>
+<span class="math display">\[1-\frac{C^2_3 \cdot 2^5 -3}{3^5}=\frac{150}{243}\]</span>
+</div></li>
+<li>4个盘子吃了5次饭的情况。 这里我们首先考虑只用了3个盘子的情况，共有<span class="math inline">\(C^3_4 \cdot 3^5\)</span>种情况。但是对这3个盘子的情况的列举已经包括了只包含2个盘子的情况，所以要减去<span class="math inline">\(C^2_4 \cdot 2^5\)</span>种2个盘子的情况，但是要注意的是对这2个盘子的列举又已经包括了1个盘子的情况，所以要加上种只含一个盘子的情况<span class="math inline">\(C^1_4 \cdot 1^5\)</span>补回来。 所以三个盘子都被用过的概率为：
+<div>
+<span class="math display">\[ 1-\frac{C^3_4 \cdot 3^5-C^2_4 \cdot 2^5+C^1_4 \cdot 1^5}{4^5}=\frac{240}{1024} \]</span>
+</div></li>
+<li>m个盘子吃了n次饭的情况。 根据上面的减减加加的想法推断（完全是瞎猜好么），就可以得到m个盘子吃了n次饭的概率公式：
+<div>
+<span class="math display">\[ 1-\frac{C^{m-1}_n \cdot (m-1)^n-C^{m-2}_n \cdot (m-2)^n+... \pm C^1_n \cdot 1^n}{m^n} \]</span>
+</div>
+m个盘子都被用过的概率为： 随便代入一个例子。m=20,n=50得到的概率为：0.16417976964878256。用模拟的方法发现这个数是对的- -。</li>
+</ol>
+<h2 id="求期望">求期望</h2>
+<p>虽然我们知道了具体的概率，还是希望有个期望值来告诉我们大概在吃几个盘子的时候你能够舔遍全食堂的盘子。根据《算法导论》5.4.2的说法，我们将吃到以前没吃过的盘子的时候定义为“命中”，然后我们要求为了吃完m个盘子需要吃的次数n。</p>
+<p>命中次数可以用来讲n次吃饭划分为多个阶段。第i个阶段包括从第i-1次命中到第i次命中所吃的次数。第1阶段因为所以盘子都没被吃过，所以是必中的。第i阶段的每一次吃饭，都有i-1个盘子被吃过，m-i+1个盘子没被吃过，这样第i次命中的概率就是(m-i+1)/m。</p>
+用<span class="math inline">\(n_i\)</span>表示第i阶段的吃饭次数。每个随机变量<span class="math inline">\(n_i\)</span>都服从概率为(m-i+1)/m的几何分布。根据几何分布的期望可以算得
+<div>
+<span class="math display">\[ E[n_i]=\frac{m}{m-i+1}\]</span>
+</div>
+由期望的线性性质，可以得到
+<div>
+<span class="math display">\[E[n]=E[\sum^m_{i=1}n_i]=\sum^m_{i=1}E[n_i]=\sum^m_{i=1}\frac{m}{m-i+1}=m \sum \frac{1}{m}=m(\ln m+O(1))\]</span>
+</div>
+<p>最后的式子是调和级数的上界，所以我们希望吃完所有的盘子大概需要<span class="math inline">\(m\ln m\)</span>次，这个问题也被称作赠卷收集者问题（coupon collector’s problem)。 如果食堂有1000 个盘子，我们大学4年估计是吃不完的。。。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://crescentluna.github.io/2013/07/14/我是否吃遍了食堂的盘子？/" data-id="cizha1r02001jg0o897hkovky" class="article-share-link" data-share="baidu">分享到</a>
+      
+
+      
+        <a href="http://crescentluna.github.io/2013/07/14/我是否吃遍了食堂的盘子？/#ds-thread" class="article-comment-link">Comments</a>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/盘子/">盘子</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="page-number" href="/archives/page/3/">3</a><a class="extend next" rel="next" href="/archives/page/2/">Next &raquo;</a>
+    </nav>
+  
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/学术/">学术</a><span class="category-list-count">18</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/学术/Gibbs-Sampling笔记/">Gibbs Sampling笔记</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/学术/变分推断笔记/">变分推断笔记</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习/">机器学习</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂项/">杂项</a><span class="category-list-count">6</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/杂项/闲话/">闲话</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a><span class="category-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/DP/" style="font-size: 13.33px;">DP</a> <a href="/tags/EM/" style="font-size: 20px;">EM</a> <a href="/tags/Gibbs-Sampling/" style="font-size: 20px;">Gibbs Sampling</a> <a href="/tags/Hexo/" style="font-size: 13.33px;">Hexo</a> <a href="/tags/LDA/" style="font-size: 10px;">LDA</a> <a href="/tags/PRML/" style="font-size: 13.33px;">PRML</a> <a href="/tags/Variational-Inference/" style="font-size: 16.67px;">Variational Inference</a> <a href="/tags/kNN/" style="font-size: 10px;">kNN</a> <a href="/tags/matlab/" style="font-size: 10px;">matlab</a> <a href="/tags/tensorflow/" style="font-size: 10px;">tensorflow</a> <a href="/tags/wordpress/" style="font-size: 10px;">wordpress</a> <a href="/tags/二叉树/" style="font-size: 10px;">二叉树</a> <a href="/tags/决策树/" style="font-size: 10px;">决策树</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/参数估计/" style="font-size: 10px;">参数估计</a> <a href="/tags/多项式分布/" style="font-size: 10px;">多项式分布</a> <a href="/tags/数据挖掘/" style="font-size: 16.67px;">数据挖掘</a> <a href="/tags/机器学习/" style="font-size: 16.67px;">机器学习</a> <a href="/tags/概率图/" style="font-size: 10px;">概率图</a> <a href="/tags/盘子/" style="font-size: 10px;">盘子</a> <a href="/tags/社区发现/" style="font-size: 10px;">社区发现</a> <a href="/tags/背包问题/" style="font-size: 13.33px;">背包问题</a> <a href="/tags/贝叶斯方法/" style="font-size: 10px;">贝叶斯方法</a> <a href="/tags/高斯混合模型/" style="font-size: 16.67px;">高斯混合模型</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">七月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/04/">四月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">二月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">一月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/">十二月 2012</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">十月 2012</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">九月 2012</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">浏览数目</h3>
+    <div class="widget">
+      <ul class="popularlist">
+      </ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">近期文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/02/23/install-tensorflow-with-gpu-support-for-ubuntu/">在Ubuntu上搭建GPU加速的TensorFlow环境</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/12/variational-inference-3/">变分推断学习笔记(3)——三硬币问题的变分推断解法</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/11/popular-widget/">使用LeanCloud平台为Hexo博客添加文章浏览量统计组件</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/11/relocation/">博客迁移小记</a>
+          </li>
+        
+          <li>
+            <a href="/2014/02/24/概率图模型简介/">概率图模型简介</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+
+  
+    
+<div class="widget-wrap">
+  <h3 class="widget-title">最近评论</h3>
+  <ul class="widget ds-recent-comments" data-num-items="5" data-show-avatars="0" data-show-title="1" data-show-time="1"></ul>
+</div>
+<!-- 需要多说的公用代码 -->
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">友情链接</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="https://github.com/xiangming/landscape-plus" target="_blank">landscape-plus主题</a>
+          </li>
+        
+          <li>
+            <a href="http://www.smallqiao.com/" target="_blank">小桥流水</a>
+          </li>
+        
+          <li>
+            <a href="http://www.ahathinking.com/" target="_blank">勇幸|Thinking</a>
+          </li>
+        
+          <li>
+            <a href="http://www.socona.me/" target="_blank">socona的博客</a>
+          </li>
+        
+          <li>
+            <a href="http://www.clarkchen.com/" target="_blank">陈曦师兄的博客</a>
+          </li>
+        
+          <li>
+            <a href="http://www.fengyafei.com/" target="_blank">小飞的博客</a>
+          </li>
+        
+          <li>
+            <a href="http://ariwaranosai.xyz/" target="_blank">今天拒绝负能量!</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Chen Hao<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      .
+      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives" class="mobile-nav-link">所有文章</a>
+  
+    <a href="/about" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+<!-- 多说公共js代码 start -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"crescent"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+<!-- 多说公共js代码 end -->
+
+
+<!-- 百度分享 start -->
+
+<div id="article-share-box" class="article-share-box">
+  <div id="bdshare" class="bdsharebuttonbox article-share-links">
+    <a class="article-share-weibo" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a class="article-share-weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a class="article-share-qq" data-cmd="sqq" title="分享到QQ"></a>
+    <a class="article-share-renren" data-cmd="renren" title="分享到人人网"></a>
+    <a class="article-share-more" data-cmd="more" title="更多"></a>
+  </div>
+</div>
+<script>window._bd_share_config={"common":{},"share":{"bdCustomStyle":"nocss.css"}};with(document)0[(getElementsByTagName("head")[0]||body).appendChild(createElement("script")).src="http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion="+~(-new Date()/36e5)];</script>
+
+<!-- 百度分享 end -->
+
+<script src="//libs.baidu.com/jquery/1.11.1/jquery.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<! -- mathjax config similar to math.stackexchange -->
+<! -- add autoNumber settting -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+                processEscapes: true
+                    
+}
+  
+        });
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+                  
+}
+    
+        });
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Queue(function() {
+            var all = MathJax.Hub.getAllJax(), i;
+            for(i=0; i < all.length; i += 1) {
+                            all[i].SourceElement().parentNode.className += ' has-jax';
+                                    
+            }
+                
+        });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+<script src="/js/script.js"></script>
+
+<!--page counter part-->
+<script>
+function addCount (Counter) {
+        url=$('.article-date').attr('href').trim();
+        title = $('.article-title').text().trim();
+       // alert(title);
+        var query=new AV.Query(Counter);
+        //use url as unique idnetfication
+        query.equalTo("url",url);
+        query.find({
+            success: function(results){
+                if(results.length>0)
+                {
+                    var counter=results[0];
+                    counter.fetchWhenSave(true); //get recent result
+                    counter.increment("time");
+                    counter.save();
+                    //alert('find '+title+' and visit time is now '+ counter.get("time"));
+                }
+                else
+                {
+                    var newcounter=new Counter();
+                    newcounter.set("title",title);
+                    newcounter.set("url",url);
+                    newcounter.set("time",1);
+                    newcounter.save(null,{
+                        success: function(newcounter){
+                        //alert('New object created');
+                        },
+                        error: function(newcounter,error){
+                        alert('Failed to create');
+                        }
+                        });
+                }
+            },
+            error: function(error){
+                //find null is not a error
+                alert('Error:'+error.code+" "+error.message);
+            }
+        });
+}
+
+$(function(){
+        var Counter=AV.Object.extend("Counter");
+        //only increse visit counting when intering a page
+        if ($('.article-title').length == 1)
+           addCount(Counter);
+        var query=new AV.Query(Counter);
+        query.descending("time");
+        query.limit(10);
+        query.find({
+            success: function(results){
+                    for(var i=0;i<results.length;i++)    
+                    {
+                        var counter=results[i];
+                        //alert(counter.get("title")+'-'+counter.get("url"));
+                        title=counter.get("title");
+                        url=counter.get("url");
+                        time=counter.get("time");
+                        // add to the popularlist widget
+                        showcontent=title+" ("+time+")";
+                        //notice the "" in href
+                        $('.popularlist').append('<li><a href="'+url+'">'+showcontent+'</a></li>');
+                    }
+                },
+            error: function(error){
+                alert("Error:"+error.code+" "+error.message);
+            }
+            }
+        )
+        });
+</script>
+
+
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>

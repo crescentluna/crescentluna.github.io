@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>社区发现及其发展方向简介（未完） | 心怀畏惧</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1. 社区发现简介
+社区，从直观上来看，是指网络中的一些密集群体，每个社区内部的结点间的联系相对紧密，但是各个社区之间的连接相对来说却比较稀疏（图1，当然社区的定义不止有这一种）。这样的社区现象被研究已经很多年了，最早期的记录甚至来自于80年前。
+
+比较经典的社区研究案例包括对空手道俱乐部(karate club),科学家合作网络(Collaboration network) 和斑马群体(zebr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="社区发现及其发展方向简介（未完）">
+<meta property="og:url" content="http://crescentluna.github.io/2013/03/26/Introdcution of Community Detection/index.html">
+<meta property="og:site_name" content="心怀畏惧">
+<meta property="og:description" content="1. 社区发现简介
+社区，从直观上来看，是指网络中的一些密集群体，每个社区内部的结点间的联系相对紧密，但是各个社区之间的连接相对来说却比较稀疏（图1，当然社区的定义不止有这一种）。这样的社区现象被研究已经很多年了，最早期的记录甚至来自于80年前。
+
+比较经典的社区研究案例包括对空手道俱乐部(karate club),科学家合作网络(Collaboration network) 和斑马群体(zebr">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/aaa.png">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/b.png">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/无标题11.png">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/maxflow.png">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/dendrogram.png">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130326165736.png">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130326183011.png">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130326183118.png">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/social-network.jpg">
+<meta property="og:updated_time" content="2017-02-21T18:24:27.407Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="社区发现及其发展方向简介（未完）">
+<meta name="twitter:description" content="1. 社区发现简介
+社区，从直观上来看，是指网络中的一些密集群体，每个社区内部的结点间的联系相对紧密，但是各个社区之间的连接相对来说却比较稀疏（图1，当然社区的定义不止有这一种）。这样的社区现象被研究已经很多年了，最早期的记录甚至来自于80年前。
+
+比较经典的社区研究案例包括对空手道俱乐部(karate club),科学家合作网络(Collaboration network) 和斑马群体(zebr">
+<meta name="twitter:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/aaa.png">
+  
+    <link rel="alternative" href="/atom.xml" title="心怀畏惧" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+  
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F1fc57dc5ccfaeae31f8e295269b6fa04' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-57404093-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+  <script src="https://cdn1.lncld.net/static/js/av-min-1.2.1.js"></script>
+  <script>AV.initialize("57nirzk8g437patyg9434lcvmpkat6e5lu5mixmrwqa8l3ao", "rsqg6iiq58eyeg8c6c6uue48crtwt5quuq5dmjaahfcjlkq8");</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">心怀畏惧</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Do not go gentle into that good night</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives">所有文章</a>
+        
+          <a class="main-nav-link" href="/about">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="http://www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
+          <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="Search">
+          <input type="submit" value="" class="search-form-submit">
+          <input name=tn type=hidden value="bds">
+          <input name=cl type=hidden value="3">
+          <input name=ct type=hidden value="2097152">
+          <input type="hidden" name="si" value="crescentluna.github.io">
+        </form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Introdcution of Community Detection" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/03/26/Introdcution of Community Detection/" class="article-date">
+  <time datetime="2013-03-26T00:48:14.000Z" itemprop="datePublished">2013-03-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/学术/">学术</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      社区发现及其发展方向简介（未完）
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="社区发现简介">1. 社区发现简介</h2>
+<p>社区，从直观上来看，是指网络中的一些密集群体，每个社区内部的结点间的联系相对紧密，但是各个社区之间的连接相对来说却比较稀疏（图1，当然社区的定义不止有这一种）。这样的社区现象被研究已经很多年了，最早期的记录甚至来自于80年前。</p>
+<p><a href="http://7sbo5n.com1.z0.glb.clouddn.com/aaa.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/aaa.png" alt="aaa"></a></p>
+<p>比较经典的社区研究案例包括对空手道俱乐部(karate club),科学家合作网络(Collaboration network) 和斑马群体(zebras) 的社交行为研究等（见图2），其中著名的空手道俱乐部社区已经成为通常检验社区发现算法效果的标准(benchmark)之一。</p>
+<a id="more"></a>
+<p><a href="http://7sbo5n.com1.z0.glb.clouddn.com/b.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/b.png" alt="b"></a></p>
+<p>随着互联网和在线社交网站的兴起，在Twitter,Facebook，Flickr这样的用户生成内容（UCG）网站上使用社区发现的技术已经成为热潮。在这些社区中用户相互的交流与反馈，能为传统的社区带来丰富的内容信息和新的结构，从而使社区发现有了新的发展。</p>
+<h2 id="社区发现算法介绍">2. 社区发现算法介绍</h2>
+<p>因为社区发现的算法很多很多，下图列出了比较核心的社区发现算法介绍（在参考1给的目录上稍作修改，包含但不限于，五花八门的太多了）：</p>
+<p><a href="http://7sbo5n.com1.z0.glb.clouddn.com/无标题11.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/无标题11.png" alt="无标题1"></a></p>
+<p>对上图所涉及的算法作简单介绍：</p>
+<h3 id="图分割">2.1 图分割</h3>
+<p>社区可以看做密集子图结构，使用图分割算法来解决。图分割问题的目标是把图中的节点分成<span class="math inline">\(g\)</span>个预定大小的群组，这些群组之间的边数目最小，这个问题是NP-hard 的。</p>
+<h4 id="二分图">2.1.1 二分图</h4>
+<p>早期的分割都是二分图，社区发现也是基于二分的，遇到多分的情况就把其中一个子图再分割。比较经典的有谱二分法，利用拉普拉斯矩阵的第二小特征值<span class="math inline">\(\lambda_2\)</span>对社区二分类，这其实是属于谱方法的一种特例。</p>
+<h4 id="kl算法">2.1.2 KL算法</h4>
+<p>KL算法通过基于贪婪优化的启发式过程把网络分解为2个规模已知的社区。该算法为网络的划分引入一个增益函数，定义为两个社区内部的边数与两个社区边数之间的差，寻求Q的最大划分办法。</p>
+<h4 id="最大流算法">2.1.3 最大流算法</h4>
+<p>基于最大流的算法是G.W.Flake提出的。他给网络加了虚拟源节点<span class="math inline">\(s\)</span>和终点节点<span class="math inline">\(t\)</span>，并证明了经过最大流算法之后，包含源点<span class="math inline">\(s\)</span>的社区恰好满足社区内节点链接比与社区外的链接要多的性质。</p>
+<p><a href="http://7sbo5n.com1.z0.glb.clouddn.com/maxflow.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/maxflow.png" alt="maxflow"></a></p>
+<h3 id="聚类">2.2 聚类</h3>
+<p>当社区的边非常密集，数目远大于点时，图分割可能就不太好使了，这时候社区发现可能更接近于聚类。我们把社区发现看做一组内容相似的物体集合，使用聚类算法。和图中的社区发现相比，图中的社区点与点之间可以用边来表示联系的紧密，而聚类中的社区，需要定义点之间的相似度，比如说根据邻接关系定义： <span class="math display">\[d_{ij}=\sqrt{\sum_{k\neq i,j}(A_{ik}-A_{jk})^2}\]</span> 其中<span class="math inline">\(A\)</span>为邻接矩阵，<span class="math inline">\(i\)</span>和<span class="math inline">\(j\)</span>的邻居越多，节点相似度越高。 聚类算法和网络发现（聚类相关的）算法可以很容易地互相转化。另外，社区发现可以是局部的，而聚类是全网络的。</p>
+<h4 id="层次聚类">2.2.1 层次聚类</h4>
+<p>层次聚类假设社区是存在层次结构的（其实不一定额，可能是中心结构），计算网络中每一对节点的相似度。 然后分为凝聚法和分裂法两种：</p>
+<ul>
+<li><p>凝聚法：根据相似度从强到弱连接相应节点对，形成树状图（Dendrogram），根据需求对树状图进行横切，获得社区结构。<a href="http://7sbo5n.com1.z0.glb.clouddn.com/dendrogram.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/dendrogram.png" alt="dendrogram"></a></p></li>
+<li><p>分裂法：找出相互关联最弱的节点，并删除他们之间的边，通过这样的反复操作将网络划分为越来越小的组件，连通的网络构成社区。</p></li>
+</ul>
+<h4 id="划分聚类扁平聚类">2.2.2 划分聚类/扁平聚类</h4>
+<p>像k-means（<del datetime="2013-04-16T12:35:38+00:00">如何弄到欧氏空间中是个问题</del>，<span style="color: #ff0000;">可以使用隐含空间模型，比如MDS</span>），k-medoids什么的就很好，可以使用上面的相似度来聚类 。</p>
+<h4 id="谱聚类">2.2.3 谱聚类</h4>
+<p>图分割中的如 Ratio Cut和Normalized Cut其实和谱聚类是等价的（见参考3），所以谱聚类也能用在社区发现上。</p>
+<h3 id="分裂法">2.3 分裂法</h3>
+<p>这里的分裂法和层次聚类中的类似，区别是前者不计算节点相似度，而是删除是两个社区之间的关联边，这些边上的两点的相似度不一定很低。其中最著名的算法就是Girvan-Newman算法，根据以下假设：社区之间所存在的少数几个连接应该是社区间通信的瓶颈，是社区间通信时通信流量的必经之路。如果我们考虑网络中某种形式的通信并且寻找到具有最高通信流量（比如最小路径条数）的边，该边就应该是连接不同社区的通道。Girvan-Newman算法就是这样，迭代删除边介数（Edge Betweenness）最大的边。</p>
+<h3 id="谱方法">2.4 谱方法</h3>
+<p>基于谱分析的社区算法基于如下事实，在同一个社区内的节点，它在拉普拉斯矩阵中的特征向量近似。将节点对应的矩阵特征向量（与特征值和特征向量有关的都叫谱）看成空间坐标，将网络节点映射到多维向量空间去，然后就可以运用传统的聚类算法将它们聚集成社团。这种方法不可避免的要计算矩阵的特征值，开销很大，但是因为能直接使用很多传统的向量聚类的成果，灵活性很高。</p>
+<h3 id="基于模块度的方法">2.5 基于模块度的方法</h3>
+<p>模块度不仅仅作为优化的目标函数提出，它也是目前是最流行的用来衡量社区结果好坏的标准之一（它的提出被称作社区发现研究历史上的里程碑)。我们知道，社区是节点有意识地紧密联系所造成的，它内部边的紧密程度总比一个随机的网络图来的紧密一些，模块度的定义就是基于此，它表示所有被划分到同一个社区的边所占的比例，再减除掉完全随机情况时被划分到同一个社区的边所占的比例： <span class="math display">\[Q=\sum^K_{c=1}[\frac{A(V_i,V_i)}{m}-(\frac{degree(V_i)}{2m})^2]\]</span> 其中<span class="math inline">\(V_i\)</span>是第<span class="math inline">\(i\)</span>个社区，<span class="math inline">\(m\)</span>是整个图中边的数目。模块度的一个优点是好坏与社区中点的数目无关。模块度真是个好东西，第一次对社区这个模糊的概念提出了量化的衡量标准（不过据说对于小粒度的不太准）。所以对模块度的算法优化多种多样，从贪心到模拟退火等应有尽有。</p>
+<h3 id="动态算法">2.6 动态算法</h3>
+<p>自旋模型和同步算法应该是物理学家提出来的算法<del>（完全看不懂）</del>，话说物理学家在社区发现领域十分活跃，发了不少论文。随机游走是基于以下思想：如果存在很强的社区结构，那么随机游走器（random walker)会在社区内部停留更长的时间，因为社区内部的边密度比较高。</p>
+<h3 id="基于统计推断的算法">2.7 基于统计推断的算法</h3>
+<p>基于统计推断的方法包括观察到的数据集和对模型的假设。如果数据集是图，模型假设对节点之间如何联系的描述就要符合真实的图结构。</p>
+<h3 id="其他">2.8 其他</h3>
+<p>个人觉得重叠和动态社区都很难成为一个类别，因为具体算法各有不同，用共同点“重叠”或“动态”来作为一类又太广泛了，比较适合作为特征或维度来描述。 而Web社区特指Web页面相互连接而成的集合,这又是一个大类，底下有不少算法。</p>
+<h2 id="社区发现算法特征">3. 社区发现算法特征</h2>
+<p>下面我从不同的角度来描绘社区发现算法的一些特征<del>（叫维度比较好？）</del>，这些特征可以用来对社区发现算法进行分类：</p>
+<h3 id="优化目标">3.1 优化目标</h3>
+<p>有一些社区发现算法比如谱方法，KL算法，以及基于最大流的社区发现方法等，给出明确的的目标函数，并提出算法来最优化目标函数。 常用的优化目标函数有：</p>
+<h4 id="normailized-cut和conductance">3.1.1 Normailized Cut和conductance</h4>
+<p>如果我们将图划分为<span class="math inline">\(S\)</span>和<span class="math inline">\(\bar{S}=V-S\)</span>两个部分，那么<span class="math inline">\(S\)</span>与图中的剩下部分联系越少，说明<span class="math inline">\(S\)</span>越独立，越有可能是一个内部紧密的社区。我们用<span class="math inline">\(cut(S)\)</span>来表示两者 之间的联系数目： <span class="math display">\[cut(S)=\sum_{i\in S,j\in \bar{S}}A(i,j)\]</span> 为了避免孤立节点的产生，我们分别除以它的权值（内部度数之和），来达到相对平均一些的分割。这就是Normailized Cut: <span class="math display">\[Ncut(S)=\frac{\sum_{i\in S,j\in \bar{S}}A(i,j)}{\sum_{i\in S}degree(i)}+\frac{\sum_{i\in S,j\in\bar{S}}A(i,j)}{\sum_{j\in \bar{S}}degree(j)}\]</span> 连通度(conductance)也是类似的定义: <span class="math display">\[ Conductance(S)=\frac{\sum_{i\in S,j\in \bar{S}}A(i,j)}{\min{(\sum_{i\in S}degree(i),\sum_{j\in\bar{S}}degree(j))}}\]</span> 当涉及到多个划分<span class="math inline">\(V_1,\ldots,V_k\)</span>时，Normalilized Cut和连通度就是它们之和。</p>
+<h4 id="kernighan-lin-object">3.1.2 Kernighan-Lin object</h4>
+<p>KL目标函数旨在使两个相同大小的社区之间的边联系最小： <span class="math display">\[KLObj(V_1,\ldots,V_k)=\sum_{i\neq j}A(V_i,V_j)\]</span> 其中<span class="math inline">\(A(V_i,V_j)=\sum_{u \in V_i,v \in V_j}A(u,v), |V_1|=|V_2|=\ldots=|V_k|\)</span>。</p>
+<h4 id="modularity">3.1.3 Modularity</h4>
+<p>模块度在2.5已提过，这里就不说了。</p>
+<h3 id="粒度控制社区数目可不可控">3.2 粒度控制（社区数目可不可控）</h3>
+<p>对于有层次的社区发现算法来说的，比如某些二分社区算法，是通过不断递归的划分子社区来获得预定的社区数目。而某些算法，像层次聚类和MCL，基于概率模型的社区发现算法等，允许用户通过调节参数来间接控制输出社区的数目。</p>
+<p>另一些算法，像模块度优化算法，它的社区数目是由优化函数决定的，不需要用户来设定社区的数目。</p>
+<h3 id="规模">3.3 规模</h3>
+<p>很多算法在设计的时候，并没有特别地考虑伸缩性，在面对整个Web以及大型社交网络时动辄百万甚至千万个点时效果不佳。比如GN算法，需要计算即通过每条边的最短路径数目（edge betweeness)，复杂度相当高，像谱聚类算法，能处理10K个点和70M条边就不错了。</p>
+<p>所以，有些算法比如Shingling算法等，使用的方法相对简单，从而能适合大规模的社区发现的运行要求。</p>
+<h3 id="局部社区发现">3.4 局部社区发现</h3>
+<p>所谓的局部社区发现，是指只根据临近的邻居节点发现社区结构，而不考虑全局的网络，这与全局社区发现中对图中的每一个节点都打上社区标签的做法相对应。</p>
+<p>在整个网络图很大，数据集不能全部加载到内存时，使用局部社区发现可以只加载图的一部分，发现一个局部社区，然后迭代地调用该方法来逐一地提取社区结构。</p>
+<h3 id="重叠社区">3.5 重叠社区</h3>
+<p>很多社区发现算法，比如图分割算法，将整个网络划分为多个独立的社区结构。但是在现实中，许多网络并不存在绝对的彼此独立的社团结构，相反，它们是由许多彼此重叠互相关联的社团构成，比如说在社交网络中，一个人根据兴趣的不同，有可能属于多个不同的小组等。所以，很多类似派系过滤算法（CPM）这样旨在发现重叠社区的算法也被不断地提出来。</p>
+<h3 id="动态社区发现">3.6 动态社区发现</h3>
+<p>在4.1有讲，这里就不讲了。</p>
+<h3 id="评价标准待改">3.7 评价标准（待改）</h3>
+<p>社区发现算法常用的评价标准有：</p>
+<h4 id="准确率召回率f1值">3.7.1 准确率，召回率，F1值</h4>
+<p>一个大规模数据集合中检索文档的时，可把文档分成四组：系统检索到的相关文档（A），系统检索到的不相关文档（B），相关但是系统没有检索到的文档（C），不相关且没有被系统检索到的文档（D）： 准确度定义为： <span class="math display">\[pr=\frac{A}{A+C}\]</span> 召回率定义为： <span class="math display">\[rc=\frac{A}{A+B}\]</span> F-measure是准确率和召回率协调之后的结果，定义为： <span class="math display">\[PWF=\frac{2\times pr \times rc}{pr+rc}\]</span> 同理，社区也可以用这个概念。</p>
+<h4 id="平均聚类纯度">3.7.2 平均聚类纯度</h4>
+<p>平均聚类纯度，average cluster purity。假设算法发现了<span class="math inline">\(C=\{C_1,\ldots,C_K\}\)</span>个社区，我们假设社区<span class="math inline">\(C_i\)</span>有<span class="math inline">\(n_i\)</span>个点，每个点分别为<span class="math inline">\(\{v_{1,i},\ldots,v_{n_i,i}\}\)</span>。令<span class="math inline">\(M_{l,i}\)</span>为点<span class="math inline">\(v_{l,i}\)</span> 真实归属的标签，平均聚类纯度为定义为 <span class="math display">\[ACP=\frac{1}{k}\sum_{i=1}^k\sum_{l=1}^{n_i}\frac{\delta(dom_i\in M_{l,i})}{n_i}\]</span> 即社区<span class="math inline">\(C_i\)</span>中主要标签的点占社区所有点的数目比例。</p>
+<h4 id="互信息">3.7.3 互信息</h4>
+<p>首先来回顾熵的定义,在一个分布内包含的信息为熵： <span class="math display">\[H(X)=-\sum_{x \in X}p(x)\log p(x)\]</span> 互信息（mutual information)描述了两个分布之间的相关性 <span class="math display">\[I(X;Y)=\sum_{y \in Y}\sum_{x \in X}p(x,y)\log(\frac{p(x,y)}{p(x)p(y)})\]</span> 我们有 <span class="math display">\[I(X;Y)=H(X)-H(X|Y)\]</span> 所谓两个事件相关性的量化度量，就是在了解其中一个Y的前提下，对消除另一个X不确定性所提供的信息量。 规范化的互信息定义为 <span class="math display">\[NMI(X;Y)=\frac{I(X;Y)}{\sqrt{H(X)H(Y)}}\]</span> 我们将划分当做一个结点落在社区的概率分布吗，然后计算社区划分结果和真实情况的NMI值，具体例子见参考4.</p>
+<h2 id="社区发现的趋势">4. 社区发现的趋势</h2>
+<h3 id="动态社区发现-dynamic-networks">4.1 动态社区发现 (Dynamic Networks)</h3>
+<p>很多社区算法都把社区看做静态的图，但是事实上的社交网络是随着时间逐渐演变的。这些社区如何形成和消解，它们的的动态变化该如何处理，确实是一个研究热点。</p>
+<p><a href="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130326165736.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130326165736.png" alt="QQ截图20130326165736"></a></p>
+<h3 id="异构网络上的社区发现heterogeneous-network">4.2 异构网络上的社区发现(Heterogeneous Network)</h3>
+<p>日常算法中我们都假定网络中的点和边属于同一类型。但是现实中也有很多异构网络（Heterogeneous Networks)它的点和边的类型不同。比如说IMDB网络，它的实体可能包括电影，导演，演员，而他们之间的关系也不同。如何在这样的网络上做社区发现也是一大挑战。</p>
+<p><a href="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130326183011.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130326183011.png" alt="QQ截图20130326183011"></a></p>
+<h3 id="有向图上的社区发现directed-networks">4.3 有向图上的社区发现(Directed Networks)</h3>
+<p>一般的社区发现都把整个网络当做无向图来处理。但是很多网络它的有向性比较特殊，比如说Web社区，论文之间的引用关系，以及Twitter用户之间的关注关系。简单地忽略这些网络中的方向性，会导致信息的损失，算法可能会得出错误的结果。</p>
+<p><a href="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130326183118.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/QQ截图20130326183118.png" alt="QQ截图20130326183118"></a></p>
+<h3 id="内容与链接关系结合的社区发现content-and-relationship-information">4.4 内容与链接关系结合的社区发现(Content and Relationship Information)</h3>
+<p>像前面说过的一样，新兴社交网络中的关系，不仅仅再是一条有向边，其中可以包括很多内容信息（文本，图像，地理信息），这又将社区发现带向了新的领域——如何联合这些关系和内容信息来发现社区。</p>
+<p><a href="http://7sbo5n.com1.z0.glb.clouddn.com/social-network.jpg" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/social-network.jpg" alt="social-network"></a></p>
+<h3 id="交叉领域的社区发现crosscutting-issues">4.5 交叉领域的社区发现(Crosscutting Issues)</h3>
+<ul>
+<li><p>伸缩性。比如说并行和分布式算法，利用GPU来运算等。</p></li>
+<li><p>可视化。如何展示数以十亿计节点，以及如何处理动态信息。</p></li>
+<li><p>交叉领域上的社区发现。生物学什么的。</p></li>
+<li><p>做排名。</p></li>
+</ul>
+<p>总而言之结论就是，社区发现（特别是社交网络上的）还是比较新的，还是有一大把理论上和实践上的开放问题可做的。<del>（我才不信呢&gt;_&lt;！）</del></p>
+<p>参考文献：</p>
+<p>1. Fortunato, S. (2010). “Community detection in graphs.” Physics Reports <strong>486</strong>(3): 75-174.</p>
+<p>2.《 Social Network Data Analytics》第四章，<em>DOI 10.1007/978-1-4419-8462-3_4</em></p>
+<p>3.<a href="http://blog.pluskid.org/?p=287" class="uri" target="_blank" rel="external">http://blog.pluskid.org/?p=287</a></p>
+<p>4.《社会计算：社区发现和社会媒体挖掘》,Page 58</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://crescentluna.github.io/2013/03/26/Introdcution of Community Detection/" data-id="cizha1qzx0019g0o8v302nl6p" class="article-share-link" data-share="baidu">分享到</a>
+      
+
+      
+        <a href="http://crescentluna.github.io/2013/03/26/Introdcution of Community Detection/#ds-thread" class="article-comment-link">Comments</a>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/社区发现/">社区发现</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2013/04/02/高斯混合模型参数估计详细推导过程/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          高斯混合模型参数估计详细推导过程
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2013/03/12/Parameter estimation for text analysis/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">LDA学习笔记---来自《Parameter estimation for text analysis》</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+  <section id="comments">
+    <div id="ds-thread" class="ds-thread" data-thread-key="2013/03/26/Introdcution of Community Detection/" data-title="社区发现及其发展方向简介（未完）" data-url="http://crescentluna.github.io/2013/03/26/Introdcution of Community Detection/"></div>
+  </section>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/学术/">学术</a><span class="category-list-count">18</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/学术/Gibbs-Sampling笔记/">Gibbs Sampling笔记</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/学术/变分推断笔记/">变分推断笔记</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习/">机器学习</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂项/">杂项</a><span class="category-list-count">6</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/杂项/闲话/">闲话</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a><span class="category-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/DP/" style="font-size: 13.33px;">DP</a> <a href="/tags/EM/" style="font-size: 20px;">EM</a> <a href="/tags/Gibbs-Sampling/" style="font-size: 20px;">Gibbs Sampling</a> <a href="/tags/Hexo/" style="font-size: 13.33px;">Hexo</a> <a href="/tags/LDA/" style="font-size: 10px;">LDA</a> <a href="/tags/PRML/" style="font-size: 13.33px;">PRML</a> <a href="/tags/Variational-Inference/" style="font-size: 16.67px;">Variational Inference</a> <a href="/tags/kNN/" style="font-size: 10px;">kNN</a> <a href="/tags/matlab/" style="font-size: 10px;">matlab</a> <a href="/tags/tensorflow/" style="font-size: 10px;">tensorflow</a> <a href="/tags/wordpress/" style="font-size: 10px;">wordpress</a> <a href="/tags/二叉树/" style="font-size: 10px;">二叉树</a> <a href="/tags/决策树/" style="font-size: 10px;">决策树</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/参数估计/" style="font-size: 10px;">参数估计</a> <a href="/tags/多项式分布/" style="font-size: 10px;">多项式分布</a> <a href="/tags/数据挖掘/" style="font-size: 16.67px;">数据挖掘</a> <a href="/tags/机器学习/" style="font-size: 16.67px;">机器学习</a> <a href="/tags/概率图/" style="font-size: 10px;">概率图</a> <a href="/tags/盘子/" style="font-size: 10px;">盘子</a> <a href="/tags/社区发现/" style="font-size: 10px;">社区发现</a> <a href="/tags/背包问题/" style="font-size: 13.33px;">背包问题</a> <a href="/tags/贝叶斯方法/" style="font-size: 10px;">贝叶斯方法</a> <a href="/tags/高斯混合模型/" style="font-size: 16.67px;">高斯混合模型</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">七月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/04/">四月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">二月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">一月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/">十二月 2012</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">十月 2012</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">九月 2012</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">浏览数目</h3>
+    <div class="widget">
+      <ul class="popularlist">
+      </ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">近期文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/02/23/install-tensorflow-with-gpu-support-for-ubuntu/">在Ubuntu上搭建GPU加速的TensorFlow环境</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/12/variational-inference-3/">变分推断学习笔记(3)——三硬币问题的变分推断解法</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/11/popular-widget/">使用LeanCloud平台为Hexo博客添加文章浏览量统计组件</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/11/relocation/">博客迁移小记</a>
+          </li>
+        
+          <li>
+            <a href="/2014/02/24/概率图模型简介/">概率图模型简介</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+
+  
+    
+<div class="widget-wrap">
+  <h3 class="widget-title">最近评论</h3>
+  <ul class="widget ds-recent-comments" data-num-items="5" data-show-avatars="0" data-show-title="1" data-show-time="1"></ul>
+</div>
+<!-- 需要多说的公用代码 -->
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">友情链接</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="https://github.com/xiangming/landscape-plus" target="_blank">landscape-plus主题</a>
+          </li>
+        
+          <li>
+            <a href="http://www.smallqiao.com/" target="_blank">小桥流水</a>
+          </li>
+        
+          <li>
+            <a href="http://www.ahathinking.com/" target="_blank">勇幸|Thinking</a>
+          </li>
+        
+          <li>
+            <a href="http://www.socona.me/" target="_blank">socona的博客</a>
+          </li>
+        
+          <li>
+            <a href="http://www.clarkchen.com/" target="_blank">陈曦师兄的博客</a>
+          </li>
+        
+          <li>
+            <a href="http://www.fengyafei.com/" target="_blank">小飞的博客</a>
+          </li>
+        
+          <li>
+            <a href="http://ariwaranosai.xyz/" target="_blank">今天拒绝负能量!</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Chen Hao<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      .
+      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives" class="mobile-nav-link">所有文章</a>
+  
+    <a href="/about" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+<!-- 多说公共js代码 start -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"crescent"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+<!-- 多说公共js代码 end -->
+
+
+<!-- 百度分享 start -->
+
+<div id="article-share-box" class="article-share-box">
+  <div id="bdshare" class="bdsharebuttonbox article-share-links">
+    <a class="article-share-weibo" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a class="article-share-weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a class="article-share-qq" data-cmd="sqq" title="分享到QQ"></a>
+    <a class="article-share-renren" data-cmd="renren" title="分享到人人网"></a>
+    <a class="article-share-more" data-cmd="more" title="更多"></a>
+  </div>
+</div>
+<script>window._bd_share_config={"common":{},"share":{"bdCustomStyle":"nocss.css"}};with(document)0[(getElementsByTagName("head")[0]||body).appendChild(createElement("script")).src="http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion="+~(-new Date()/36e5)];</script>
+
+<!-- 百度分享 end -->
+
+<script src="//libs.baidu.com/jquery/1.11.1/jquery.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<! -- mathjax config similar to math.stackexchange -->
+<! -- add autoNumber settting -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+                processEscapes: true
+                    
+}
+  
+        });
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+                  
+}
+    
+        });
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Queue(function() {
+            var all = MathJax.Hub.getAllJax(), i;
+            for(i=0; i < all.length; i += 1) {
+                            all[i].SourceElement().parentNode.className += ' has-jax';
+                                    
+            }
+                
+        });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+<script src="/js/script.js"></script>
+
+<!--page counter part-->
+<script>
+function addCount (Counter) {
+        url=$('.article-date').attr('href').trim();
+        title = $('.article-title').text().trim();
+       // alert(title);
+        var query=new AV.Query(Counter);
+        //use url as unique idnetfication
+        query.equalTo("url",url);
+        query.find({
+            success: function(results){
+                if(results.length>0)
+                {
+                    var counter=results[0];
+                    counter.fetchWhenSave(true); //get recent result
+                    counter.increment("time");
+                    counter.save();
+                    //alert('find '+title+' and visit time is now '+ counter.get("time"));
+                }
+                else
+                {
+                    var newcounter=new Counter();
+                    newcounter.set("title",title);
+                    newcounter.set("url",url);
+                    newcounter.set("time",1);
+                    newcounter.save(null,{
+                        success: function(newcounter){
+                        //alert('New object created');
+                        },
+                        error: function(newcounter,error){
+                        alert('Failed to create');
+                        }
+                        });
+                }
+            },
+            error: function(error){
+                //find null is not a error
+                alert('Error:'+error.code+" "+error.message);
+            }
+        });
+}
+
+$(function(){
+        var Counter=AV.Object.extend("Counter");
+        //only increse visit counting when intering a page
+        if ($('.article-title').length == 1)
+           addCount(Counter);
+        var query=new AV.Query(Counter);
+        query.descending("time");
+        query.limit(10);
+        query.find({
+            success: function(results){
+                    for(var i=0;i<results.length;i++)    
+                    {
+                        var counter=results[i];
+                        //alert(counter.get("title")+'-'+counter.get("url"));
+                        title=counter.get("title");
+                        url=counter.get("url");
+                        time=counter.get("time");
+                        // add to the popularlist widget
+                        showcontent=title+" ("+time+")";
+                        //notice the "" in href
+                        $('.popularlist').append('<li><a href="'+url+'">'+showcontent+'</a></li>');
+                    }
+                },
+            error: function(error){
+                alert("Error:"+error.code+" "+error.message);
+            }
+            }
+        )
+        });
+</script>
+
+
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>

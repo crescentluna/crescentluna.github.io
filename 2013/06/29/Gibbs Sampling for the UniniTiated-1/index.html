@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>《Gibbs Sampling for the UniniTiated》阅读笔记(上)---参数估计方法及Gibbs Sampling简介 | 心怀畏惧</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前一阵子折腾的事儿太多，写了点东西都没有传上来，是我偷懒了- -，下不为例。
+这篇文章基本上是来自于《Gibbs Sampling for the UniniTiated》，说是笔记其实和翻译也差不多了。
+整个结构分为上中下三部分：
+
+ 参数估计方法及Gibbs Sampling简介
+一个朴素贝叶斯文档模型例子
+连续型参数求积分的思考
+
+
+
+这篇是上部分，介绍基础参数估计和Gibbs Sampli">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《Gibbs Sampling for the UniniTiated》阅读笔记(上)---参数估计方法及Gibbs Sampling简介">
+<meta property="og:url" content="http://crescentluna.github.io/2013/06/29/Gibbs Sampling for the UniniTiated-1/index.html">
+<meta property="og:site_name" content="心怀畏惧">
+<meta property="og:description" content="前一阵子折腾的事儿太多，写了点东西都没有传上来，是我偷懒了- -，下不为例。
+这篇文章基本上是来自于《Gibbs Sampling for the UniniTiated》，说是笔记其实和翻译也差不多了。
+整个结构分为上中下三部分：
+
+ 参数估计方法及Gibbs Sampling简介
+一个朴素贝叶斯文档模型例子
+连续型参数求积分的思考
+
+
+
+这篇是上部分，介绍基础参数估计和Gibbs Sampli">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/first.png">
+<meta property="og:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/second.png">
+<meta property="og:updated_time" content="2017-02-21T18:24:27.407Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《Gibbs Sampling for the UniniTiated》阅读笔记(上)---参数估计方法及Gibbs Sampling简介">
+<meta name="twitter:description" content="前一阵子折腾的事儿太多，写了点东西都没有传上来，是我偷懒了- -，下不为例。
+这篇文章基本上是来自于《Gibbs Sampling for the UniniTiated》，说是笔记其实和翻译也差不多了。
+整个结构分为上中下三部分：
+
+ 参数估计方法及Gibbs Sampling简介
+一个朴素贝叶斯文档模型例子
+连续型参数求积分的思考
+
+
+
+这篇是上部分，介绍基础参数估计和Gibbs Sampli">
+<meta name="twitter:image" content="http://7sbo5n.com1.z0.glb.clouddn.com/first.png">
+  
+    <link rel="alternative" href="/atom.xml" title="心怀畏惧" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+  
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F1fc57dc5ccfaeae31f8e295269b6fa04' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-57404093-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+  <script src="https://cdn1.lncld.net/static/js/av-min-1.2.1.js"></script>
+  <script>AV.initialize("57nirzk8g437patyg9434lcvmpkat6e5lu5mixmrwqa8l3ao", "rsqg6iiq58eyeg8c6c6uue48crtwt5quuq5dmjaahfcjlkq8");</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">心怀畏惧</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Do not go gentle into that good night</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives">所有文章</a>
+        
+          <a class="main-nav-link" href="/about">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="http://www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
+          <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="Search">
+          <input type="submit" value="" class="search-form-submit">
+          <input name=tn type=hidden value="bds">
+          <input name=cl type=hidden value="3">
+          <input name=ct type=hidden value="2097152">
+          <input type="hidden" name="si" value="crescentluna.github.io">
+        </form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Gibbs Sampling for the UniniTiated-1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/06/29/Gibbs Sampling for the UniniTiated-1/" class="article-date">
+  <time datetime="2013-06-29T00:59:53.000Z" itemprop="datePublished">2013-06-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/学术/">学术</a>►<a class="article-category-link" href="/categories/学术/Gibbs-Sampling笔记/">Gibbs Sampling笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      《Gibbs Sampling for the UniniTiated》阅读笔记(上)---参数估计方法及Gibbs Sampling简介
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>前一阵子折腾的事儿太多，写了点东西都没有传上来，是我偷懒了- -，下不为例。</p>
+<p>这篇文章基本上是来自于《Gibbs Sampling for the UniniTiated》，说是笔记其实和翻译也差不多了。</p>
+<p>整个结构分为上中下三部分：</p>
+<ol style="list-style-type: decimal">
+<li> <a href="http://www.crescentmoon.info/?p=504" target="_blank" rel="external">参数估计方法及Gibbs Sampling简介</a></li>
+<li><a href="http://www.crescentmoon.info/?p=525" target="_blank" rel="external">一个朴素贝叶斯文档模型例子</a></li>
+<li><a href="http://www.crescentmoon.info/?p=548" target="_blank" rel="external">连续型参数求积分的思考</a></li>
+</ol>
+<hr>
+
+<p>这篇是上部分，介绍基础参数估计和Gibbs Sampling概念。</p>
+<h2 id="为什么求积分参数估计方法">为什么求积分—参数估计方法</h2>
+<p>很多概率模型的算法并不需要使用积分，只要对概率求和就行了（比如隐马尔科夫链的Baum-Welch算法），那么什么时候用到求积分呢？—— 当为了获得概率密度估计的时候，比如说根据一句话前面部分的文本估计下一个词的概率，根据email的内容估计它是否是垃圾邮件的概率等等。为了估计概率密度，一般有MLE（最大似然估计），MAP（最大后验估计），bayesian estimation（贝叶斯估计）三种方法。</p>
+<h3 id="最大似然估计">最大似然估计</h3>
+<p>这里举一个例子来讲最大似然估计。假设我们有一个硬币，它扔出正面的概率<span class="math inline">\(\pi\)</span>不确定，我们扔了10次，结果为HHHHTTTTTT（H为正面，T为反面）。利用最大似然估计的话，很容易得到下一次为正面的概率为0.4,因为它估计的是使观察数据产生的概率最大的参数。 <a href="http://7sbo5n.com1.z0.glb.clouddn.com/first.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/first.png" alt="first"></a></p>
+<p>令<span class="math inline">\(\chi=\{HHHHTTTTTT\}\)</span>代表观察到的数据,<span class="math inline">\(y\)</span>为下一次抛硬币可能的结果,估计公式如下: <span class="math display">\[\begin{equation}\begin{split}\tilde{\pi}_{MLE} &amp;=\arg \max \limits_{\pi}P(\chi|\pi) \\P(y|\chi) &amp; \approx \int_{\pi} p(y|\tilde{\pi}_{MLE})P(\pi|\chi) d\pi = p(y|\tilde{\pi}_{MLE})\end{split}\end{equation}\]</span></p>
+<a id="more"></a>
+<h3 id="最大后验估计">最大后验估计</h3>
+<p>最大似然估计是直接最大化似然函数对参数进行估计。如果我们有一些关于硬币的先验知识的话（比如我们知道参数<span class="math inline">\(\pi\)</span>服从某个形式的概率分布)，那么根据贝叶斯公式，我们就能求得观察到数据之后<span class="math inline">\(\pi\)</span>的后验概率，令后验概率最大化 <span class="math display">\[\begin{equation}
+\begin{split}\tilde{\pi}_{MAP} &amp; =\arg \max \limits_{\pi}P(\pi|\chi) \\ &amp; =\arg \max \limits_{\pi} \frac{P(\chi|\pi)P(\pi)}{P(\chi)} \\ &amp; =\arg \max \limits_{\pi} P(\chi|\pi)P(\pi) \\P(y|\chi) &amp; \approx \int_{\pi} p(y|\tilde{\pi}_{MAP})P(\pi|\chi) d\pi =p(y|\tilde{\pi}_{MAP}) \\\end{split}\end{equation}\]</span> 这里<span class="math inline">\(P(\chi)\)</span>与参数<span class="math inline">\(\pi\)</span>无关就省略了。假设我们取一个令<span class="math inline">\(P(\pi)\)</span>的期望为0.5的先验分布，那么之后观察到的数据将对之前假设硬币正反概率一样的bias 产生影响。</p>
+<h3 id="贝叶斯估计">贝叶斯估计</h3>
+<p>首先我们可以看到,最大似然估计和最大后验估计都是基于一个假设，即把待估计的参数<span class="math inline">\(\pi\)</span>看做是一个固定的值，只是其取值未知。而最大似然是最简单的形式，其假定参数虽然未知，但是是确定值，就是找到使得样本对数似然分布最大的参数。而最大后验，只是优化函数为后验概率形式，多了一个先验概率项。 而贝叶斯估计和二者最大的不同在于，它假定参数是一个随机的变量，不是确定值。在样本分布<span class="math inline">\(P(\pi|\chi)\)</span> 上，<span class="math inline">\(\pi\)</span>是有可能取从0到1的任意一个值的，只是取到的概率不同。而MAP和MLE只取了整个概率分布<span class="math inline">\(P(\pi|\chi)\)</span> 上的一个点，丢失了一些观察到的数据<span class="math inline">\(\chi\)</span>给予的信息（这也就是经典统计学派和贝叶斯学派最大的分歧所在。）</p>
+<p>为了利用所有的信息，我们可以对参数的概率分布求期望值。对于一个离散型变量<span class="math inline">\(z\)</span>的函数<span class="math inline">\(f(z)\)</span>的期望一般是这样求得 <span class="math display">\[\begin{equation}
+E[f(z)]=\sum_{z\in\mathcal{Z}}f(z)p(z)
+\end{equation}\]</span> 这里<span class="math inline">\(\mathcal{Z}\)</span>是所有<span class="math inline">\(z\)</span>可能取的值，<span class="math inline">\(p(z)\)</span>是取这个值的概率。如果<span class="math inline">\(z\)</span> 是个连续型的变量，期望就是求积分而不是求和了: <span class="math display">\[\begin{equation}
+E[f(z)]=\int f(z)p(z) dz
+\end{equation}\]</span> 对于这里的例子来说,<span class="math inline">\(z=\pi\)</span>,函数<span class="math inline">\(f(z)=P(y|\pi)\)</span>（这里文章讲的不清楚，这个<span class="math inline">\(P(y|\pi)\)</span>是模型生成该结果的概率，而<span class="math inline">\(P(\pi|\chi)\)</span>是使用这个模型的概率，比如说有3个模型，第一个模型生成该数据的概率为0.5，第二个为0.4，第三个为0.3，需要考虑模型的结果），需要取期望的概率分布为<span class="math inline">\(P(\pi|\chi)\)</span>，所以整个期望是模型的所有分布上生成该数据的概率 <span class="math display">\[\begin{equation}
+P(y|\chi)= \int P(y|\pi)P(\pi|\chi)d \pi
+\end{equation}\]</span> 对<span class="math inline">\(P(\pi|\chi)\)</span>我们使用贝叶斯公式 <span class="math display">\[\begin{equation}
+P(\pi|\chi)=\frac{P(\chi|\pi)P(\pi)}{P(\chi)}=\frac{P(\chi|\pi)P(\pi)}{\int_\pi P(\chi|\pi)P(\pi)d \pi}
+\end{equation}\]</span> 要注意这里的后验概率是个函数，而不是像之前的MAP一样是个值，它充分考虑了<span class="math inline">\(\pi\)</span>的先验知识和根据观察数据<span class="math inline">\(\chi\)</span>获得的信息，并将它们联系起来。</p>
+<h2 id="为什么抽样gibbs-sampling">为什么抽样–Gibbs-Sampling</h2>
+<p>积分存在的一个问题就是他们很难算。事实上，之前的后验概率里面的分母很可能没有解析解，这个时候就要用抽样的方法获得这个概率分布的具体形式了。</p>
+<h3 id="monte-carlo算法">Monte Carlo算法</h3>
+<p>Gibbs 抽样是Markov Chain Monte Carlo(蒙特卡洛方法）的一种。所谓的蒙特卡洛方法就是模拟统计的方法，举一个例子：假设有一个正方形和它的内接圆，然后我们随机地往正方形上撒很多很多的米粒，最后统计那些在圆里面的米粒数据（记作C），然后那些在正方形里的米粒数目（记作S)。可以看到两者之比近似于圆和正方形的面积之比： <span class="math display">\[\begin{equation}
+\frac{C}{S} \approx \frac{\pi(\frac{d}{2})^2}{d^2}
+\end{equation}\]</span> 这样我们就可以得到<span class="math inline">\(\pi \approx \frac{4C}{S}\)</span>，这是一个典型的通过模拟来积分的例子，这里的圆面积是通过无数个点加和来逼近真实面积的。</p>
+<p>在这个例子里，我们是对一个均匀分布采用来求值。回到刚才我们的问题，是要计算期望值<span class="math inline">\(E_{p(x)}[f(x)]\)</span>，这里我们未知的是概率分布<span class="math inline">\(p(x)\)</span>，假设它不是一个均匀分布，而且很难获得解析解。 <a href="http://7sbo5n.com1.z0.glb.clouddn.com/second.png" target="_blank" rel="external"><img src="http://7sbo5n.com1.z0.glb.clouddn.com/second.png" alt="second"></a> 图2给出了<span class="math inline">\(f(z)\)</span>和<span class="math inline">\(p(z)\)</span>的例子。从概念上来说，之前的积分应该是在<span class="math inline">\(z\)</span>的所有空间上对<span class="math inline">\(f(z)p(z)\)</span>加和所得到的结果。换一种角度来看，如果我们从<span class="math inline">\(p(z)\)</span>随机依次抽取<span class="math inline">\(N\)</span> 个点<span class="math inline">\(z^{(0)},z^{(1)},z^{(2)},\ldots,z^{(N)}\)</span>,当<span class="math inline">\(N\)</span>趋向于无穷的时候，我们可以通过无数个采样获得的点<span class="math inline">\(z\)</span> 来逼近它真实的概率分布，就有 <span class="math display">\[\begin{equation}
+E_{p(x)}[f(x)]=\lim_{N\rightarrow \infty}\frac{1}{N}\sum^{N}_{t=1}f(z^{(t)})
+\end{equation}\]</span> 当<span class="math inline">\(z\)</span>是离散变量的时候，<span class="math inline">\(f(z)\)</span>的期望就是加权平均，每个<span class="math inline">\(z\)</span>的权值就是它的概率。当<span class="math inline">\(z\)</span>是连续变量是，我们也可以用类似的想法，对于所有采样得到<span class="math inline">\(z\)</span>，我们都用观察到的频率<span class="math inline">\(\frac{1}{N}count(z)(N \rightarrow \infty)\)</span>代替真实的概率<span class="math inline">\(p(z)\)</span>，所以<span class="math inline">\(p(z)\)</span>就隐含在采样得到的样本之中（这个想法是直观上的，因为实际上连续变量统计样本<span class="math inline">\(z\)</span>出现的次数<span class="math inline">\(count(z)\)</span>是没有意义的）。很容易可以发现，在整个<span class="math inline">\(p(z)\)</span> 的分布上，概率大的地方被采样的次数也多。</p>
+<p>上面的式子<span class="math inline">\(N\)</span>是趋向于无穷大的，我们也可以使用有限数目<span class="math inline">\(T\)</span>的点来获得一个比较近似的值。 <span class="math display">\[\begin{equation}
+E_{p(x)}[f(x)]\approx \frac{1}{T}\sum^{T}_{t=1}f(z^{(t)})
+\end{equation}\]</span> 好，现在我们有近似获得积分值的方法了。剩下的问题就是，如何根据<span class="math inline">\(p(z)\)</span>采样出样本<span class="math inline">\(z^{(0)},z^{(1)},z^{(2)},\ldots,z^{(T)}\)</span>。这正好是模拟统计所研究的问题，所以有很多很多的采样方法，比如rejection sampling ,adaptive sampling, important sampling等等(见PRML），而我们采样的方法把<span class="math inline">\(z\)</span> 看做状态空间中的点，用从<span class="math inline">\(z^{(0)}\)</span> 转移到<span class="math inline">\(z^{(1)}\)</span> 再转移到<span class="math inline">\(z^{(2)}\)</span> 这样的方式遍历<span class="math inline">\(z\)</span> 的状态空间，见图2。</p>
+<p>可以看到<span class="math inline">\(Z\)</span>的状态转移是一条马尔科夫链，这里<span class="math inline">\(g\)</span>是一个根据转移概率<span class="math inline">\(P_{trans}(z^{(t+1)}|z^{(0)},z^{(1)},\ldots,z^{(t)})\)</span>来决定下一个状态是什么的函数。由Markov Chain 的性质，我们可以知道下一个状态<span class="math inline">\(z^{(t+1)}\)</span> 仅仅取决于当前状态<span class="math inline">\(z^{(t)}\)</span>。 <span class="math display">\[\begin{equation}
+P_{trans}(z^{(t+1)}|z^{(0)},z^{(1)},\ldots,z^{(t)})=P_{trans}(z^{(t+1)}|z^{(t)})
+\end{equation}\]</span> 而Markov Chain Monte Carlo方法的核心就在于如何设计这个函数<span class="math inline">\(g\)</span>使得访问状态<span class="math inline">\(z\)</span>的概率刚好是<span class="math inline">\(p(z)\)</span>，这就需要转移概率<span class="math inline">\(P_{trans}\)</span>满足一定的条件（平稳细致条件，详见PRML的第四章)，而Gibbs sampling就是满足该条件的抽样方法之一。</p>
+<h3 id="gibbs-sampling算法">Gibbs sampling算法</h3>
+<p>假设每个点 <span class="math inline">\(z=&lt;z_1^{0},\ldots,z_k^{0}&gt;(k&gt;1)\)</span>。Gibbs Sampling 每次在确定下一个状态的时候，并不是一次性地确定所有维度上的值，而是选取一个维度，通过剩下的<span class="math inline">\(k-1\)</span>个维度来确定这个维度的值，见图2。</p>
+<p>通过条件概率的定义我们可以得到 <span class="math display">\[\begin{equation}
+\begin{split}
+&amp; P(Z_i|z_1^{(t+1)},\ldots,z^{(t+1)}_{i-1},z^{(t)}_{i+1},\ldots,z^{t}_k) \\=&amp;\frac{P(z_1^{(t+1)},\ldots,z^{(t+1)}_{i-1},z^{(t)}_{i},z^{(t)}_{i+1},\ldots,z^{(t)}_k)}{P(z_1^{(t+1)},\ldots,z^{(t+1)}_{i-1},z^{(t)}_{i+1},\ldots,z^{(t)}_k)}\\\end{split}
+\end{equation}\]</span> 注意右式的分子部分是全联合概率，而分母部分少了<span class="math inline">\(z^{(t)}_i\)</span>这个维度，也就是我们要估计的这个维度。把这个操作对每个维度都采样一遍我们就得到了下一个新的点<span class="math inline">\(z^{(t+1)}=g(z^{(t)})=&lt;z_1^{(t+1)},\ldots,z_k^{(t+1)}&gt;\)</span>。要注意的是每次新采样得到的值都可以直接用于下一次采样，所以公式里<span class="math inline">\(z^{(t)}_{i+1}\)</span>前面的维度上标都是<span class="math inline">\(t+1\)</span>，因为他们都刚刚被采样过。</p>
+<h2 id="吐槽的部分">吐槽的部分</h2>
+<p>一般文章对Gibbs Sampling的介绍也就到此为止了，这样的介绍对新手来说（比如我- -)太难了,讲了也不会用。比如以下问题：</p>
+<ul>
+<li><p>对特定的模型Gibbs Sampling条件概率的分布采样到底是咋做的？</p></li>
+<li><p>连续型的参数变量如何处理？</p></li>
+<li><p>只做<span class="math inline">\(T\)</span>次循环怎么确保获得你想要的期望值？</p></li>
+</ul>
+<p>于是这篇文章又生动活泼地举了一个从朴素贝叶斯模型生成Gibbs 采样器的例子。（见中篇）</p>
+<p>参考文献：</p>
+<ol style="list-style-type: decimal">
+<li><p>《Pattern Recognition and Machine Learning》</p></li>
+<li><p>《LDA数学八卦》</p></li>
+<li><p>http://www.xperseverance.net/blogs/2013/03/1682/</p></li>
+<li><p>《Gibbs Sampling for the UniniTiated》</p></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://crescentluna.github.io/2013/06/29/Gibbs Sampling for the UniniTiated-1/" data-id="cizha1qzz001cg0o8ugcko05a" class="article-share-link" data-share="baidu">分享到</a>
+      
+
+      
+        <a href="http://crescentluna.github.io/2013/06/29/Gibbs Sampling for the UniniTiated-1/#ds-thread" class="article-comment-link">Comments</a>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Gibbs-Sampling/">Gibbs Sampling</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/参数估计/">参数估计</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2013/06/29/Gibbs Sampling for the UniniTiated-2/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          《Gibbs Sampling for the UniniTiated》阅读笔记(中)---一个朴素贝叶斯文档模型例子
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2013/04/11/SyntaxHighlighter支持高亮的语言列表/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">SyntaxHighlighter支持高亮的语言列表</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+  <section id="comments">
+    <div id="ds-thread" class="ds-thread" data-thread-key="2013/06/29/Gibbs Sampling for the UniniTiated-1/" data-title="《Gibbs Sampling for the UniniTiated》阅读笔记(上)---参数估计方法及Gibbs Sampling简介" data-url="http://crescentluna.github.io/2013/06/29/Gibbs Sampling for the UniniTiated-1/"></div>
+  </section>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/学术/">学术</a><span class="category-list-count">18</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/学术/Gibbs-Sampling笔记/">Gibbs Sampling笔记</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/学术/变分推断笔记/">变分推断笔记</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习/">机器学习</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂项/">杂项</a><span class="category-list-count">6</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/杂项/闲话/">闲话</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a><span class="category-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/DP/" style="font-size: 13.33px;">DP</a> <a href="/tags/EM/" style="font-size: 20px;">EM</a> <a href="/tags/Gibbs-Sampling/" style="font-size: 20px;">Gibbs Sampling</a> <a href="/tags/Hexo/" style="font-size: 13.33px;">Hexo</a> <a href="/tags/LDA/" style="font-size: 10px;">LDA</a> <a href="/tags/PRML/" style="font-size: 13.33px;">PRML</a> <a href="/tags/Variational-Inference/" style="font-size: 16.67px;">Variational Inference</a> <a href="/tags/kNN/" style="font-size: 10px;">kNN</a> <a href="/tags/matlab/" style="font-size: 10px;">matlab</a> <a href="/tags/tensorflow/" style="font-size: 10px;">tensorflow</a> <a href="/tags/wordpress/" style="font-size: 10px;">wordpress</a> <a href="/tags/二叉树/" style="font-size: 10px;">二叉树</a> <a href="/tags/决策树/" style="font-size: 10px;">决策树</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/参数估计/" style="font-size: 10px;">参数估计</a> <a href="/tags/多项式分布/" style="font-size: 10px;">多项式分布</a> <a href="/tags/数据挖掘/" style="font-size: 16.67px;">数据挖掘</a> <a href="/tags/机器学习/" style="font-size: 16.67px;">机器学习</a> <a href="/tags/概率图/" style="font-size: 10px;">概率图</a> <a href="/tags/盘子/" style="font-size: 10px;">盘子</a> <a href="/tags/社区发现/" style="font-size: 10px;">社区发现</a> <a href="/tags/背包问题/" style="font-size: 13.33px;">背包问题</a> <a href="/tags/贝叶斯方法/" style="font-size: 10px;">贝叶斯方法</a> <a href="/tags/高斯混合模型/" style="font-size: 16.67px;">高斯混合模型</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">七月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/04/">四月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">二月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">一月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/">十二月 2012</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">十月 2012</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">九月 2012</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">浏览数目</h3>
+    <div class="widget">
+      <ul class="popularlist">
+      </ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">近期文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/02/23/install-tensorflow-with-gpu-support-for-ubuntu/">在Ubuntu上搭建GPU加速的TensorFlow环境</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/12/variational-inference-3/">变分推断学习笔记(3)——三硬币问题的变分推断解法</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/11/popular-widget/">使用LeanCloud平台为Hexo博客添加文章浏览量统计组件</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/11/relocation/">博客迁移小记</a>
+          </li>
+        
+          <li>
+            <a href="/2014/02/24/概率图模型简介/">概率图模型简介</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+
+  
+    
+<div class="widget-wrap">
+  <h3 class="widget-title">最近评论</h3>
+  <ul class="widget ds-recent-comments" data-num-items="5" data-show-avatars="0" data-show-title="1" data-show-time="1"></ul>
+</div>
+<!-- 需要多说的公用代码 -->
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">友情链接</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="https://github.com/xiangming/landscape-plus" target="_blank">landscape-plus主题</a>
+          </li>
+        
+          <li>
+            <a href="http://www.smallqiao.com/" target="_blank">小桥流水</a>
+          </li>
+        
+          <li>
+            <a href="http://www.ahathinking.com/" target="_blank">勇幸|Thinking</a>
+          </li>
+        
+          <li>
+            <a href="http://www.socona.me/" target="_blank">socona的博客</a>
+          </li>
+        
+          <li>
+            <a href="http://www.clarkchen.com/" target="_blank">陈曦师兄的博客</a>
+          </li>
+        
+          <li>
+            <a href="http://www.fengyafei.com/" target="_blank">小飞的博客</a>
+          </li>
+        
+          <li>
+            <a href="http://ariwaranosai.xyz/" target="_blank">今天拒绝负能量!</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Chen Hao<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      .
+      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives" class="mobile-nav-link">所有文章</a>
+  
+    <a href="/about" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+<!-- 多说公共js代码 start -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"crescent"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+<!-- 多说公共js代码 end -->
+
+
+<!-- 百度分享 start -->
+
+<div id="article-share-box" class="article-share-box">
+  <div id="bdshare" class="bdsharebuttonbox article-share-links">
+    <a class="article-share-weibo" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a class="article-share-weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a class="article-share-qq" data-cmd="sqq" title="分享到QQ"></a>
+    <a class="article-share-renren" data-cmd="renren" title="分享到人人网"></a>
+    <a class="article-share-more" data-cmd="more" title="更多"></a>
+  </div>
+</div>
+<script>window._bd_share_config={"common":{},"share":{"bdCustomStyle":"nocss.css"}};with(document)0[(getElementsByTagName("head")[0]||body).appendChild(createElement("script")).src="http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion="+~(-new Date()/36e5)];</script>
+
+<!-- 百度分享 end -->
+
+<script src="//libs.baidu.com/jquery/1.11.1/jquery.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<! -- mathjax config similar to math.stackexchange -->
+<! -- add autoNumber settting -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+                processEscapes: true
+                    
+}
+  
+        });
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+                  
+}
+    
+        });
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Queue(function() {
+            var all = MathJax.Hub.getAllJax(), i;
+            for(i=0; i < all.length; i += 1) {
+                            all[i].SourceElement().parentNode.className += ' has-jax';
+                                    
+            }
+                
+        });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+<script src="/js/script.js"></script>
+
+<!--page counter part-->
+<script>
+function addCount (Counter) {
+        url=$('.article-date').attr('href').trim();
+        title = $('.article-title').text().trim();
+       // alert(title);
+        var query=new AV.Query(Counter);
+        //use url as unique idnetfication
+        query.equalTo("url",url);
+        query.find({
+            success: function(results){
+                if(results.length>0)
+                {
+                    var counter=results[0];
+                    counter.fetchWhenSave(true); //get recent result
+                    counter.increment("time");
+                    counter.save();
+                    //alert('find '+title+' and visit time is now '+ counter.get("time"));
+                }
+                else
+                {
+                    var newcounter=new Counter();
+                    newcounter.set("title",title);
+                    newcounter.set("url",url);
+                    newcounter.set("time",1);
+                    newcounter.save(null,{
+                        success: function(newcounter){
+                        //alert('New object created');
+                        },
+                        error: function(newcounter,error){
+                        alert('Failed to create');
+                        }
+                        });
+                }
+            },
+            error: function(error){
+                //find null is not a error
+                alert('Error:'+error.code+" "+error.message);
+            }
+        });
+}
+
+$(function(){
+        var Counter=AV.Object.extend("Counter");
+        //only increse visit counting when intering a page
+        if ($('.article-title').length == 1)
+           addCount(Counter);
+        var query=new AV.Query(Counter);
+        query.descending("time");
+        query.limit(10);
+        query.find({
+            success: function(results){
+                    for(var i=0;i<results.length;i++)    
+                    {
+                        var counter=results[i];
+                        //alert(counter.get("title")+'-'+counter.get("url"));
+                        title=counter.get("title");
+                        url=counter.get("url");
+                        time=counter.get("time");
+                        // add to the popularlist widget
+                        showcontent=title+" ("+time+")";
+                        //notice the "" in href
+                        $('.popularlist').append('<li><a href="'+url+'">'+showcontent+'</a></li>');
+                    }
+                },
+            error: function(error){
+                alert("Error:"+error.code+" "+error.message);
+            }
+            }
+        )
+        });
+</script>
+
+
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>

@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>背包问题学习笔记(2)-问法的变化 | 心怀畏惧</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="所有问法均以01背包问题为例，问题如下： 有\(N\)种物品和一个容量为\(V\)的背包，每种物品都有无限件可用。放入第i种物品的费用是\(C_i\)，价值是\(W_i\)，求背包所装物体的价值最大。 基本代码：
+1234567891011121314151617181920#includeusing namespace std;const int N=4,V=10;int F[N+1][V+1]">
+<meta property="og:type" content="article">
+<meta property="og:title" content="背包问题学习笔记(2)-问法的变化">
+<meta property="og:url" content="http://crescentluna.github.io/2013/08/08/bag-problem-2/index.html">
+<meta property="og:site_name" content="心怀畏惧">
+<meta property="og:description" content="所有问法均以01背包问题为例，问题如下： 有\(N\)种物品和一个容量为\(V\)的背包，每种物品都有无限件可用。放入第i种物品的费用是\(C_i\)，价值是\(W_i\)，求背包所装物体的价值最大。 基本代码：
+1234567891011121314151617181920#includeusing namespace std;const int N=4,V=10;int F[N+1][V+1]">
+<meta property="og:updated_time" content="2017-02-21T18:24:27.407Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="背包问题学习笔记(2)-问法的变化">
+<meta name="twitter:description" content="所有问法均以01背包问题为例，问题如下： 有\(N\)种物品和一个容量为\(V\)的背包，每种物品都有无限件可用。放入第i种物品的费用是\(C_i\)，价值是\(W_i\)，求背包所装物体的价值最大。 基本代码：
+1234567891011121314151617181920#includeusing namespace std;const int N=4,V=10;int F[N+1][V+1]">
+  
+    <link rel="alternative" href="/atom.xml" title="心怀畏惧" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+  
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F1fc57dc5ccfaeae31f8e295269b6fa04' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-57404093-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+  <script src="https://cdn1.lncld.net/static/js/av-min-1.2.1.js"></script>
+  <script>AV.initialize("57nirzk8g437patyg9434lcvmpkat6e5lu5mixmrwqa8l3ao", "rsqg6iiq58eyeg8c6c6uue48crtwt5quuq5dmjaahfcjlkq8");</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">心怀畏惧</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Do not go gentle into that good night</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives">所有文章</a>
+        
+          <a class="main-nav-link" href="/about">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="http://www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
+          <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="Search">
+          <input type="submit" value="" class="search-form-submit">
+          <input name=tn type=hidden value="bds">
+          <input name=cl type=hidden value="3">
+          <input name=ct type=hidden value="2097152">
+          <input type="hidden" name="si" value="crescentluna.github.io">
+        </form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-bag-problem-2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/08/08/bag-problem-2/" class="article-date">
+  <time datetime="2013-08-08T06:03:10.000Z" itemprop="datePublished">2013-08-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/算法/">算法</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      背包问题学习笔记(2)-问法的变化
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>所有问法均以01背包问题为例，问题如下： 有<span class="math inline">\(N\)</span>种物品和一个容量为<span class="math inline">\(V\)</span>的背包，每种物品都有无限件可用。放入第i种物品的费用是<span class="math inline">\(C_i\)</span>，价值是<span class="math inline">\(W_i\)</span>，求背包所装物体的价值最大。 基本代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> N=<span class="number">4</span>,V=<span class="number">10</span>;</div><div class="line"><span class="keyword">int</span> F[N+<span class="number">1</span>][V+<span class="number">1</span>];</div><div class="line"><span class="keyword">int</span> C[N+<span class="number">1</span>]=&#123;<span class="number">0</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">4</span>,<span class="number">5</span>&#125;;</div><div class="line"><span class="keyword">int</span> W[N+<span class="number">1</span>]=&#123;<span class="number">0</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">6</span>,<span class="number">7</span>&#125;;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">BasicZeroOnePack</span><span class="params">()</span>  <span class="comment">//O(NV)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="built_in">memset</span>(F,<span class="number">0</span>,<span class="keyword">sizeof</span>(F));</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=N;i++)</div><div class="line">	&#123;</div><div class="line"></div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> v=<span class="number">0</span>;v&lt;=V;v++) 		</div><div class="line">		&#123;</div><div class="line">			F[i][v]=F[i<span class="number">-1</span>][v];  <span class="comment">//默认不加入物品 			</span></div><div class="line">			<span class="keyword">if</span>(v&gt;=C[i])  <span class="comment">//可以加入的时候考虑一下</span></div><div class="line">				F[i][v]=max(F[i<span class="number">-1</span>][v],F[i<span class="number">-1</span>][v-C[i]]+W[i]);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>改动都是基于这个代码。</p>
+<h3 id="恰好装满的要求">恰好装满的要求</h3>
+<p>如果要求恰好装满的话,初始化时除了<span class="math inline">\(F[0]=0\)</span>以外，其余的F[1,…V]均设为负无穷。因为如果要求恰好装满，初始化的时候只有容量为0的背包装容量为0的物体才是合法状态，其余的状态全都不合法，用负无穷表示。 <a id="more"></a></p>
+<h3 id="输出方案">输出方案</h3>
+<p>如果需要输出方案，我们只需逆推状态转移方程，确定这个状态是由哪一个策略所推出的，从而找到上一个状态即可。可以用<span class="math inline">\(G[i,v]\)</span>记录来自哪个状态，代码如下:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> G[N+<span class="number">1</span>][V+<span class="number">1</span>];</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">BasicZeroOnePackCase</span><span class="params">()</span><span class="comment">//O(NV)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="built_in">memset</span>(F,<span class="number">0</span>,<span class="keyword">sizeof</span>(F));</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=N;i++)</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> v=<span class="number">0</span>;v&lt;=V;v++) 		</div><div class="line">		&#123;</div><div class="line">			F[i][v]=F[i<span class="number">-1</span>][v];  <span class="comment">//默认不加入物品 			</span></div><div class="line">			G[i][v]=<span class="number">0</span>; 			</div><div class="line">			<span class="keyword">if</span>(v&gt;=C[i])  <span class="comment">//可以加入的时候考虑一下</span></div><div class="line">			&#123;</div><div class="line">				F[i][v]=max(F[i<span class="number">-1</span>][v],F[i<span class="number">-1</span>][v-C[i]]+W[i]);</div><div class="line">				<span class="keyword">if</span>(F[i<span class="number">-1</span>][v-C[i]]+W[i]&gt;F[i<span class="number">-1</span>][v])</div><div class="line">					G[i][v]=<span class="number">1</span>;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其实不记录也可以，我们可以直接根据<span class="math inline">\(F[i][v]\)</span>是否等于<span class="math inline">\(F[i-1][v-C[i]]+W[i]\)</span>的值判断得到。</p>
+<h3 id="输出字典序最小">输出字典序最小</h3>
+<p>所谓的”字典序最小“就是按字典排序方式，1到N号物体的选择方案排列最靠前。很明显的1肯定比2靠前，也就是说我们尽量要选择前面的物体，由于我们原先的子问题”1..i个物体,背包容量j“会分解为”1…,i-1，背包容量j“和”1…i-1,背包容量j-C[i]“两个子问题并不符合字典序的假设，因为即使第i个物体服从字典序，也无法确定前i-1个物体是否服从字典序，因为1…i-1这个子问题已经被处理过了。</p>
+<p>于是我们把循环顺序倒过来，子问题变成了“i..1个物体,背包容量j”会分解为“i-1…,1，背包容量j”和“i-1…1,背包容量<span class="math inline">\(j-C[i]\)</span>”两个子问题，这样只要i做了服从字典序的选择，那我们只要去继续探究i-1…1这个子问题就好了。 所以我们把状态转移方程改成这样 <span class="math display">\[ F[i,v]=\max\{F[i+1][v],F[i+1][v-C_i]+W_i\}\]</span> 代码也只要把i逆序，i-1变成i+1即可。在输出的时候，如果<span class="math inline">\(F[i+1][v]==F[i+1][v-C_i]+W_i\)</span>相等，尽量选加入i的策略，因为物品i必定比i+1靠前。代码</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">BasicZeroOnePackDictionaryOrder</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">	<span class="built_in">memset</span>(F,<span class="number">0</span>,<span class="keyword">sizeof</span>(F));</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=N;i&gt;=<span class="number">1</span>;i--)<span class="comment">//反向定义</span></div><div class="line">	&#123;</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> v=<span class="number">0</span>;v&lt;=V;v++) 		</div><div class="line">		&#123;</div><div class="line">			F[i][v]=F[i+<span class="number">1</span>][v];  <span class="comment">//默认不加入物品 			</span></div><div class="line">			<span class="keyword">if</span>(v&gt;=C[i])  <span class="comment">//可以加入的时候考虑一下</span></div><div class="line">				F[i][v]=max(F[i+<span class="number">1</span>][v],F[i+<span class="number">1</span>][v-C[i]]+W[i]);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">int</span> v=V;</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=N;i++)</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">if</span>(F[i][v]==F[i+<span class="number">1</span>][v-C[i]]+W[i])</div><div class="line">		&#123;</div><div class="line">			<span class="built_in">cout</span>&lt;&lt;i&lt;&lt;<span class="string">" "</span>;</div><div class="line">			v=v-C[i];</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="built_in">cout</span>&lt;&lt;<span class="built_in">endl</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="求方案总数">求方案总数</h3>
+<p>求方案总数一般只要把状态转移方程中的max改成sum，子问题定义为“可行的方案数”即可，要注意初始条件。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">BasicZeroOnePackSum</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">	<span class="built_in">memset</span>(F,<span class="number">0</span>,<span class="keyword">sizeof</span>(F));</div><div class="line">	F[<span class="number">0</span>][<span class="number">0</span>]=<span class="number">1</span>;</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=N;i++)</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> v=<span class="number">0</span>;v&lt;=V;v++) 		</div><div class="line">		&#123;</div><div class="line">			F[i][v]=F[i<span class="number">-1</span>][v];  <span class="comment">//默认不加入物品 			</span></div><div class="line">			<span class="keyword">if</span>(v&gt;=C[i])  <span class="comment">//可以加入的时候考虑一下</span></div><div class="line">				F[i][v]=sum(F[i<span class="number">-1</span>][v],F[i<span class="number">-1</span>][v-C[i]]);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="求最优方案总数">求最优方案总数</h3>
+<p>最优方案就是总价值最大的方案。这个时候只要跟着原01背包的策略走，哪个策略好就用哪个策略的方案数，如果一样好就把2个策略的方案数相加即可。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">BasicZeroOnePackBestSum</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">	<span class="built_in">memset</span>(F,<span class="number">0</span>,<span class="keyword">sizeof</span>(F));</div><div class="line">	<span class="built_in">memset</span>(G,<span class="number">0</span>,<span class="keyword">sizeof</span>(G));</div><div class="line">	G[<span class="number">0</span>][<span class="number">0</span>]=<span class="number">1</span>;</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=N;i++)</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> v=<span class="number">0</span>;v&lt;=V;v++) 		</div><div class="line">		&#123;</div><div class="line">			F[i][v]=F[i<span class="number">-1</span>][v];  <span class="comment">//默认不加入物品 			</span></div><div class="line">			G[i][v]=G[i<span class="number">-1</span>][v]; 			</div><div class="line">			<span class="keyword">if</span>(v&gt;=C[i])  <span class="comment">//可以加入的时候考虑一下</span></div><div class="line">			&#123;</div><div class="line">				F[i][v]=max(F[i<span class="number">-1</span>][v],F[i<span class="number">-1</span>][v-C[i]]+W[i]);</div><div class="line">				<span class="keyword">if</span>(F[i<span class="number">-1</span>][v-C[i]]+W[i]&gt;F[i<span class="number">-1</span>][v])</div><div class="line">				&#123;</div><div class="line">					G[i][v]=G[i<span class="number">-1</span>][v-C[i]];</div><div class="line">				&#125;</div><div class="line">				<span class="keyword">else</span> <span class="keyword">if</span>(F[i<span class="number">-1</span>][v-C[i]]+W[i]==F[i<span class="number">-1</span>][v])</div><div class="line">				&#123;</div><div class="line">					G[i][v]+=G[i<span class="number">-1</span>][v-C[i]];</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="求第k优解">求第K优解</h3>
+<p>基本思想是将每个状态表示成有序队列，将状态转移方程中的max转化成有序队列的合并。<span class="math inline">\(F[i,v]\)</span>这个有序队列是由<span class="math inline">\(F[i-1,v]\)</span>，<span class="math inline">\(F[i-1,v-C_i+W_i\)</span>两个有序队列合并得到的。这个两个有序队列各自有自己的前K个最优解，然后两者合并得到当前的最优的K个解。 代码如下，为了节省空间使用了一维的01背包解法。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="function">priority_queue <span class="title">mergeTopK</span><span class="params">(priority_queue a,priority_queue b,<span class="keyword">int</span> W,<span class="keyword">int</span> K)</span></span></div><div class="line">&#123;</div><div class="line">	priority_queue c;</div><div class="line">	<span class="keyword">while</span> (c.size()&lt;K) 	</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">if</span>(a.top()&gt;b.top()+W)</div><div class="line">		&#123;</div><div class="line">			c.push(a.top());</div><div class="line">			a.pop();</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span></div><div class="line">		&#123;</div><div class="line">			c.push(b.top()+W);</div><div class="line">			b.pop();</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> c;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">ZeroOnePackTopK</span><span class="params">(<span class="keyword">int</span> K)</span></span></div><div class="line">&#123;</div><div class="line">	priority_queue FQueue[V+<span class="number">1</span>];</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;=V;i++)</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=K;j++)</div><div class="line">		&#123;</div><div class="line">			FQueue[i].push(<span class="number">0</span>);<span class="comment">//数组初始化为K个0</span></div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=N;i++) 	&#123; 		<span class="keyword">for</span>(<span class="keyword">int</span> v=V;v&gt;=C[i];v--)</div><div class="line">		&#123;</div><div class="line">			FQueue[v]=mergeTopK(FQueue[v],FQueue[v-C[i]],W[i],K);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">while</span>(!FQueue[V].empty())<span class="comment">//输出最优的K个解</span></div><div class="line">	&#123;</div><div class="line">		<span class="built_in">cout</span>&lt;&lt;FQueue[V].top()&lt;&lt;<span class="string">" "</span>;</div><div class="line">		FQueue[V].pop();</div><div class="line">	&#125;</div><div class="line">	<span class="built_in">cout</span>&lt;&lt;<span class="built_in">endl</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>参考： 1.《背包问题9讲》，https://github.com/tianyicui/pack</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://crescentluna.github.io/2013/08/08/bag-problem-2/" data-id="cizha1r04001qg0o8fyhe7rad" class="article-share-link" data-share="baidu">分享到</a>
+      
+
+      
+        <a href="http://crescentluna.github.io/2013/08/08/bag-problem-2/#ds-thread" class="article-comment-link">Comments</a>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DP/">DP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/背包问题/">背包问题</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2013/10/03/变分推断学习笔记1——概念介绍/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          变分推断学习笔记(1)——概念介绍
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2013/08/05/bag-problem-1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">背包问题学习笔记(1)-基本的背包问题介绍</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+  <section id="comments">
+    <div id="ds-thread" class="ds-thread" data-thread-key="2013/08/08/bag-problem-2/" data-title="背包问题学习笔记(2)-问法的变化" data-url="http://crescentluna.github.io/2013/08/08/bag-problem-2/"></div>
+  </section>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/学术/">学术</a><span class="category-list-count">18</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/学术/Gibbs-Sampling笔记/">Gibbs Sampling笔记</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/学术/变分推断笔记/">变分推断笔记</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习/">机器学习</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂项/">杂项</a><span class="category-list-count">6</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/杂项/闲话/">闲话</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a><span class="category-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/DP/" style="font-size: 13.33px;">DP</a> <a href="/tags/EM/" style="font-size: 20px;">EM</a> <a href="/tags/Gibbs-Sampling/" style="font-size: 20px;">Gibbs Sampling</a> <a href="/tags/Hexo/" style="font-size: 13.33px;">Hexo</a> <a href="/tags/LDA/" style="font-size: 10px;">LDA</a> <a href="/tags/PRML/" style="font-size: 13.33px;">PRML</a> <a href="/tags/Variational-Inference/" style="font-size: 16.67px;">Variational Inference</a> <a href="/tags/kNN/" style="font-size: 10px;">kNN</a> <a href="/tags/matlab/" style="font-size: 10px;">matlab</a> <a href="/tags/tensorflow/" style="font-size: 10px;">tensorflow</a> <a href="/tags/wordpress/" style="font-size: 10px;">wordpress</a> <a href="/tags/二叉树/" style="font-size: 10px;">二叉树</a> <a href="/tags/决策树/" style="font-size: 10px;">决策树</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/参数估计/" style="font-size: 10px;">参数估计</a> <a href="/tags/多项式分布/" style="font-size: 10px;">多项式分布</a> <a href="/tags/数据挖掘/" style="font-size: 16.67px;">数据挖掘</a> <a href="/tags/机器学习/" style="font-size: 16.67px;">机器学习</a> <a href="/tags/概率图/" style="font-size: 10px;">概率图</a> <a href="/tags/盘子/" style="font-size: 10px;">盘子</a> <a href="/tags/社区发现/" style="font-size: 10px;">社区发现</a> <a href="/tags/背包问题/" style="font-size: 13.33px;">背包问题</a> <a href="/tags/贝叶斯方法/" style="font-size: 10px;">贝叶斯方法</a> <a href="/tags/高斯混合模型/" style="font-size: 16.67px;">高斯混合模型</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">七月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/04/">四月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">二月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">一月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/">十二月 2012</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">十月 2012</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">九月 2012</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">浏览数目</h3>
+    <div class="widget">
+      <ul class="popularlist">
+      </ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">近期文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/02/23/install-tensorflow-with-gpu-support-for-ubuntu/">在Ubuntu上搭建GPU加速的TensorFlow环境</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/12/variational-inference-3/">变分推断学习笔记(3)——三硬币问题的变分推断解法</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/11/popular-widget/">使用LeanCloud平台为Hexo博客添加文章浏览量统计组件</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/11/relocation/">博客迁移小记</a>
+          </li>
+        
+          <li>
+            <a href="/2014/02/24/概率图模型简介/">概率图模型简介</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+
+  
+    
+<div class="widget-wrap">
+  <h3 class="widget-title">最近评论</h3>
+  <ul class="widget ds-recent-comments" data-num-items="5" data-show-avatars="0" data-show-title="1" data-show-time="1"></ul>
+</div>
+<!-- 需要多说的公用代码 -->
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">友情链接</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="https://github.com/xiangming/landscape-plus" target="_blank">landscape-plus主题</a>
+          </li>
+        
+          <li>
+            <a href="http://www.smallqiao.com/" target="_blank">小桥流水</a>
+          </li>
+        
+          <li>
+            <a href="http://www.ahathinking.com/" target="_blank">勇幸|Thinking</a>
+          </li>
+        
+          <li>
+            <a href="http://www.socona.me/" target="_blank">socona的博客</a>
+          </li>
+        
+          <li>
+            <a href="http://www.clarkchen.com/" target="_blank">陈曦师兄的博客</a>
+          </li>
+        
+          <li>
+            <a href="http://www.fengyafei.com/" target="_blank">小飞的博客</a>
+          </li>
+        
+          <li>
+            <a href="http://ariwaranosai.xyz/" target="_blank">今天拒绝负能量!</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Chen Hao<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      .
+      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives" class="mobile-nav-link">所有文章</a>
+  
+    <a href="/about" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+<!-- 多说公共js代码 start -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"crescent"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+<!-- 多说公共js代码 end -->
+
+
+<!-- 百度分享 start -->
+
+<div id="article-share-box" class="article-share-box">
+  <div id="bdshare" class="bdsharebuttonbox article-share-links">
+    <a class="article-share-weibo" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a class="article-share-weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a class="article-share-qq" data-cmd="sqq" title="分享到QQ"></a>
+    <a class="article-share-renren" data-cmd="renren" title="分享到人人网"></a>
+    <a class="article-share-more" data-cmd="more" title="更多"></a>
+  </div>
+</div>
+<script>window._bd_share_config={"common":{},"share":{"bdCustomStyle":"nocss.css"}};with(document)0[(getElementsByTagName("head")[0]||body).appendChild(createElement("script")).src="http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion="+~(-new Date()/36e5)];</script>
+
+<!-- 百度分享 end -->
+
+<script src="//libs.baidu.com/jquery/1.11.1/jquery.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<! -- mathjax config similar to math.stackexchange -->
+<! -- add autoNumber settting -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+                processEscapes: true
+                    
+}
+  
+        });
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+                  
+}
+    
+        });
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Queue(function() {
+            var all = MathJax.Hub.getAllJax(), i;
+            for(i=0; i < all.length; i += 1) {
+                            all[i].SourceElement().parentNode.className += ' has-jax';
+                                    
+            }
+                
+        });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+<script src="/js/script.js"></script>
+
+<!--page counter part-->
+<script>
+function addCount (Counter) {
+        url=$('.article-date').attr('href').trim();
+        title = $('.article-title').text().trim();
+       // alert(title);
+        var query=new AV.Query(Counter);
+        //use url as unique idnetfication
+        query.equalTo("url",url);
+        query.find({
+            success: function(results){
+                if(results.length>0)
+                {
+                    var counter=results[0];
+                    counter.fetchWhenSave(true); //get recent result
+                    counter.increment("time");
+                    counter.save();
+                    //alert('find '+title+' and visit time is now '+ counter.get("time"));
+                }
+                else
+                {
+                    var newcounter=new Counter();
+                    newcounter.set("title",title);
+                    newcounter.set("url",url);
+                    newcounter.set("time",1);
+                    newcounter.save(null,{
+                        success: function(newcounter){
+                        //alert('New object created');
+                        },
+                        error: function(newcounter,error){
+                        alert('Failed to create');
+                        }
+                        });
+                }
+            },
+            error: function(error){
+                //find null is not a error
+                alert('Error:'+error.code+" "+error.message);
+            }
+        });
+}
+
+$(function(){
+        var Counter=AV.Object.extend("Counter");
+        //only increse visit counting when intering a page
+        if ($('.article-title').length == 1)
+           addCount(Counter);
+        var query=new AV.Query(Counter);
+        query.descending("time");
+        query.limit(10);
+        query.find({
+            success: function(results){
+                    for(var i=0;i<results.length;i++)    
+                    {
+                        var counter=results[i];
+                        //alert(counter.get("title")+'-'+counter.get("url"));
+                        title=counter.get("title");
+                        url=counter.get("url");
+                        time=counter.get("time");
+                        // add to the popularlist widget
+                        showcontent=title+" ("+time+")";
+                        //notice the "" in href
+                        $('.popularlist').append('<li><a href="'+url+'">'+showcontent+'</a></li>');
+                    }
+                },
+            error: function(error){
+                alert("Error:"+error.code+" "+error.message);
+            }
+            }
+        )
+        });
+</script>
+
+
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>
